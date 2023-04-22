@@ -1,4 +1,3 @@
-import { checkIfExistsUser } from "../features/localStorage/login";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo-hotel.svg"
@@ -73,18 +72,11 @@ const handleSubmit = (e) =>{
     const email = document.getElementById("email").value; 
     const password = document.getElementById("password").value;
 
-    const user = {
-        email: email,
-        password: password,
-    }
 
-    const loginResponse = checkIfExistsUser(user);
-    
-
-    if(loginResponse){
+    if(email === "admin@admin.com" && password=== "admin"){
         localStorage.setItem("isLogged", true);
         props.setAuth(true)
-        navigate("/contact");
+        navigate("/");
     }
 }
 

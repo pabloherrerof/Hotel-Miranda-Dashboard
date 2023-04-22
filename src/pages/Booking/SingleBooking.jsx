@@ -1,10 +1,14 @@
-import styled from "styled-components"
-import { Card, CardContainer, CardImage, Booked, CardTitle, UserImage, CardItem, CardSeparator, CardAmenitie, TitleRow, FeaturesRow} from "../../components/Card";
+
+import { Card, CardContainer, CardImage, Booked, CardTitle, UserImage, CardItem, CardSeparator, CardAmenitie, TitleRow, FeaturesRow, CardImageText} from "../../components/Card";
 import {IoBedOutline, IoShieldCheckmarkOutline, IoWifiOutline} from "react-icons/io5"
+import styled from "styled-components";
+import { MySlider } from "../../components/Slider";
 
 
-export const SingleBooking = () =>{
 
+
+export const SingleBooking = (props) =>{
+    let bookStatus = "IN PROGRESS"
     return(<>
         <CardContainer full>
             <Card full>
@@ -63,7 +67,12 @@ export const SingleBooking = () =>{
                     
                 </FeaturesRow>                
              </Card>
-            <CardImage><Booked>BOOKED</Booked></CardImage>
+            <CardImage>
+                
+        <MySlider/>
+
+                <Booked bookStatus={bookStatus}>{bookStatus}</Booked>
+                <CardImageText/></CardImage>
         </CardContainer>
     </>)
 }

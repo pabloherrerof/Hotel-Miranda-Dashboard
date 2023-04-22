@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Dashboard } from "./pages/Dashboard";
 import { Booking } from "./pages/Booking/Booking";
@@ -14,29 +14,20 @@ import { SingleBooking } from "./pages/Booking/SingleBooking";
 import { ErrorPage } from "./pages/ErrorPage";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Layout } from "./components/Layout";
+import { Room } from "./pages/Rooms/Room";
 
 
 function App() {
 
   const [isAuthenticated, setAuthenticated] = useState(localStorage.getItem("isLogged"));
  
-  
-
-  if(localStorage.getItem("users") === null){
-    const user = {
-      email: "admin@admin.com",
-      password: "admin",
-      name: "Admin" ,
+  useEffect(() => {
+    if (isAuthenticated) {
+      localStorage.setItem("isLogged", "true");
+    } else {
+      localStorage.removeItem("isLogged");
     }
-
-    let objectLocalStorage = {
-      data: [],
-    }
-
-    objectLocalStorage.data.push(user);
-    let objectLocalStorageEncoded = JSON.stringify(objectLocalStorage);
-      localStorage.setItem("users", objectLocalStorageEncoded);
-  }
+  }, [isAuthenticated]);
 
 
 
@@ -48,24 +39,23 @@ function App() {
         <Routes>
         <Route exact path = "/login" element={isAuthenticated ? <Navigate to="/"/> : <Login setAuth={setAuthenticated}/>} />
          
-         <Route element={<Layout setAuth={setAuthenticated}/>}>
-          <Route exact path="/" element={<PrivateRoute authenticated= {isAuthenticated}><Dashboard/></PrivateRoute>} />
+         <Route element={<PrivateRoute authenticated={isAuthenticated}><Layout setAuth={setAuthenticated}/></PrivateRoute>}>
+          <Route exact path="/" element={<Dashboard/>} />
  
-          <Route exact path="/booking" element={  <PrivateRoute authenticated= {isAuthenticated}><Booking /></PrivateRoute> } />
-          <Route exact path="/booking/:bookingId" element={ <PrivateRoute authenticated= {isAuthenticated}><SingleBooking/></PrivateRoute> } />
+          <Route exact path="/booking" element={<Booking /> } />
+          <Route exact path="/booking/:id" element={<SingleBooking/>} />
 
-          <Route exact path="/rooms" element={<PrivateRoute authenticated= {isAuthenticated}><Rooms /> </PrivateRoute>} />
-          <Route exact path="/rooms/addRoom" element={ <PrivateRoute authenticated= {isAuthenticated}><AddRoom /></PrivateRoute> } />
+          <Route exact path="/rooms" element={<Rooms />} />
+          <Route exact path = "/rooms/:id" element={<Room/>}/>
+          <Route exact path="/rooms/addRoom" element={<AddRoom />} />
 
-          <Route exact path="/contact" element={<PrivateRoute authenticated= {isAuthenticated}><Contact /> </PrivateRoute>} />
+          <Route exact path="/contact" element={<Contact />} />
 
-          <Route exact path="/user" element={<PrivateRoute authenticated= {isAuthenticated}><Users /> </PrivateRoute>} /> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
-          <Route exact path="/user/add" element= {<PrivateRoute authenticated= {isAuthenticated}><AddUser/> </PrivateRoute> } /> 
-          <Route exact path="/user/:id" element= {<PrivateRoute authenticated= {isAuthenticated}><EditUser/> </PrivateRoute> } /> 
-
-        
-          <Route path="*" element={<ErrorPage />} />
+          <Route exact path="/user" element={<Users />} /> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
+          <Route exact path="/user/add" element= {<AddUser/> } /> 
+          <Route  path="/user/:id" element= {<EditUser/>} /> 
           </Route>
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
         
       </BrowserRouter>

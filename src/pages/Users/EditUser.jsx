@@ -2,6 +2,6 @@ import { Card, CardContainer, CardImage, Booked, CardTitle, UserImage, CardItem,
 
 export const EditUser = (props) =>{
     return (<>
-        
+        hola
     </>)
 }

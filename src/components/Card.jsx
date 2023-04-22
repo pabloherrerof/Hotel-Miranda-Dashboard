@@ -5,6 +5,7 @@ export const CardContainer = styled.section`
     background-color: #FFFFFF;
     display: flex;
     border-radius: 30px;
+    height: 100%;
 `
 
 export const Card = styled.div`
@@ -21,6 +22,54 @@ export const CardImage = styled.div`
     background-color: #C5C5C5;
     border-radius: 0 12px 12px 0;
     overflow: hidden;
+    font-weight: 500;
+    
+
+    .slick-slider{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        position: relative;
+        
+    }
+    .slick-prev:before, .slick-next:before{
+        font-size: 30px;
+        font-family: "Courier";
+        background-color: #FFFFFF47 ;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border: 1px solid ;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        
+    }
+
+    .slick-next{
+        position: absolute;
+        top: 65%;
+        right: 50px;
+        z-index: 10;
+       
+    }
+    .slick-prev{
+        position: absolute;
+        top: 65%;
+        left: 30px;
+        z-index: 10;
+    }
+`
+
+export const CardImageText = styled.div`
+height: 40%;
+width: 100%;
+background: rgb(64,68,68);
+background: linear-gradient(0deg, rgba(64,68,68,0.9486388305322129) 19%, rgba(99,100,100,0.6769301470588236) 51%, rgba(116,115,115,0.309983368347339) 79%, rgba(255,255,255,0) 100%);
+position: absolute;
+bottom: 0;
+z-index: 1;
 `
 
 export const Booked = styled.div`
@@ -30,7 +79,17 @@ export const Booked = styled.div`
     top: 30px;
     width: 200px;
     right: -60px;
-    background-color: #5AD07A;
+    background-color:${props => {
+    switch (props.bookStatus) {
+      case "CHECK IN":
+        return "#5AD07A";
+      case "CHECK OUT":
+        return "#E23428";
+      case "IN PROGRESS":
+        return "#E8E83F";
+      default:
+        return "transparent";
+    }}};
     height: 30px;
     z-index: 1;
     transform: rotate(45deg);
@@ -150,6 +209,7 @@ export const TitleRow= styled.div`
     flex-direction: row;
     gap: 2rem;
 `
+
 export const FeaturesRow = styled.div`
     display: flex;
     flex-direction: row;

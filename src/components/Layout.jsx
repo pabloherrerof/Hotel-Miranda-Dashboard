@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SideBar } from "./SideBar";
 import styled, {css} from "styled-components";
 
-const Container = styled.body`
+const Container = styled.div`
     min-height: 100vh;
     display: flex;
     margin: 0;
@@ -13,16 +13,14 @@ const Container = styled.body`
 const LeftMenu = styled.div`
  display: inline-block;
  width: 400px;
- height: 100vh;
  ${props => !props.open && css`
     display: none;
-`};
+`}
  `;
 
 
 const RightSection = styled.section`
 display: inline-block;
-height: 100vh;
 width: 100%;
 `
 
@@ -31,16 +29,22 @@ display: flex;
 justify-content: center;
 background-color: #00000005;
 padding: 50px 50px;
-
+height: calc(100% - 200px);
 `
 
 
 export const Layout = (props) => {
   let location = useLocation();
-  
-  let title = "";
+  let roomMatch = useMatch("/rooms/:id");
+  let bookingMatch = useMatch("/booking/:bookingId");
+  let userMatch = useMatch("/user/:id");
 
-  const[open, setOpen] = useState(false);
+
+  
+let title= ""
+
+  const[open, setOpen] = useState(true);
+
 
   const titleChooser = () => {
     if (location.pathname === "/") {
@@ -51,12 +55,20 @@ export const Layout = (props) => {
       title = "Rooms";
     } else if (location.pathname === "/booking") {
       title = "Bookings";
-    } else if (location.pathname === "*") {
-      title = "Error";
     } else if(location.pathname === "/user"){
-      title= "User";
+      title= "Users";
+    } else if( userMatch != null && location.pathname === userMatch.pathname){
+      console.log(bookingMatch)
+      title= "User"
+    } else if(bookingMatch != null && location.pathname === bookingMatch.pathname){
+      console.log(userMatch)
+      console.log("booking")
+      title="Booking detail";
+    } else if(roomMatch != null && location.pathname === roomMatch.pathname){
+      title= "Room detail";
     }
-    return title;
+
+    return title
   };
 
  
