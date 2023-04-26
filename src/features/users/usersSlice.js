@@ -41,6 +41,10 @@ export const usersSlice = createSlice({
             state.status = "fullfilled";
             
         })
+
+        .addCase(deleteUser.pending, (state, action) =>{
+            state.status = "pending";
+        })
        
 
 

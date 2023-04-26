@@ -1,4 +1,4 @@
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import {
   Card,
   CardContainer,
@@ -12,7 +12,7 @@ import {
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, getUser } from "../../features/users/usersThunks";
-import { getSingleUserStatus, getUsersData, getUsersSingle, getUsersStatus } from "../../features/users/usersSlice";
+import { getSingleUserStatus, getUsersSingle, getUsersStatus } from "../../features/users/usersSlice";
 import styled from "styled-components";
 import { HashLoader } from "react-spinners";
 
@@ -25,13 +25,11 @@ const Wrapper = styled.div`
 export const EditUser = ({ match }) => {
   const userId = useParams();
   const dispatch = useDispatch();
-  const getData = useSelector(getUsersData);
   const getUserData = useSelector(getUsersSingle);
   const getStatus = useSelector(getUsersStatus);
   const getUserStatus = useSelector(getSingleUserStatus);
 
-  console.log(getStatus);
-  console.log(getUserStatus)
+
   useEffect(() => {
     if (getStatus === "idle") {
       dispatch(fetchUsers());
@@ -39,7 +37,7 @@ export const EditUser = ({ match }) => {
     if(getUserStatus === "idle"){
       dispatch(getUser(userId.id))
     }
-  }, [dispatch, getStatus, getUserStatus]);
+  }, [dispatch, getStatus, getUserStatus, userId.id]);
 
 
 if(getUserStatus === "pending"){

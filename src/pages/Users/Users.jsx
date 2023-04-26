@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersStatus, getUsersData } from "../../features/users/usersSlice";
 import { useEffect } from "react";
-import { addUser, deleteUser, editUser, fetchUsers } from "../../features/users/usersThunks";
+import { addUser, editUser, fetchUsers } from "../../features/users/usersThunks";
 import { HashLoader } from "react-spinners";
 import styled from "styled-components";
 import { Table } from "../../components/Table";
-import { AddButton, Button } from "../../components/Button";
+import { Button } from "../../components/Button";
 import { TableActions } from "../../components/TableStyled";
-import { Modal } from "../../components/Modal";
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,9 +54,7 @@ export const Users = (props) => {
    
   };
 
-  const onDeleteClickHandler = () => {
-    dispatch(deleteUser("U-0001"))
-  }
+
 
   const onEditClickHandler = () =>{
     const user = {
@@ -89,6 +87,7 @@ export const Users = (props) => {
       <>
       <TableActions>
         <Button onClick={onAddClickHandler}>Add Room</Button>
+        <Button onClick={onEditClickHandler}>Edit User</Button>
         
       </TableActions>
         <Table tableTitles={tableTitles} data={getData} page={"users"} />

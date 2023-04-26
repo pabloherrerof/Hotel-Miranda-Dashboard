@@ -1,9 +1,10 @@
 import { useDispatch } from "react-redux"
 import { Button } from "./Button"
-import { CardContainer } from "./CardStyled"
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled"
 import {IoClose} from "react-icons/io5"
 import { deleteUser } from "../features/users/usersThunks"
+import { deleteBooking } from "../features/bookings/bookingThunks"
+import { deleteRoom } from "../features/rooms/roomsThunks"
 
 export const Modal = (props) => {
     const dispatch = useDispatch();
@@ -14,6 +15,15 @@ export const Modal = (props) => {
             props.setShowDeleteModal(false);
         }
         
+        if(props.page === "bookings"){
+            dispatch(deleteBooking(props.itemId));
+            props.setShowDeleteModal(false);
+        }
+
+        if(props.page === "rooms"){
+            dispatch(deleteRoom(props.itemId));
+            props.setShowDeleteModal(false);
+        }   
     }
     
     if(props.mode === "delete"){

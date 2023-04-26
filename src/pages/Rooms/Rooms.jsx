@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import { fetchRooms } from "../../features/rooms/roomsThunks";
 import { HashLoader } from "react-spinners";
 import styled from "styled-components";
-import { AddButton } from "../../components/Button";
-import { TableActions } from "../../components/TableStyled";
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -34,7 +33,7 @@ export const Rooms = (props) => {
     }
   }, [dispatch, getStatus]);
 
-  const onAddClickHandler = () => {};
+
 
   if (getStatus === "pending") {
     return (

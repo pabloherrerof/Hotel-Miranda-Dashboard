@@ -1,4 +1,4 @@
-import { AddButton, StatusButton, NotesButton } from "../components/Button";
+import { StatusButton, NotesButton } from "../components/Button";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { VscTrash } from "react-icons/vsc";
 import {
@@ -10,12 +10,10 @@ import {
   TableTitle,
 } from "./TableStyled";
 import { bookedStatusCalc, dateConverter } from "../features/otherFunctions";
-import { Link, useNavigate } from "react-router-dom";
 import { Modal } from "./Modal";
 import { useState } from "react";
 
 export const Table = (props) => {
-  const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [targetId, setTargetId] = useState("")
 
@@ -58,7 +56,10 @@ export const Table = (props) => {
               <AiOutlineInfoCircle />
             </TableItem>
             <TableItem>
-              <VscTrash />
+              <VscTrash onClick={()=> {
+                setShowDeleteModal(true);
+                setTargetId(element.id);
+                }}/>
             </TableItem>
           </>
         );
@@ -98,7 +99,10 @@ export const Table = (props) => {
               <AiOutlineInfoCircle />
             </TableItem>
             <TableItem>
-              <VscTrash />
+              <VscTrash onClick={()=> {
+                setShowDeleteModal(true);
+                setTargetId(element.id);
+                }}/>
             </TableItem>
           </>
         );

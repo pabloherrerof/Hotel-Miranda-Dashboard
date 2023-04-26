@@ -5,11 +5,9 @@ import {
 import { HashLoader } from "react-spinners";
 import styled from "styled-components";
 import { useEffect } from "react";
-import { addBooking, fetchBookings } from "../../features/bookings/bookingThunks";
+import { fetchBookings } from "../../features/bookings/bookingThunks";
 import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
-import { TableActions } from "../../components/TableStyled";
-import { AddButton } from "../../components/Button";
-import { addUser } from "../../features/users/usersThunks";
+
 
 
 const Wrapper = styled.div`
@@ -25,10 +23,12 @@ export const Booking = (props) => {
   const getData = useSelector(getBookingsData);
   console.log(getData)
   const tableTitles = [
-    "Room Name",
-    "Amenities",
-    "Price",
-    "Offer Price",
+    "Guest",
+    "Order Date",
+    "Check In",
+    "Check Out",
+    "Special Request",
+    "Room Type",
     "Status",
     "Details",
     "Delete",
@@ -42,7 +42,7 @@ export const Booking = (props) => {
 
   
 
-  const onAddClickHandler = () => {};
+
 
   if (getStatus === "pending") {
     return (
