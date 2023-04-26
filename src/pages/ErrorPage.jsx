@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 const ErrorWrapper = styled.div`
     display: flex;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
   justify-content: center;
   align-items: center;
   flex-direction: column;

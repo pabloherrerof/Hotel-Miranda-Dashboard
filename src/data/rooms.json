@@ -1,0 +1,136 @@
+[
+    {
+      "roomType": "Single Bed",
+      "roomNumber": "101",
+      "description": "Cozy room with a single bed and a window facing the city.",
+      "offer": "NO",
+      "price": 80,
+      "discount": 0,
+      "cancellation": "You can cancel up to 24 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "Air conditioning",
+        "Mini fridge"
+      ],
+      "status" : "AVAILABLE"
+    },
+    {
+      "roomType": "Double Bed",
+      
+      "roomNumber": "102",
+      "description": "Spacious room with two double beds and a balcony with sea view.",
+      "offer": "YES",
+      "price": 120,
+      "discount": 10,
+      "cancellation": "You can cancel up to 48 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "A/C",
+        "Bathtub",
+        "Safe"
+      ],
+      "status" : "BOOKED"
+    },
+    {
+      "roomType": "Suite",
+      "roomNumber": "201",
+      "description": "Elegant room with a queen bed, a sitting area, and a view of the garden.",
+      "offer": "YES",
+      "price": 150,
+      "discount": 20,
+      "cancellation": "You can cancel up to 72 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "A/C",
+        "Mini fridge",
+        "Hair dryer"
+      ],
+      "status" : "AVAILABLE"
+    },
+    {
+      "roomType": "Double Superior",
+      "roomNumber": "202",
+      "description": "Luxurious room with a king bed, a private terrace, and a whirlpool tub.",
+      "offer": "NO",
+      "price": 200,
+      "discount": 0,
+      "cancellation": "You can cancel up to 48 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "A/C",
+        "Safe",
+        "Coffee maker",
+        "Iron"
+      ],
+      "status" : "AVAILABLE"
+    },
+    {
+      "roomType": "Suite",
+      "roomNumber": "203",
+      "description": "Comfortable room with two twin beds, a desk, and a view of the mountains.",
+      "offer": "YES",
+      "price": 100,
+      "discount": 15,
+      "cancellation": "You can cancel up to 24 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "A/C",
+        "Mini fridge",
+        "Hair dryer"
+      ],
+      "status" : "BOOKED"
+    },
+    {
+      "roomType": "Single Bed",
+      "roomNumber": "301",
+      "description": "Basic room with a single bed, a wardrobe, and a small window.",
+      "offer": "NO",
+      "price": 60,
+      "discount": 0,
+      "cancellation": "You can cancel up to 24 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "A/C"
+      ],
+      "status" : "BOOKED"
+    },
+    {
+      "roomType": "Double Bed",
+      "roomNumber": "302",
+      "description": "Modern room with two double beds, a work desk, and a view of the pool.",
+      "offer": "YES",
+      "price": 110,
+      "discount": 10,
+      "cancellation": "You can cancel up to 48 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "A/C",
+        "Mini fridge",
+        "Safe"
+      ],
+      "status" : "AVAILABLE"
+    },
+    {
+      "roomType": "Single Bed",
+      "roomNumber": "401",
+      "description": "Charming room with a queen bed, a fireplace, and a balcony with garden view.",
+      "offer": "YES",
+      "price": 140,
+      "discount": 20,
+      "cancellation": "You can cancel up to 72 hours before check-in without penalty.",
+      "amenities": [
+        "Wi-Fi",
+        "TV",
+        "A/C",
+        "Bathtub"
+      ],
+      "status" : "BOOKED"
+    }
+  ]

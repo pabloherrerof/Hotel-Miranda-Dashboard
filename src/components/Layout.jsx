@@ -8,11 +8,12 @@ const Container = styled.div`
     min-height: 100vh;
     display: flex;
     margin: 0;
+    max-width: 100vw;
 `;
 
 const LeftMenu = styled.div`
  display: inline-block;
- width: 400px;
+ width: 300px;
  ${props => !props.open && css`
     display: none;
 `}
@@ -21,15 +22,18 @@ const LeftMenu = styled.div`
 
 const RightSection = styled.section`
 display: inline-block;
-width: 100%;
+width: ${props => props.open ? "calc(100% - 300px)" : "100%"};
 `
 
 const Content = styled.main`
 display: flex;
 justify-content: center;
+align-items: center;
+flex-direction: column;
 background-color: #00000005;
-padding: 50px 50px;
-height: calc(100% - 200px);
+padding: 50px 30px;
+height: calc(100% - 100px);
+position: relative;
 `
 
 
@@ -78,7 +82,7 @@ let title= ""
         <LeftMenu open={open}>
           <SideBar/>
         </LeftMenu>
-        <RightSection>
+        <RightSection open={open}>
             <TopBar page={titleChooser()} setAuth={props.setAuth} showSideBar={setOpen} open={open} />
             <Content>
                 <Outlet/>

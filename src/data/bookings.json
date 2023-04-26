@@ -1,0 +1,156 @@
+[
+  {
+    "name": "John Doe",
+    "orderDate": "2022-03-15T12:30:00Z",
+    "checkIn": "2022-03-20T14:00:00Z",
+    "checkOut": "2022-03-25T12:00:00Z",
+    "room": {
+      "roomType": "Double Superior",
+      "roomNumber": 101
+    },
+    "specialRequest": "No smoking room",
+    "totalPrice": 1500
+  },
+
+  {
+    "name": "Alice Johnson",
+    "orderDate": "2023-05-01T09:00:00Z",
+    "checkIn": "2023-05-10T15:00:00Z",
+    "checkOut": "2023-05-15T11:00:00Z",
+    "room": {
+      "roomType": "Double Bed",
+      "roomNumber": 102
+    },
+    "specialRequest": "Early check-in, please",
+    "totalPrice": 1200
+  },
+
+  {
+    "name": "Bob Smith",
+    "orderDate": "2022-06-20T10:30:00Z",
+    "checkIn": "2022-06-25T16:00:00Z",
+    "checkOut": "2022-06-30T12:00:00Z",
+    "room": {
+      "roomType": "Single Bed",
+      "roomNumber": 103
+    },
+    "specialRequest": "",
+    "totalPrice": 800
+  },
+
+  {
+    "name": "Emily Davis",
+    "orderDate": "2022-09-01T14:45:00Z",
+    "checkIn": "2022-09-10T12:00:00Z",
+    "checkOut": "2022-09-15T10:00:00Z",
+    "room": {
+      "roomType": "Suite",
+      "roomNumber": 104
+    },
+    "specialRequest": "Ocean view preferred",
+    "totalPrice": 3000
+  },
+
+  {
+    "name": "David Lee",
+    "orderDate": "2023-07-10T08:00:00Z",
+    "checkIn": "2023-07-15T14:00:00Z",
+    "checkOut": "2023-07-20T12:00:00Z",
+    "room": {
+      "roomType": "Double Bed",
+      "roomNumber": 105
+    },
+    "specialRequest": "Late check-out, please",
+    "totalPrice": 1600
+  },
+
+  {
+    "name": "Sophia Brown",
+    "orderDate": "2023-08-15T11:30:00Z",
+    "checkIn": "2023-08-20T16:00:00Z",
+    "checkOut": "2023-08-25T12:00:00Z",
+    "room": {
+      "roomType": "Double Superior",
+      "roomNumber": 106
+    },
+    "specialRequest": "Extra blankets, please",
+    "totalPrice": 1900
+  },
+
+  {
+    "name": "Oliver Garcia",
+    "orderDate": "2022-11-01T10:00:00Z",
+    "checkIn": "2022-11-10T14:00:00Z",
+    "checkOut": "2022-11-15T12:00:00Z",
+    "room": {
+      "roomType": "Single Bed",
+      "roomNumber": 107
+    },
+    "specialRequest": "Quiet room, please",
+    "totalPrice": 1000
+  },
+  {
+    "name": "William Jones",
+    "orderDate": "2023-10-01T11:30:00Z",
+    "checkIn": "2023-10-10T15:00:00Z",
+    "checkOut": "2023-10-15T12:00:00Z",
+    "room": {
+      "roomType": "Suite",
+      "roomNumber": 112
+    },
+    "specialRequest": "Room with balcony preferred",
+    "totalPrice": 3500
+  },
+
+  {
+    "name": "Ava Hernandez",
+    "orderDate": "2022-04-20T09:15:00Z",
+    "checkIn": "2023-04-25T16:00:00Z",
+    "checkOut": "2023-05-30T12:00:00Z",
+    "room": {
+      "roomType": "Double Superior",
+      "roomNumber": 109
+    },
+    "specialRequest": "Extra towels, please",
+    "totalPrice": 2000
+  },
+
+  {
+    "name": "Mia Wilson",
+    "orderDate": "2022-03-01T08:00:00Z",
+    "checkIn": "2022-03-10T14:00:00Z",
+    "checkOut": "2022-03-15T12:00:00Z",
+    "room": {
+      "roomType": "Single Bed",
+      "roomNumber": 110
+    },
+    "specialRequest": "",
+    "totalPrice": 900
+  },
+
+  {
+    "name": "Ethan Taylor",
+    "orderDate": "2022-04-15T12:00:00Z",
+    "checkIn": "2022-04-20T14:00:00Z",
+    "checkOut": "2022-04-25T12:00:00Z",
+    "room": {
+      "roomType": "Double Bed",
+      "roomNumber": 111
+    },
+    "specialRequest": "Extra pillows, please",
+    "totalPrice": 1400
+  },
+
+  {
+    "name": "Charlotte Anderson",
+    "orderDate": "2023-04-01T14:00:00Z",
+    "checkIn": "2023-04-18T12:00:00Z",
+    "checkOut": "2023-06-20T10:00:00Z",
+    "room": {
+      "roomType": "Double Superior",
+      "roomNumber": 108
+    },
+    "specialRequest": "Early check-in, please",
+    "totalPrice": 1800
+  }
+]

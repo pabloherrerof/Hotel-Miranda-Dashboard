@@ -2,17 +2,30 @@ import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import styled from 'styled-components';
+
 
 
 
 
 export const MySlider = () => {
+
+  const SlickButtonFix = ({currentSlide, slideCount, children, ...props}) => (
+    <span {...props}>{children}</span>
+);
+
+
   const settings = {
-    prevArrow: <button type="button" className="slick-prev"></button>,
-    nextArrow: <button type="button" className="slick-next"></button>,
+    prevArrow: (<SlickButtonFix>
+      
+     
+      
+  </SlickButtonFix>)
+    ,
+    nextArrow: (<SlickButtonFix> </SlickButtonFix>),
     infinite: true,
     speed: 500,
+    autoplay: true,
+    autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1
   };
@@ -20,7 +33,7 @@ export const MySlider = () => {
   return (
     <Slider {...settings}>
       <div>
-        <h3>Slide 1</h3>
+        hola
       </div>
       <div>
         <h3>Slide 2</h3>
