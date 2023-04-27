@@ -46,7 +46,7 @@ export const SideBar = () => {
 
           <li>
             <TbCalendarEvent />
-            <MenuLink to={"/booking"}>Bookings</MenuLink>
+            <MenuLink to={"/bookings"}>Bookings</MenuLink>
           </li>
 
           <li>
@@ -56,7 +56,7 @@ export const SideBar = () => {
 
           <li>
             <MdPersonOutline />
-            <MenuLink to={"/user"}>Users</MenuLink>
+            <MenuLink to={"/users"}>Users</MenuLink>
           </li>
         </LinkContainer>
         <User>

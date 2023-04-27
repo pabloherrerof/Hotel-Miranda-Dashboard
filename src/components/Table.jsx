@@ -9,14 +9,17 @@ import {
   TableRow,
   TableTitle,
 } from "./TableStyled";
-import { bookedStatusCalc, dateConverter } from "../features/otherFunctions";
+import {
+  bookedStatusCalc,
+  dateConverter,
+  offerPriceCalc,
+} from "../features/otherFunctions";
 import { Modal } from "./Modal";
 import { useState } from "react";
 
 export const Table = (props) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [targetId, setTargetId] = useState("")
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [targetId, setTargetId] = useState("");
 
   const rowRender = (page, element) => {
     switch (page) {
@@ -42,9 +45,7 @@ export const Table = (props) => {
               {element.price + "$"} <p>{"/per night"}</p>
             </TableItem>
             <TableItem offer discount={element.discount}>
-              {element.discount > 0
-                ? element.price - (element.price * element.discount) / 100 + "$"
-                : "-"}{" "}
+              {offerPriceCalc(element.price, element.discount)}
               <p>{element.discount > 0 ? "/per night" : ""}</p>
             </TableItem>
             <TableItem>
@@ -53,13 +54,17 @@ export const Table = (props) => {
               </StatusButton>
             </TableItem>
             <TableItem>
-              <AiOutlineInfoCircle />
+              <StyledLink to={`/rooms/${element.id}`}>
+                <AiOutlineInfoCircle />
+              </StyledLink>
             </TableItem>
             <TableItem>
-              <VscTrash onClick={()=> {
-                setShowDeleteModal(true);
-                setTargetId(element.id);
-                }}/>
+              <VscTrash
+                onClick={() => {
+                  setShowDeleteModal(true);
+                  setTargetId(element.id);
+                }}
+              />
             </TableItem>
           </>
         );
@@ -96,13 +101,17 @@ export const Table = (props) => {
               </StatusButton>
             </TableItem>
             <TableItem>
-              <AiOutlineInfoCircle />
+              <StyledLink to={`/bookings/${element.id}`}>
+                <AiOutlineInfoCircle />
+              </StyledLink>
             </TableItem>
             <TableItem>
-              <VscTrash onClick={()=> {
-                setShowDeleteModal(true);
-                setTargetId(element.id);
-                }}/>
+              <VscTrash
+                onClick={() => {
+                  setShowDeleteModal(true);
+                  setTargetId(element.id);
+                }}
+              />
             </TableItem>
           </>
         );
@@ -127,24 +136,26 @@ export const Table = (props) => {
             </TableItem>
             <TableItem>
               <p>{element.phone}</p>
-            </TableItem>
-            <TableItem>
               <p>{element.email}</p>
             </TableItem>
             <TableItem>
-              <StatusButton
-                status={element.state}
-              > {element.state}
+              <StatusButton status={element.state}>
+                {" "}
+                {element.state}
               </StatusButton>
             </TableItem>
             <TableItem>
-              <StyledLink to={`/user/${element.id}`}><AiOutlineInfoCircle/></StyledLink>
+              <StyledLink to={`/users/${element.id}`}>
+                <AiOutlineInfoCircle />
+              </StyledLink>
             </TableItem>
             <TableItem>
-              <VscTrash onClick={()=> {
-                setShowDeleteModal(true);
-                setTargetId(element.id);
-                }}/>
+              <VscTrash
+                onClick={() => {
+                  setShowDeleteModal(true);
+                  setTargetId(element.id);
+                }}
+              />
             </TableItem>
           </>
         );
@@ -155,7 +166,6 @@ export const Table = (props) => {
 
   return (
     <>
-     
       <TableContainer>
         <thead>
           <TableTitle>
@@ -172,7 +182,13 @@ export const Table = (props) => {
           ))}
         </tbody>
       </TableContainer>
-      <Modal mode="delete" page={props.page} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} itemId={targetId}/>
+      <Modal
+        mode="delete"
+        page={props.page}
+        showDeleteModal={showDeleteModal}
+        setShowDeleteModal={setShowDeleteModal}
+        itemId={targetId}
+      />
     </>
   );
 };

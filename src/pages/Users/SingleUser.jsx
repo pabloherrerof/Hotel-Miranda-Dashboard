@@ -12,42 +12,45 @@ import {
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, getUser } from "../../features/users/usersThunks";
-import { getSingleUserStatus, getUsersSingle, getUsersStatus } from "../../features/users/usersSlice";
-import styled from "styled-components";
+import {
+  getSingleUserStatus,
+  getUsersSingle,
+  getUsersStatus,
+} from "../../features/users/usersSlice";
 import { HashLoader } from "react-spinners";
+import { Wrapper } from "../../components/LayoutStyled";
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
-export const EditUser = ({ match }) => {
+
+export const SingleUser = ({ match }) => {
   const userId = useParams();
   const dispatch = useDispatch();
   const getUserData = useSelector(getUsersSingle);
   const getStatus = useSelector(getUsersStatus);
   const getUserStatus = useSelector(getSingleUserStatus);
+  console.log(userId)
 
 
   useEffect(() => {
     if (getStatus === "idle") {
       dispatch(fetchUsers());
     } 
-    if(getUserStatus === "idle"){
-      dispatch(getUser(userId.id))
+    if(getUserStatus ==="idle" || getUserData){
+      if(userId.id !== getUserData.id){
+        dispatch(getUser(userId.id))
+      }
     }
-  }, [dispatch, getStatus, getUserStatus, userId.id]);
+  }, [dispatch, getStatus, getUserStatus, userId.id, getUserData]);
 
-
-if(getUserStatus === "pending"){
-  return(
-  <Wrapper>
-    <HashLoader color="#799283" size={100} />
-  </Wrapper>)
-} else if(getUserData){
-  return (
-    <>
+  if (getUserStatus === "pending" || getStatus === "pending") {
+    return (
+      <Wrapper>
+        <HashLoader color="#799283" size={100} />
+      </Wrapper>
+    );
+  } else if (getUserData) {
+    return (
+      <>
         <CardContainer>
           <Card>
             <TitleRow>
@@ -74,7 +77,7 @@ if(getUserStatus === "pending"){
                 <h6>Date of registration</h6>
                 <h5>{getUserData.startDate}</h5>
               </CardItem>
-              <CardItem userState={getUserData.state}>
+              <CardItem state={getUserData.state}>
                 <h6>Status</h6>
                 <h5>{getUserData.state}</h5>
               </CardItem>
@@ -95,10 +98,13 @@ if(getUserStatus === "pending"){
           </Card>
         </CardContainer>
       </>
-  );
-} else {
-  return(<>
-  <Navigate to="*"/>
-  </>)
-}
+    );
+  } else {
+    return (
+      <>
+        <Navigate to="error" />
+      </>
+    ); 
+  }
+  
 };

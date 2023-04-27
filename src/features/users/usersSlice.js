@@ -7,7 +7,7 @@ import { addUser, deleteUser, editUser, fetchUsers, getUser } from "./usersThunk
 export const usersSlice = createSlice({
     name: "users",
     initialState: {
-        data: [],
+        usersListData: [],
         status: "idle",
         singleUser: {},
         singleUserStatus: "idle",
@@ -24,20 +24,20 @@ export const usersSlice = createSlice({
         })
         .addCase(fetchUsers.fulfilled, (state, action) =>{
             state.status = "fulfilled";
-            state.data = action.payload;
-            state.data.forEach((obj, index) => {
+            state.usersListData = action.payload;
+            state.usersListData.forEach((obj, index) => {
                 obj.id = "U-" + (index + 1).toString().padStart(4, "0");
               });
         })
 
         .addCase(addUser.fulfilled, (state, action) =>{
-            const lastId = parseInt(state.data[state.data.length  -1].id.slice(2));    
+            const lastId = parseInt(state.usersListData[state.usersListData.length  -1].id.slice(2));    
             action.payload.id = "U-" + (lastId + 1).toString().padStart(4, "0");
-            state.data.push(action.payload)
+            state.usersListData.push(action.payload)
         })
 
         .addCase(deleteUser.fulfilled, (state, action) =>{
-            state.data = state.data.filter(item => item.id !== action.payload);
+            state.usersListData = state.usersListData.filter(item => item.id !== action.payload);
             state.status = "fullfilled";
             
         })
@@ -49,7 +49,7 @@ export const usersSlice = createSlice({
 
 
         .addCase(getUser.fulfilled, (state, action) =>{
-            state.singleUser = state.data.find(item =>{
+            state.singleUser = state.usersListData.find(item =>{
                 
                 return item.id === action.payload
             })
@@ -63,15 +63,15 @@ export const usersSlice = createSlice({
         
 
         .addCase(editUser.fulfilled, (state,action) =>{
-            state.data = state.data.filter(item => item.id !== action.payload.id);
-            state.data = [action.payload, ...state.data];
+            state.data = state.usersListData.filter(item => item.id !== action.payload.id);
+            state.data = [action.payload, ...state.usersListData];
         })
         
     },
 })
 
 export const getUsersStatus = (state) => state.users.status;
-export const getUsersData = (state) => state.users.data;
+export const getUsersData = (state) => state.users.usersListData;
 export const getUsersSingle = (state) => state.users.singleUser;
 export const getSingleUserStatus = (state) => state.users.singleUserStatus;
 

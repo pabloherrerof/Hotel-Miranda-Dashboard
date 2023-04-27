@@ -3,17 +3,11 @@ import { getUsersStatus, getUsersData } from "../../features/users/usersSlice";
 import { useEffect } from "react";
 import { addUser, editUser, fetchUsers } from "../../features/users/usersThunks";
 import { HashLoader } from "react-spinners";
-import styled from "styled-components";
 import { Table } from "../../components/Table";
 import { Button } from "../../components/Button";
 import { TableActions } from "../../components/TableStyled";
+import { Wrapper } from "../../components/LayoutStyled";
 
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export const Users = (props) => {
   const dispatch = useDispatch();
@@ -24,8 +18,7 @@ export const Users = (props) => {
     "Name",
     "Start Date",
     "Description",
-    "Phone",
-    "Email",
+    "Contact",
     "Status",
     "Details",
     "Delete",

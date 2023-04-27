@@ -23,7 +23,6 @@ width: ${props => props.open ? "calc(100% - 300px)" : "100%"};
 
 export const Content = styled.main`
 display: flex;
-justify-content: center;
 align-items: center;
 flex-direction: column;
 background-color: #00000005;
@@ -31,3 +30,10 @@ padding: 50px 30px;
 height: calc(100% - 100px);
 position: relative;
 `
+
+export const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;

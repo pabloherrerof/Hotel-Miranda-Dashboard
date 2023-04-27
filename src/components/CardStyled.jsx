@@ -46,13 +46,13 @@ export const CardImage = styled.div`
 
   .slick-next {
     position: absolute;
-    top: 65%;
+    top: 50%;
     right: 50px;
     z-index: 10;
   }
   .slick-prev {
     position: absolute;
-    top: 65%;
+    top: 50%;
     left: 30px;
     z-index: 10;
   }
@@ -77,9 +77,13 @@ export const CardImageText = styled.div`
   position: absolute;
   z-index: 1;
   bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 3rem;
 
   h4 {
-    padding-top: 10rem;
+
     padding-left: 5%;
     padding-right: 5%;
     font-size: 22px;
@@ -87,7 +91,7 @@ export const CardImageText = styled.div`
     font-weight: 500;
     font-family: "Poppins";
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   p {
@@ -134,7 +138,7 @@ export const Booked = styled.div`
 export const CardTitle = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.3rem;
   margin: 0;
 
   h2 {
@@ -184,21 +188,36 @@ export const CardItem = styled.div`
     font-weight: medium;
     font-family: "Poppins";
     font-size: 16px;
-    color:${(props) => {switch(props.userState){
+    text-decoration: ${(props) => {
+    if (props.discount > 0 && props.price) {
+      return "line-through";
+    } else return "none";
+  }};
+    color:${(props) => {if(props.state){
+      switch(props.state){
         case "ACTIVE":
-            return "green";
+            return "#5AD07A"
         case "INACTIVE":
-        return "red";
+        return "#E23428";
+        case "AVAILABLE":
+          return "#5AD07A";
+        case "BOOKED":
+          return "#E23428";
         default: 
         return "#212121";
-    }}};
+  }} else {
+    if (props.discount > 0 && props.offer) {
+      return "#E23428";
+    } else return "#212121";
+  }
+  }};
     margin: 0;
   }
 
   h4 {
     font-weight: medium;
     font-family: "Poppins";
-    font-size: 24px;
+    font-size: 20px;
     color: #212121;
     margin: 0;
   }
@@ -208,6 +227,7 @@ export const CardItem = styled.div`
     font-size: 14px;
     color: #799283;
     margin: 0;
+    
   }
 
   p {

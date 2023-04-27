@@ -11,14 +11,16 @@ export function delay(data, time = 1000) {
     });
 }
 
-export function addIndexProperty(arr) {
-    
-    arr.forEach((obj, index) => {
-      obj.id = "#" + (index + 1).toString().padStart(3, "0");
-    });
-    return arr;
+  export const offerChecker = (discount) => {
+    if(discount > 0){
+      return "OFFER"
+    } else return ""
   }
 
+  export const offerPriceCalc = (price, discount) => {
+    return discount > 0 ? price - (price * discount) / 100 + "$"
+      : "-"
+  }
 
   export const dateConverter = (dateToConver) => {
     const fecha = new Date(dateToConver); 
@@ -47,4 +49,12 @@ export function addIndexProperty(arr) {
       } else {
         return "IN PROGRESS"
       }
+  }
+
+  export const totalPriceCalc = (pricePerNight, checkIn, checkOut) => {
+    var date1 = new Date (checkOut);
+    var date2 = new Date (checkIn);
+
+    var difference = date1.getTime()-date2.getTime();
+    return Math.round(difference / (1000 * 60 * 60 * 24))*pricePerNight;
   }

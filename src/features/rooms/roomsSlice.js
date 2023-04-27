@@ -5,9 +5,10 @@ import { fetchRooms, addRoom, deleteRoom, getRoom, editRoom } from "./roomsThunk
 export const roomSlice = createSlice({
     name: "rooms",
     initialState: {
-        data: [],
+        roomsListData: [],
         status: "idle",
-        room: {},
+        singleRoomData: {},
+        singleRoomStatus: "idle",
     },
     
 
@@ -21,14 +22,16 @@ export const roomSlice = createSlice({
         })
         .addCase(fetchRooms.fulfilled, (state, action) =>{
             state.status = "fulfilled";
-            state.data = action.payload;
-            state.data.forEach((obj, index) => {
-                obj.id = "R" + (index + 1).toString().padStart(3, "0");
+            state.roomsListData = action.payload;
+            state.roomsListData.forEach((obj, index) => {
+                obj.id = "R-" + (index + 1).toString().padStart(4, "0");
               });
         })
 
         .addCase(addRoom.fulfilled, (state, action) =>{
-            state.data.push(action.payload)
+            const lastId = parseInt(state.roomsListData[state.roomsListData.length  -1].id.slice(2));    
+            action.payload.id = "R-" + (lastId + 1).toString().padStart(4, "0");
+            state.roomsListData.push(action.payload)
         })
         .addCase(addRoom.pending, (state) =>{
             state.status = "pending";
@@ -36,8 +39,8 @@ export const roomSlice = createSlice({
 
 
         .addCase(deleteRoom.fulfilled, (state, action) =>{
-            state.data = state.data.filter(item => item.id !== action.payload);
-            state.status = "fullfilled";
+            state.roomsListData = state.roomsListData.filter(item => item.id !== action.payload);
+            state.status = "fulfilled";
         })
         .addCase(deleteRoom.pending, (state, action) =>{
             state.status = "pending";
@@ -45,32 +48,29 @@ export const roomSlice = createSlice({
 
 
         .addCase(getRoom.fulfilled, (state, action) =>{
-            state.data = state.data.find(item => item.id !== action.payload);
-            state.status = "fullfilled";
+            state.singleRoomData = state.roomsListData.find(item => item.id === action.payload);
+            state.singleRoomStatus = "fulfilled";
         })
         .addCase(getRoom.pending, (state, action) =>{
-            state.status = "pending";
+            state.singleRoomStatus = "pending";
         })
 
         .addCase(editRoom.fulfilled, (state,action) =>{
-            state.data = state.data.filter(item => item.id !== action.payload.id);
-            state.data.push(action.payload);
+            
+            state.data = state.roomsListData.filter(item => item.id !== action.payload.id);
+            state.data = [action.payload, ...state.roomsListData];
         })
 
         .addCase(editRoom.pending, (state, action) =>{
             state.status = "pending";
-        })
-
-
-       
-
-
-
-        
+        })    
     },
 })
 
-export const getRoomStatus = (state) => state.rooms.status;
-export const getRoomData = (state) => state.rooms.data;
+export const getRoomsStatus = (state) => state.rooms.status;
+export const getRoomsData = (state) => state.rooms.roomsListData;
+export const getSingleRoom = (state) => state.rooms.singleRoomData;
+export const getSingleRoomStatus = (state) => state.rooms.singleRoomStatus;
+
 
 export default roomSlice.reducer;
