@@ -58,3 +58,43 @@ export function delay(data, time = 1000) {
     var difference = date1.getTime()-date2.getTime();
     return Math.round(difference / (1000 * 60 * 60 * 24))*pricePerNight;
   }
+
+  export const getBookingRoom = (roomId, rooms)=> {
+    console.log(roomId)
+    console.log(rooms)
+  const filteredRoom = rooms.filter(room => room.id === roomId);
+  console.log(filteredRoom)
+    return filteredRoom[0]
+  }
+
+  export function getTodayString() {
+    const today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; // January is 0
+    const yyyy = today.getFullYear();
+  
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+  
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+  
+    return yyyy + '-' + mm + '-' + dd;
+  }
+  
+  export const jobDescriptionChooser = (position) =>{
+    if(position === "Manager"){
+      return "Responsible for the hotel's daily management."
+    } else if(position === "Recepcionist"){
+      return "Responsible for greeting guests and checking them in and out of the hotel."
+    } else if(position === "Room Service"){
+       return "Responsible for preparing and delivering food and beverages to guest rooms."
+    }
+  }
+
+  export function searchObjectByEmailAndPassword(array, email, password) {
+    return array.find(object => object.email === email && object.password === password);
+  }
+  

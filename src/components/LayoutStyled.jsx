@@ -26,7 +26,7 @@ display: flex;
 align-items: center;
 flex-direction: column;
 background-color: #00000005;
-padding: 50px 30px;
+padding: 3% 30px;
 height: calc(100% - 100px);
 position: relative;
 `

@@ -8,10 +8,12 @@ import {
   TableItem,
   TableRow,
   TableTitle,
+  UserTableImage,
 } from "./TableStyled";
 import {
   bookedStatusCalc,
   dateConverter,
+  getBookingRoom,
   offerPriceCalc,
 } from "../features/otherFunctions";
 import { Modal } from "./Modal";
@@ -20,6 +22,8 @@ import { useState } from "react";
 export const Table = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [targetId, setTargetId] = useState("");
+;
+  
 
   const rowRender = (page, element) => {
     switch (page) {
@@ -91,7 +95,7 @@ export const Table = (props) => {
               <NotesButton>View Notes</NotesButton>
             </TableItem>
             <TableItem>
-              {element.room.roomType} - {element.room.roomNumber}
+              {getBookingRoom(element.room, props.rooms).roomType} - {getBookingRoom(element.room, props.rooms).roomNumber}
             </TableItem>
             <TableItem>
               <StatusButton
@@ -119,8 +123,11 @@ export const Table = (props) => {
         return (
           <>
             <TableItem>
-              <ImageItem>
+              <ImageItem user>
+                <UserTableImage>
                 <img src={element.photo} alt="user" />
+                </UserTableImage>
+                
                 <div>
                   {element.name}
                   <p>{element.id}</p>
@@ -189,6 +196,7 @@ export const Table = (props) => {
         setShowDeleteModal={setShowDeleteModal}
         itemId={targetId}
       />
+      
     </>
   );
 };

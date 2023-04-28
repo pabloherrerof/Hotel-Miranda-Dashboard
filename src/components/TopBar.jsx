@@ -1,17 +1,14 @@
 import { BsArrowBarLeft, BsArrowBarRight } from "react-icons/bs";
 import { HiOutlineLogout, HiOutlineBell, HiOutlineMail } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
-import {Nav, NavItemContainer} from "./TopBarStyled"
-
-
+import { Nav, NavItemContainer } from "./TopBarStyled";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 
 export const TopBar = (props) => {
-  const navigate = useNavigate();
+  const { dispatch } = useContext(UserContext);
 
   const onLogOutClickHandler = () => {
-    localStorage.removeItem("isLogged");
-    props.setAuth(false);
-    navigate("/login");
+    dispatch({ type: "LogOut" });
   };
 
   const onClickSideBarHandler = () => {

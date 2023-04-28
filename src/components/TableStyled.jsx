@@ -38,6 +38,7 @@ export const TableTitle = styled.tr`
 export const TableRow = styled.tr`
   max-height: 70px;
   box-shadow: 0px 3px 10px #00000005;
+  position: relative;
 `;
 export const TableItem = styled.td`
   font-family: "Poppins";
@@ -89,14 +90,20 @@ export const ImageItem = styled.div`
   align-items: center;
   gap: 1rem;
   margin: 0;
+
 `;
 
 export const UserTableImage = styled.div`
     border-radius: 12px;
     background: #C5C5C5;
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
+    img{
+      border-radius: 12px;
+      width: 80px;
+      height: 80px;
+    }
 `
 
 export const StyledLink = styled(Link)`

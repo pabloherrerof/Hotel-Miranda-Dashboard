@@ -9,8 +9,8 @@ import { Wrapper } from "../../components/LayoutStyled";
 
 export const Rooms = (props) => {
   const dispatch = useDispatch();
-  const getStatus = useSelector(getRoomsStatus);
-  const getData = useSelector(getRoomsData);
+  const roomsStatus = useSelector(getRoomsStatus);
+  const roomsData = useSelector(getRoomsData);
   const tableTitles = [
     "Room Name",
     "Amenities",
@@ -23,13 +23,13 @@ export const Rooms = (props) => {
 
 
   useEffect(() => {
-    if (getStatus === "idle") {
+    if (roomsStatus === "idle") {
       dispatch(fetchRooms());
     }
-  }, [dispatch, getStatus]);
+  }, [dispatch, roomsStatus]);
 
 
-  if (getStatus === "pending") {
+  if (roomsStatus === "pending") {
     return (
       <>
       
@@ -41,7 +41,7 @@ export const Rooms = (props) => {
   } else {
     return (
       <>
-        <Table tableTitles={tableTitles} data={getData} page={"rooms"} />
+        <Table tableTitles={tableTitles} data={roomsData} page={"rooms"} />
       </>
     );
   }

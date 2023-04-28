@@ -120,6 +120,14 @@ export const User = styled.div`
   }
 `;
 
+export const SideBarUserImage = styled.img`
+    width: 70px;
+    height: 70px;
+    background-color: #c5c5c5;
+    border-radius: 8px;
+    object-fit: cover;
+`
+
 export const MenuLink = styled(NavLink)`
   font-weight: normal;
   color: #799283;

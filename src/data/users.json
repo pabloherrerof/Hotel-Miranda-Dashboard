@@ -1,4 +1,15 @@
 [
+   {
+      "photo": "https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png",
+      "name": "Admin",
+      "position": "Administrator",
+      "email": "admin@admin.com",
+      "phone": "-",
+      "startDate": "2022-03-15",
+      "jobDescription": "Dashboard Managing Account",
+      "state": "ACTIVE",
+      "password": "admin" 
+   },
     {
         "photo": "https://randomuser.me/api/portraits/men/49.jpg",
         "name": "John Smith",

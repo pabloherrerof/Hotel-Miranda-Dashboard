@@ -28,6 +28,7 @@ export const Button = styled.button`
     height: 32px;
     border-radius: 10px;
     border: none;
+    min-width: 100px;
     
     background-color: ${props => {
       switch (props.type){

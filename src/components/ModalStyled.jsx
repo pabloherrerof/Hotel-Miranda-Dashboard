@@ -8,8 +8,8 @@ export const ModalContainer = styled.div`
     padding-bottom: 2rem;
     background-color: #FFFFFFFF;
     border-radius: 12px;
-    position: absolute;
-    top: 30%;
+    position: fixed;
+    top: ${props => props.top ? "10%" : "40%"};
     box-shadow: 0px 3px 10px #00000005;
     border: 0.5px solid #212121 ;
     gap: 1rem;

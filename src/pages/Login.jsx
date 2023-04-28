@@ -1,104 +1,74 @@
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import logo from "../assets/logo-hotel.svg"
+import logo from "../assets/logo-hotel.svg";
 import { Logo } from "../components/SideBarStyled";
 import { EditButton } from "../components/Button";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../components/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsersData, getUsersStatus } from "../features/users/usersSlice";
+import { fetchUsers } from "../features/users/usersThunks";
+import { searchObjectByEmailAndPassword } from "../features/otherFunctions";
+import { Inputs, LogContainer, LogForm } from "./LoginStyled";
 
-const LogContainer = styled.div`
-display: flex;
-justify-content:center;
-align-items: center;
-background-color: #F8F8F8;
-width: 100vw;
-height: 100vh;
-min-width: 300px;
-min-height: 400px;
-`
-const LogForm = styled.form`
- 
-    padding: 4% 2%;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px #00000005;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+export const Login = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { dispatch } = useContext(UserContext);
 
-    p{
-        text-align: center;
-        font-family: "Poppins";
-        font-weight: 300;
-        font-size: 10px;
-        color: #5D5449;
+  const dispatcher = useDispatch();
+  const usersStatus = useSelector(getUsersStatus);
+  const usersData = useSelector(getUsersData);
 
+  useEffect(() => {
+    if (usersStatus === "idle") {
+      dispatcher(fetchUsers());
     }
-`
-const Inputs = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    justify-content: center;
-    align-items: center;
+  }, [dispatcher, usersStatus]);
 
-    label{
-        font-family: "Poppins";
-        font-weight: 600;
-        font-size: 12px;
-        letter-spacing: 0.2px;
-    }
-
-    input{
-        width: 150%;
-        border: none;
-        border-radius: 5px;
-        background-color:#00000014;
-        font-family: "Poppins";
-        padding: 0.5rem 1rem;
-    }
-  
-`
-
-
-
-export const Login = (props) =>{
-    const navigate = useNavigate();
-
-
-    
-const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const email = document.getElementById("email").value; 
-    const password = document.getElementById("password").value;
 
+    const user = searchObjectByEmailAndPassword(usersData, email, password);
 
-    if(email === "admin@admin.com" && password=== "admin"){
-        localStorage.setItem("isLogged", true);
-        props.setAuth(true)
-        navigate("/");
+    if (user) {
+      dispatch({ type: "LogIn", payload: user });
+    } else {
+      alert("Invalid credentials!");
     }
-}
+  };
 
-    
-    return (<>
+  return (
+    <>
+      <LogContainer>
+        <LogForm onSubmit={handleSubmit}>
+          <Logo column>
+            <img src={logo} alt="logo" />
+            <h2>travl</h2>
+          </Logo>
 
-<LogContainer>
-    <LogForm onSubmit={handleSubmit}>
-        <Logo column>
-        <img src={logo} alt="logo" />
-        <h2>travl</h2>
-        </Logo>
-        
-        <p>(Use email=<strong> admin@admin.com </strong>  and password=<strong> admin</strong> to test the application )</p>
-        <Inputs> 
-        <label htmlFor="email">Email:</label>
-        <input id="email" type="text" />
-        <label htmlFor="password">Pasword:</label>
-        <input id="password" type="password" /></Inputs>
-       
-        <EditButton type="submit">Login</EditButton>
-    </LogForm>
-</LogContainer>
-    </>)
-}
+          <p>
+            (Use email=<strong> admin@admin.com </strong> and password=
+            <strong> admin</strong> to test the application )
+          </p>
+          <Inputs>
+            <label htmlFor="email">Email:</label>
+            <input
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              type="text"
+            />
+            <label htmlFor="password">Pasword:</label>
+            <input
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              type="password"
+            />
+          </Inputs>
+
+          <EditButton type="submit">Login</EditButton>
+        </LogForm>
+      </LogContainer>
+    </>
+  );
+};

@@ -12,17 +12,21 @@ import {
   LinkContainer,
   Logo,
   MenuLink,
+  SideBarUserImage,
   User,
   Wrapper,
 } from "./SideBarStyled";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 
 export const SideBar = () => {
   const navigate = useNavigate();
+  const { state } = useContext(UserContext);
 
   const clickHandler = () => {
-    navigate("/user/:id");
+    navigate(`/users/${state.user.id}`);
   };
-  
+
   return (
     <>
       <Wrapper>
@@ -60,9 +64,11 @@ export const SideBar = () => {
           </li>
         </LinkContainer>
         <User>
-          <div className="user-image"></div>
-          <h5>Pablo</h5>
-          <p>admin@admin.com</p>
+        <SideBarUserImage src={state.user.photo}>
+           
+        </SideBarUserImage>
+          <h5>{state.user.name}</h5>
+          <p>{state.user.email}</p>
           <button onClick={() => clickHandler()}>Edit User</button>
         </User>
         <Copyright>

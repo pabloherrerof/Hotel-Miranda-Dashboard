@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useReducer } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Dashboard } from "./pages/Dashboard";
 import { Bookings } from "./pages/Booking/Bookings";
@@ -15,32 +15,46 @@ import { ErrorPage } from "./pages/ErrorPage";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Layout } from "./components/Layout";
 import { SingleRoom } from "./pages/Rooms/SingleRoom";
+import { UserContext } from "./components/UserContext";
+
+const initialState = {
+    auth: false,
+    user:{},
+}
 
 
+const reducer = (state, action) => {
+  switch(action.type){
+    case "LogIn":
+    return {...state, auth: true, user: action.payload}
+    case "LogOut":
+      return {...state, auth: false, user:{}}
+    default: 
+    return state;
+  }
+    
+}
 
 function App() {
 
-  const [isAuthenticated, setAuthenticated] = useState(localStorage.getItem("isLogged"));
- 
-  useEffect(() => {
-    if (isAuthenticated) {
-      localStorage.setItem("isLogged", "true");
-    } else {
-      localStorage.removeItem("isLogged");
-    }
-  }, [isAuthenticated]);
 
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  console.log(state);
+ 
+  
 
 
 
   return (
     <>
+    <UserContext.Provider value={{state, dispatch}}>
       <BrowserRouter>
       
         <Routes>
-        <Route exact path = "/login" element={isAuthenticated ? <Navigate to="/"/> : <Login setAuth={setAuthenticated}/>} />
+        <Route exact path = "/login" element={state.auth ? <Navigate to="/"/> : <Login/>} />
          
-         <Route element={<PrivateRoute authenticated={isAuthenticated}><Layout setAuth={setAuthenticated}/></PrivateRoute>}>
+         <Route element={<PrivateRoute auth={state.auth}><Layout/></PrivateRoute>}>
           <Route exact path="/" element={<Dashboard/>} />
  
           <Route exact path="/bookings" element={<Bookings /> } />
@@ -60,6 +74,7 @@ function App() {
         </Routes>
         
       </BrowserRouter>
+      </UserContext.Provider>
     </>
   );
 }
