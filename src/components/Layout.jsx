@@ -20,9 +20,9 @@ export const Layout = (props) => {
       title = "Contact";
     } else if (location.pathname === "/rooms") {
       title = "Rooms";
-    } else if (location.pathname === "/booking") {
+    } else if (location.pathname === "/bookings") {
       title = "Bookings";
-    } else if (location.pathname === "/user") {
+    } else if (location.pathname === "/users") {
       title = "Users";
     } else if (userMatch != null && location.pathname === userMatch.pathname) {
       console.log(bookingMatch);

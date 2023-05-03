@@ -19,7 +19,7 @@ import {
   getSingleRoomStatus,
 } from "../../features/rooms/roomsSlice";
 import { useEffect } from "react";
-import { fetchRooms, getRoom } from "../../features/rooms/roomsThunks";
+import {  getRoom } from "../../features/rooms/roomsThunks";
 import { HashLoader } from "react-spinners";
 import { offerChecker, offerPriceCalc } from "../../features/otherFunctions";
 import { Wrapper } from "../../components/LayoutStyled";
@@ -30,24 +30,19 @@ export const SingleRoom = (props) => {
   const roomId = useParams();
   const dispatch = useDispatch();
   const singleRoomData = useSelector(getSingleRoom);
-  const roomsStatus = useSelector(getRoomsStatus);
   const singleRoomStatus = useSelector(getSingleRoomStatus);
 
   useEffect(() => {
-    if (roomsStatus === "idle") {
-      dispatch(fetchRooms());
-    }
-   
     if( singleRoomStatus ==="idle" || singleRoomData){
       if(roomId.id !== singleRoomData.id){
         dispatch(getRoom(roomId.id))
       }
     }
-  }, [dispatch, roomsStatus, singleRoomStatus, roomId.id, singleRoomData ]);
+  }, [dispatch,  singleRoomStatus, roomId.id, singleRoomData]);
 
   console.log(singleRoomData)
 
-  if ( roomsStatus=== "pending" || singleRoomStatus==="pending" || roomsStatus=== "idle" || singleRoomStatus==="idle" ) {
+  if ( singleRoomStatus==="pending" || singleRoomStatus==="idle" ) {
     return(
     <Wrapper>
         <HashLoader color="#799283" size={100} />

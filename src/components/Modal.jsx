@@ -17,14 +17,16 @@ export const Modal = (props) => {
   const [userPosition, setUserPosition] = useState("Manager");
   const [userEmail, setUserEmail] = useState("");
   const [userStartDate, setUserStartDate] = useState(getTodayString());
-  const [userImage, setUserImage] = useState("");
+  const [userImage, setUserImage] = useState("https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png");
   const [userState, setUserState] = useState("")
   const [userPassword, setUserPassword] = useState("");
+  
   
 
   const onClickDeleteHandler = () => {
     if (props.page === "users") {
       dispatch(deleteUser(props.itemId));
+      
       props.setShowDeleteModal(false);
     }
 
@@ -44,14 +46,6 @@ export const Modal = (props) => {
     if(props.page === "users") {
         if(userEmail=== "" || userImage ==="" || userName=== "" || userPosition==="" || userStartDate==="" || userState==="" || userPhone==="" || userPassword=== ""){
             setFieldError("You have to enter all inputs!")
-            console.log(userEmail)
-            console.log(userPhone)
-            console.log(userName)
-            console.log(userPosition)
-            console.log(userStartDate)
-            console.log(userState)
-            console.log(userImage)
-
         } else {
             const user = {
                 photo: userImage,
@@ -69,7 +63,7 @@ export const Modal = (props) => {
             setFieldError("");
             setUserEmail("");
             setUserName("");
-            setUserImage("");
+            setUserImage("https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png");
             setUserPassword("");
             setUserPosition("Manager");
             setUserStartDate(getTodayString());

@@ -5,16 +5,13 @@ import { useEffect } from "react";
 import { fetchBookings } from "../../features/bookings/bookingThunks";
 import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
 import { Wrapper } from "../../components/LayoutStyled";
-import { getRoomsData, getRoomsStatus } from "../../features/rooms/roomsSlice";
-import { fetchRooms } from "../../features/rooms/roomsThunks";
 
 
 export const Bookings = (props) => {
   const dispatch = useDispatch();
   const bookingsStatus = useSelector(getBookingsStatus);
   const bookingsData = useSelector(getBookingsData);
-  const roomsData = useSelector(getRoomsData);
-  const roomsStatus = useSelector(getRoomsStatus);
+ 
   const tableTitles = [
     "Guest",
     "Order Date",
@@ -34,16 +31,8 @@ export const Bookings = (props) => {
    
     }
   }, [dispatch, bookingsStatus]);
-
-  useEffect(() => {
-    if (roomsStatus === "idle") {
-      dispatch(fetchRooms());
-    }
-  }, [dispatch, roomsStatus]);
-
-
   
-  if (bookingsData === "pending" || roomsStatus=== "pending") {
+  if (bookingsStatus === "pending") {
     return (
       <>
         <Wrapper>
@@ -54,7 +43,7 @@ export const Bookings = (props) => {
   } else {
     return (
       <>
-        <Table tableTitles={tableTitles} data={bookingsData} rooms={roomsData} page={"bookings"} />
+        <Table tableTitles={tableTitles} data={bookingsData} page={"bookings"} />
       </>
     );
   }

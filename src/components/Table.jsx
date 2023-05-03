@@ -3,6 +3,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { VscTrash } from "react-icons/vsc";
 import {
   ImageItem,
+  RoomImageItem,
   StyledLink,
   TableContainer,
   TableItem,
@@ -13,29 +14,29 @@ import {
 import {
   bookedStatusCalc,
   dateConverter,
-  getBookingRoom,
   offerPriceCalc,
 } from "../features/otherFunctions";
 import { Modal } from "./Modal";
 import { useState } from "react";
+import { searchBookingRoom } from "../features/API";
+
 
 export const Table = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [targetId, setTargetId] = useState("");
-;
-  
 
-  const rowRender = (page, element) => {
+  
+ 
+
+ const rowRender = (page, element) => {
     switch (page) {
       case "rooms":
         return (
           <>
             <TableItem>
               <ImageItem>
-                <img
-                  src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
-                  alt=""
-                />
+                <RoomImageItem src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
+                  alt="" />
                 <div>
                   {element.roomType + "-" + element.roomNumber}
                   <p>{element.id}</p>
@@ -95,7 +96,7 @@ export const Table = (props) => {
               <NotesButton>View Notes</NotesButton>
             </TableItem>
             <TableItem>
-              {getBookingRoom(element.room, props.rooms).roomType} - {getBookingRoom(element.room, props.rooms).roomNumber}
+              {searchBookingRoom(element.room).roomType} - {searchBookingRoom(element.room).roomNumber}
             </TableItem>
             <TableItem>
               <StatusButton
@@ -124,10 +125,8 @@ export const Table = (props) => {
           <>
             <TableItem>
               <ImageItem user>
-                <UserTableImage>
-                <img src={element.photo} alt="user" />
-                </UserTableImage>
-                
+                <UserTableImage src={element.photo} alt="user" />
+      
                 <div>
                   {element.name}
                   <p>{element.id}</p>

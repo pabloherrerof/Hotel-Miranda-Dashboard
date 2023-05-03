@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addUser, deleteUser, editUser, fetchUsers, getUser } from "./usersThunks";
+import { act } from "react-dom/test-utils";
 
 
 
@@ -25,9 +26,6 @@ export const usersSlice = createSlice({
         .addCase(fetchUsers.fulfilled, (state, action) =>{
             state.status = "fulfilled";
             state.usersListData = action.payload;
-            state.usersListData.forEach((obj, index) => {
-                obj.id = "U-" + (index + 1).toString().padStart(4, "0");
-              });
         })
 
         .addCase(addUser.fulfilled, (state, action) =>{
@@ -49,11 +47,12 @@ export const usersSlice = createSlice({
 
 
         .addCase(getUser.fulfilled, (state, action) =>{
-            state.singleUser = state.usersListData.find(item =>{
-                
-                return item.id === action.payload
-            })
-           console.log(state.singleUser)
+            if(typeof action.payload === "object"){
+                state.singleUser = action.payload
+            } else{
+                state.singleUser = state.usersListData.find(user => user.id === action.payload)
+            }
+            
             state.singleUserStatus = "fullfilled";
         })
 
@@ -63,8 +62,14 @@ export const usersSlice = createSlice({
         
 
         .addCase(editUser.fulfilled, (state,action) =>{
-            state.data = state.usersListData.filter(item => item.id !== action.payload.id);
-            state.data = [action.payload, ...state.usersListData];
+            console.log(action.payload)
+             for(let i = 0; i < state.usersListData.length; i++) {
+                if (state.usersListData[i].id === action.payload.id) {
+                    state.usersListData[i] = action.payload;
+                    state.singleUser = action.payload
+                  return;
+                }
+              }
         })
         
     },

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addBooking, deleteBooking, editBooking, fetchBookings, getBooking } from "./bookingThunks";
+import { searchBookingRoom } from "../API";
 
 
 
@@ -24,9 +25,6 @@ export const bookingsSlice = createSlice({
         .addCase(fetchBookings.fulfilled, (state, action) =>{
             state.status = "fulfilled";
             state.bookingListData = action.payload;
-            state.bookingListData.forEach((obj, index) => {
-                obj.id = "B-" + (index + 1).toString().padStart(4, "0");
-              });
         })
 
         .addCase(addBooking.fulfilled, (state, action) =>{
@@ -49,7 +47,7 @@ export const bookingsSlice = createSlice({
 
 
         .addCase(getBooking.fulfilled, (state, action) =>{
-            state.singleBookingData = state.bookingListData.find(item => item.id === action.payload);
+            state.singleBookingData = action.payload;
             state.singleBookingStatus = "fulfilled";
         })
         .addCase(getBooking.pending, (state, action) =>{

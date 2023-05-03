@@ -2,6 +2,7 @@
     {
       "roomType": "Single Bed",
       "roomNumber": "101",
+      "id": "R-0001",
       "description": "Cozy room with a single bed and a window facing the city.",
       "price": 80,
       "discount": 0,
@@ -18,6 +19,7 @@
       "roomType": "Double Bed",
       
       "roomNumber": "102",
+      "id": "R-0002",
       "description": "Spacious room with two double beds and a balcony with sea view.",
       "price": 120,
       "discount": 10,
@@ -34,6 +36,7 @@
     {
       "roomType": "Suite",
       "roomNumber": "201",
+      "id": "R-0003",
       "description": "Elegant room with a queen bed, a sitting area, and a view of the garden.",
       "price": 150,
       "discount": 20,
@@ -50,6 +53,7 @@
     {
       "roomType": "Double Superior",
       "roomNumber": "202",
+      "id": "R-0004",
       "description": "Luxurious room with a king bed, a private terrace, and a whirlpool tub.",
       "price": 200,
       "discount": 0,
@@ -67,6 +71,7 @@
     {
       "roomType": "Suite",
       "roomNumber": "203",
+      "id": "R-0005",
       "description": "Comfortable room with two twin beds, a desk, and a view of the mountains.",
       "price": 100,
       "discount": 15,
@@ -83,6 +88,7 @@
     {
       "roomType": "Single Bed",
       "roomNumber": "301",
+      "id": "R-0006",
       "description": "Basic room with a single bed, a wardrobe, and a small window.",
       "price": 60,
       "discount": 0,
@@ -97,6 +103,7 @@
     {
       "roomType": "Double Bed",
       "roomNumber": "302",
+      "id": "R-0007",
       "description": "Modern room with two double beds, a work desk, and a view of the pool.",
       "price": 110,
       "discount": 10,
@@ -113,6 +120,7 @@
     {
       "roomType": "Single Bed",
       "roomNumber": "401",
+      "id": "R-0008",
       "description": "Charming room with a queen bed, a fireplace, and a balcony with garden view.",
       "price": 140,
       "discount": 20,

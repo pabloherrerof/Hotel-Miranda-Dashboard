@@ -5,7 +5,7 @@ export const EditButton = styled.button`
      font-family: "Poppins";
     font-size: 12px;
     font-weight: normal;
-
+  min-width: 100px;
     height: 32px;
     border-radius: 10px;
     border: none;

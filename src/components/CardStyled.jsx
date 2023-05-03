@@ -1,3 +1,4 @@
+import { IoClose } from "react-icons/io5";
 import styled from "styled-components";
 
 export const CardContainer = styled.section`
@@ -281,3 +282,26 @@ export const FeaturesRow = styled.div`
   gap: ${(props) => (props.amenities ? "1rem" : "0")};
   flex-wrap: wrap;
 `;
+
+export const CardHeader = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 30px;
+  margin-bottom: 2rem;
+  color: ${(props) => props.close ? "#E23428" : "gray"};
+  svg:hover{
+    scale: 1.1;
+    cursor:pointer;
+  }
+  p{
+    color: red;
+    font-size: 10px;
+  }
+`
+
+
+export const CloseIcon = styled(IoClose)`
+ color:  #E23428;
+`

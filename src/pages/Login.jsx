@@ -1,33 +1,21 @@
 import logo from "../assets/logo-hotel.svg";
 import { Logo } from "../components/SideBarStyled";
 import { EditButton } from "../components/Button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../components/UserContext";
-import { useDispatch, useSelector } from "react-redux";
-import { getUsersData, getUsersStatus } from "../features/users/usersSlice";
-import { fetchUsers } from "../features/users/usersThunks";
-import { searchObjectByEmailAndPassword } from "../features/otherFunctions";
 import { Inputs, LogContainer, LogForm } from "./LoginStyled";
+import { searchObjectByEmailAndPassword } from "../features/API";
 
 export const Login = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@admin.com");
+  const [password, setPassword] = useState("admin");
   const { dispatch } = useContext(UserContext);
 
-  const dispatcher = useDispatch();
-  const usersStatus = useSelector(getUsersStatus);
-  const usersData = useSelector(getUsersData);
-
-  useEffect(() => {
-    if (usersStatus === "idle") {
-      dispatcher(fetchUsers());
-    }
-  }, [dispatcher, usersStatus]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const user = searchObjectByEmailAndPassword(usersData, email, password);
+    const user = searchObjectByEmailAndPassword(email, password);
 
     if (user) {
       dispatch({ type: "LogIn", payload: user });

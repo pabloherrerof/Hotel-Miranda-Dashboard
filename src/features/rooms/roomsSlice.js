@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchRooms, addRoom, deleteRoom, getRoom, editRoom } from "./roomsThunks";
+import { searchBookingRoom } from "../API";
 
 
 export const roomSlice = createSlice({
@@ -10,6 +11,7 @@ export const roomSlice = createSlice({
         singleRoomData: {},
         singleRoomStatus: "idle",
     },
+    
     
 
     extraReducers(builder){
@@ -23,9 +25,8 @@ export const roomSlice = createSlice({
         .addCase(fetchRooms.fulfilled, (state, action) =>{
             state.status = "fulfilled";
             state.roomsListData = action.payload;
-            state.roomsListData.forEach((obj, index) => {
-                obj.id = "R-" + (index + 1).toString().padStart(4, "0");
-              });
+            
+            
         })
 
         .addCase(addRoom.fulfilled, (state, action) =>{
@@ -48,7 +49,7 @@ export const roomSlice = createSlice({
 
 
         .addCase(getRoom.fulfilled, (state, action) =>{
-            state.singleRoomData = state.roomsListData.find(item => item.id === action.payload);
+            state.singleRoomData = action.payload;
             state.singleRoomStatus = "fulfilled";
         })
         .addCase(getRoom.pending, (state, action) =>{

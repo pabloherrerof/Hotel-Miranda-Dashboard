@@ -5,7 +5,6 @@ import { Bookings } from "./pages/Booking/Bookings";
 import { Rooms } from "./pages/Rooms/Rooms";
 import { Contact } from "./pages/Contact";
 import { Users } from "./pages/Users/Users";
-import { AddUser } from "./pages/Users/AddUser";
 import { AddRoom } from "./pages/Rooms/AddRoom";
 import { SingleUser } from "./pages/Users/SingleUser";
 import "./App.css";
@@ -67,7 +66,6 @@ function App() {
           <Route exact path="/contact" element={<Contact />} />
 
           <Route exact path="/users" element={<Users />} /> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
-          <Route exact path="/user/add" element= {<AddUser/> } /> 
           <Route  path="/users/:id" element= {<SingleUser/>} /> 
           </Route>
           <Route path="*" element={<ErrorPage />} />

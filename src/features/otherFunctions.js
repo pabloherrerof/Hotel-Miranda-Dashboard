@@ -70,7 +70,7 @@ export function delay(data, time = 1000) {
   export function getTodayString() {
     const today = new Date();
     let dd = today.getDate();
-    let mm = today.getMonth() + 1; // January is 0
+    let mm = today.getMonth() + 1; 
     const yyyy = today.getFullYear();
   
     if (dd < 10) {
@@ -94,7 +94,5 @@ export function delay(data, time = 1000) {
     }
   }
 
-  export function searchObjectByEmailAndPassword(array, email, password) {
-    return array.find(object => object.email === email && object.password === password);
-  }
+  
   

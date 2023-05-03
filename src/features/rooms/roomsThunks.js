@@ -11,7 +11,11 @@ export const addRoom = createAsyncThunk("rooms/addRoom", async (roomObject) => {
 });
 
 export const getRoom = createAsyncThunk("rooms/getRoom", async (roomId) =>{
-    return await delay (roomId);
+    
+    return await roomsList.find(room =>  {
+        console.log(room.id)
+        return room.id === roomId})
+   
 })
 
 export const deleteRoom = createAsyncThunk('rooms/deleteRooms', async (roomId) => {

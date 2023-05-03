@@ -4,7 +4,6 @@ import {
   CardImage,
   Booked,
   CardTitle,
-  UserImage,
   CardItem,
   CardSeparator,
   CardAmenitie,
@@ -16,40 +15,29 @@ import { MySlider } from "../../components/Slider";
 import { Navigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getBookingsStatus,
   getSingleBooking,
   getSingleBookingStatus,
 } from "../../features/bookings/bookingsSlice";
 import { useEffect } from "react";
 import {
-  fetchBookings,
   getBooking,
 } from "../../features/bookings/bookingThunks";
 import { bookedStatusCalc, dateConverter, totalPriceCalc } from "../../features/otherFunctions";
-import { fetchRooms, getRoom } from "../../features/rooms/roomsThunks";
-import {
-  getRoomsStatus,
-  getSingleRoom,
-  getSingleRoomStatus,
-} from "../../features/rooms/roomsSlice";
 import { Wrapper } from "../../components/LayoutStyled";
 import { HashLoader } from "react-spinners";
+import { searchBookingRoom } from "../../features/API";
 
 export const SingleBooking = (props) => {
   const bookingId = useParams();
   const dispatch = useDispatch();
   const bookingData = useSelector(getSingleBooking);
-  const bookingsStatus = useSelector(getBookingsStatus);
   const singleBookingStatus = useSelector(getSingleBookingStatus);
-  const singleRoomData = useSelector(getSingleRoom);
-  const singleRoomStatus = useSelector(getSingleRoomStatus);
-  const roomsStatus = useSelector(getRoomsStatus);
+
+
+  console.log(bookingData)
 
   useEffect(() => {
-    if (bookingsStatus === "idle") {
-      dispatch(fetchBookings());
-      dispatch(fetchRooms());
-    }
+    console.log(bookingId);
     if (singleBookingStatus === "idle" || bookingData) {
       if (bookingId.id !== bookingData.id) {
         dispatch(getBooking(bookingId.id));
@@ -58,44 +46,18 @@ export const SingleBooking = (props) => {
   }, [
     dispatch,
     singleBookingStatus,
-    bookingsStatus,
-    bookingId.id,
-    bookingData,
-  ]);
+    bookingId, bookingData]);
 
-  useEffect(() => {
-    if (roomsStatus === "idle") {
-      dispatch(fetchRooms());
-    }
-    if (singleBookingStatus === "fulfilled") {
-      if (bookingData.room !== singleRoomData.id) console.log(bookingData.room);
-      dispatch(getRoom(bookingData.room));
-    }
-  }, [dispatch, bookingData, roomsStatus, singleBookingStatus, singleRoomData]);
+console.log(bookingData)
 
   if (
-    bookingsStatus === "pending" ||
-    singleBookingStatus === "pending" ||
-    roomsStatus === "pending" ||
-    singleRoomStatus === "pending" ||
-    bookingsStatus === "idle" ||
-    singleBookingStatus === "idle" ||
-    roomsStatus === "idle" ||
-    singleRoomStatus === "idle"
-  ) {
+    singleBookingStatus === "pending" ||  singleBookingStatus === "idle" ) {
     return (
       <Wrapper>
         <HashLoader color="#799283" size={100} />
       </Wrapper>
     );
-  } else if (bookingData) {
-    if (bookingData.room !== singleRoomData.id) {
-      return (
-        <Wrapper>
-          <HashLoader color="#799283" size={100} />
-        </Wrapper>
-      );
-    } else {
+  } else if (bookingData !== {}) {
       return (
         <>
           <CardContainer full>
@@ -123,12 +85,12 @@ export const SingleBooking = (props) => {
                 <CardItem>
                   <h6>Room info</h6>
                   <h4>
-                    {singleRoomData.roomType}-{singleRoomData.roomNumber}
+                    {searchBookingRoom(bookingData.room).roomType}-{searchBookingRoom(bookingData.room).roomNumber}
                   </h4>
                 </CardItem>
                 <CardItem>
                   <h6>Price</h6>
-                  <h4>{totalPriceCalc(singleRoomData.price, bookingData.checkIn, bookingData.checkOut)} $</h4>
+                  <h4>{totalPriceCalc(searchBookingRoom(bookingData.room).price, bookingData.checkIn, bookingData.checkOut)} $</h4>
                 </CardItem>
               </FeaturesRow>
               <FeaturesRow>
@@ -137,7 +99,7 @@ export const SingleBooking = (props) => {
                 </CardItem>
               </FeaturesRow>
               <FeaturesRow amenities>
-                {singleRoomData.amenities.map((amenitie) => {
+                {searchBookingRoom(bookingData.room).amenities.map((amenitie) => {
                   return (
                     <CardItem amenitie>
                       <CardAmenitie>{amenitie}</CardAmenitie>
@@ -158,16 +120,15 @@ export const SingleBooking = (props) => {
                 {bookedStatusCalc(bookingData.checkIn, bookingData.checkOut)}
               </Booked>
               <CardImageText>
-                <h4>{singleRoomData.roomType}</h4>
+                <h4>{searchBookingRoom(bookingData.room).roomType}</h4>
                 <p>
-                  {singleRoomData.description}
+                  {searchBookingRoom(bookingData.room).description}
                 </p>
               </CardImageText>
             </CardImage>
           </CardContainer>
         </>
       );
-    }
   } else {
     return (
       <>
