@@ -24,7 +24,7 @@ import { Wrapper } from "../../components/LayoutStyled";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
 import { Button } from "../../components/Button";
 import { Input, Label, RadioInput } from "../../components/FormStyled";
-import { getTodayString, jobDescriptionChooser } from "../../features/otherFunctions";
+import { jobDescriptionChooser } from "../../features/otherFunctions";
 
 export const SingleUser = ({ match }) => {
   const userId = useParams();
@@ -179,7 +179,7 @@ export const SingleUser = ({ match }) => {
                 
                   <FeaturesRow>
                     <Input>
-                      <label htmlFor="image">Image Link</label>
+                      <h6>Image Link</h6>
                       <input
                         type="link"
                         name="image"
@@ -193,7 +193,7 @@ export const SingleUser = ({ match }) => {
                   <FeaturesRow>
                     <CardItem>
                     <Input>
-                      <label htmlFor="name">Name</label>
+                      <h6>Name</h6>
                       <input
                         type="text"
                         name="name"
@@ -206,7 +206,7 @@ export const SingleUser = ({ match }) => {
                     </CardItem>
                    <CardItem>
                    <Input>
-                      <label htmlFor="position">Position</label>
+                     <h6>Position</h6>
                       <select
                         name="position"
                         defaultValue={userPosition}

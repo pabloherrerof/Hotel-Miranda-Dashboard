@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addBooking, deleteBooking, editBooking, fetchBookings, getBooking } from "./bookingThunks";
-import { searchBookingRoom } from "../API";
 
 
 
@@ -23,18 +22,18 @@ export const bookingsSlice = createSlice({
             state.status = "pending";
         })
         .addCase(fetchBookings.fulfilled, (state, action) =>{
-            state.status = "fulfilled";
             state.bookingListData = action.payload;
+            state.status = "fulfilled";
+            
         })
 
         .addCase(addBooking.fulfilled, (state, action) =>{
             const lastId = parseInt(state.bookingListData[state.bookingListData.length  -1].id.slice(2));    
             action.payload.id = "B-" + (lastId + 1).toString().padStart(4, "0");
             state.bookingListData.push(action.payload)
+            state.status = "fulfilled";
         })
-        .addCase(addBooking.pending, (state) =>{
-            state.status = "pending";
-        })
+
 
 
         .addCase(deleteBooking.fulfilled, (state, action) =>{
@@ -47,16 +46,28 @@ export const bookingsSlice = createSlice({
 
 
         .addCase(getBooking.fulfilled, (state, action) =>{
-            state.singleBookingData = action.payload;
+            if(typeof action.payload === "object"){
+                state.singleBookingData = action.payload
+            } else{
+                state.singleBookingData = state.bookingListData.find(booking => booking.id === action.payload)
+            }
             state.singleBookingStatus = "fulfilled";
         })
+
         .addCase(getBooking.pending, (state, action) =>{
             state.singleBookingStatus = "pending";
         })
 
         .addCase(editBooking.fulfilled, (state,action) =>{
-            state.bookingListData = state.bookingListData.filter(item => item.id !== action.payload.id);
-            state.bookingListData.push(action.payload);
+            state.status = "fulfilled"
+            for(let i = 0; i < state.bookingListData.length; i++) {
+                if (state.bookingListData[i].id === action.payload.id) {
+                    state.bookingListData[i] = action.payload;
+                    state.singleBookingData = action.payload
+                  return;
+                }
+              }
+            
         })
 
         .addCase(editBooking.pending, (state, action) =>{

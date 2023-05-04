@@ -134,16 +134,16 @@ export const TableLink = styled(Link)`
   border-bottom: ${(props) => {if(props.active === "true"){
     return "#135846 2px solid";
   } else{
-    return "#686868 2px solid";
+    return "#939090be 2px solid";
   } }};
   height: 30px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   color: ${(props) => {if(props.active === "true"){
     return "#135846";
   } else{
-    return "#686868";
+    return "#939090be";
   } }};
 `;
 
@@ -178,6 +178,7 @@ export const CustomDropdown = styled(ReactDropdown)`
     font-size: 12px;
     font-weight: normal;
     position: relative;
+  
     .Dropdown-control{
       display: flex;
       gap: 2%;
@@ -188,7 +189,7 @@ export const CustomDropdown = styled(ReactDropdown)`
       background-color: #135846;
       color: #FFFFFF;
       padding: 0.5rem ;
-      width: 80px;
+      width: ${props => props.room ? "120px" : "80px"};
       z-index: 1;
       &:hover{
         scale:1.1;
@@ -205,7 +206,7 @@ export const CustomDropdown = styled(ReactDropdown)`
       background-color: #135846;
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
-      width: 80px;
+      width: ${props => props.room ? "120px" : "80px"};;
       padding: 0.5rem;
       top: 25px;
       z-index: 0;

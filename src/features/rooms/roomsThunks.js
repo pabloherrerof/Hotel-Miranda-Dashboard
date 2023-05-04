@@ -11,10 +11,14 @@ export const addRoom = createAsyncThunk("rooms/addRoom", async (roomObject) => {
 });
 
 export const getRoom = createAsyncThunk("rooms/getRoom", async (roomId) =>{
-    
-    return await roomsList.find(room =>  {
-        console.log(room.id)
-        return room.id === roomId})
+    if(roomsList.find((item) => {
+        return item.id === roomId;
+      }) !== undefined) {
+        return await  delay (roomsList.find((item) => {
+          return item.id === roomId;
+        })
+        )
+      } else return roomId
    
 })
 

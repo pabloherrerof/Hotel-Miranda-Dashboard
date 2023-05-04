@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchRooms, addRoom, deleteRoom, getRoom, editRoom } from "./roomsThunks";
-import { searchBookingRoom } from "../API";
 
 
 export const roomSlice = createSlice({
@@ -30,6 +29,7 @@ export const roomSlice = createSlice({
         })
 
         .addCase(addRoom.fulfilled, (state, action) =>{
+            state.status = "fulfilled"
             const lastId = parseInt(state.roomsListData[state.roomsListData.length  -1].id.slice(2));    
             action.payload.id = "R-" + (lastId + 1).toString().padStart(4, "0");
             state.roomsListData.push(action.payload)
@@ -49,17 +49,26 @@ export const roomSlice = createSlice({
 
 
         .addCase(getRoom.fulfilled, (state, action) =>{
-            state.singleRoomData = action.payload;
             state.singleRoomStatus = "fulfilled";
+             if(typeof action.payload === "object"){
+                state.singleRoomData = action.payload
+            } else{
+                state.singleRoomData = state.roomsListData.find(booking => booking.id === action.payload)
+            }
         })
         .addCase(getRoom.pending, (state, action) =>{
             state.singleRoomStatus = "pending";
         })
 
         .addCase(editRoom.fulfilled, (state,action) =>{
-            
-            state.data = state.roomsListData.filter(item => item.id !== action.payload.id);
-            state.data = [action.payload, ...state.roomsListData];
+            state.status = "fulfilled"
+            for(let i = 0; i < state.roomsListData.length; i++) {
+                if (state.roomsListData[i].id === action.payload.id) {
+                    state.roomsListData[i] = action.payload;
+                    state.singleRoomData = action.payload
+                  return;
+                }
+              }
         })
 
         .addCase(editRoom.pending, (state, action) =>{

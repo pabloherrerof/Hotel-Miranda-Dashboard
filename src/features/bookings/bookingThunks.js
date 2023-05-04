@@ -11,8 +11,14 @@ export const addBooking = createAsyncThunk("bookings/addBooking", async (booking
 });
 
 export const getBooking = createAsyncThunk("bookings/getBooking", async (bookingId) =>{
-    return await delay (bookingsList.find(booking => {
-        return booking.id === bookingId}))
+    if(bookingsList.find((item) => {
+        return item.id === bookingId;
+      }) !== undefined) {
+        return await  delay (bookingsList.find((item) => {
+          return item.id === bookingId;
+        })
+        )
+      } else return bookingId
 })
 
 export const deleteBooking = createAsyncThunk('bookings/deleteBooking', async (bookingId) => {

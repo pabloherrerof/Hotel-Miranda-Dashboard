@@ -1,10 +1,10 @@
-import logo from "../assets/logo-hotel.svg";
-import { Logo } from "../components/SideBarStyled";
-import { EditButton } from "../components/Button";
+import logo from "../../assets/logo-hotel.svg";
+import { Logo } from "../../components/SideBarStyled";
+import { EditButton } from "../../components/Button";
 import { useContext, useState } from "react";
-import { UserContext } from "../components/UserContext";
+import { UserContext } from "../../components/UserContext";
 import { Inputs, LogContainer, LogForm } from "./LoginStyled";
-import { searchObjectByEmailAndPassword } from "../features/API";
+import { searchObjectByEmailAndPassword } from "../../features/API";
 
 export const Login = (props) => {
   const [email, setEmail] = useState("admin@admin.com");

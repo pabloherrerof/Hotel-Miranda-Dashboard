@@ -2,9 +2,9 @@
   {
     "name": "John Doe",
     "id": "B-0001",
-    "orderDate": "2022-03-15T12:30:00Z",
-    "checkIn": "2022-03-20T14:00:00Z",
-    "checkOut": "2022-03-25T12:00:00Z",
+    "orderDate": "2022-03-15",
+    "checkIn": "2022-03-20",
+    "checkOut": "2022-03-25",
     "room": "R-0001",
     "specialRequest": "No smoking room"
   },
@@ -12,9 +12,9 @@
   {
     "name": "Alice Johnson",
     "id": "B-0002",
-    "orderDate": "2023-05-01T09:00:00Z",
-    "checkIn": "2023-05-10T15:00:00Z",
-    "checkOut": "2023-05-15T11:00:00Z",
+    "orderDate": "2023-05-01",
+    "checkIn": "2023-05-10",
+    "checkOut": "2023-05-15",
     "room": "R-0005",
     "specialRequest": "Early check-in, please"
   },
@@ -22,9 +22,9 @@
   {
     "name": "Bob Smith",
     "id": "B-0003",
-    "orderDate": "2022-06-20T10:30:00Z",
-    "checkIn": "2022-06-25T16:00:00Z",
-    "checkOut": "2022-06-30T12:00:00Z",
+    "orderDate": "2022-06-20",
+    "checkIn": "2022-06-25",
+    "checkOut": "2022-06-30",
     "room": "R-0007",
     "specialRequest": "Early check-in, please",
     "totalPrice": 800
@@ -33,9 +33,9 @@
   {
     "name": "Emily Davis",
     "id": "B-0004",
-    "orderDate": "2022-09-01T14:45:00Z",
-    "checkIn": "2022-09-10T12:00:00Z",
-    "checkOut": "2022-09-15T10:00:00Z",
+    "orderDate": "2022-09-01",
+    "checkIn": "2022-09-10",
+    "checkOut": "2022-09-15",
     "room": "R-0008",
     "specialRequest": "Ocean view preferred",
     "totalPrice": 3000
@@ -44,9 +44,9 @@
   {
     "name": "David Lee",
     "id": "B-0005",
-    "orderDate": "2023-07-10T08:00:00Z",
-    "checkIn": "2023-07-15T14:00:00Z",
-    "checkOut": "2023-07-20T12:00:00Z",
+    "orderDate": "2023-07-10",
+    "checkIn": "2023-07-15",
+    "checkOut": "2023-07-20",
     "room": "R-0006",
     "specialRequest": "Late check-out, please"
   },
@@ -54,9 +54,9 @@
   {
     "name": "Sophia Brown",
     "id": "B-0006",
-    "orderDate": "2022-08-15T11:30:00Z",
-    "checkIn": "2022-08-20T16:00:00Z",
-    "checkOut": "2022-08-25T12:00:00Z",
+    "orderDate": "2022-08-15",
+    "checkIn": "2022-08-20",
+    "checkOut": "2022-08-25",
     "room": "R-0003",
     "specialRequest": "Extra blankets, please"
   },
@@ -64,18 +64,18 @@
   {
     "name": "Oliver Garcia",
     "id": "B-0007",
-    "orderDate": "2022-11-01T10:00:00Z",
-    "checkIn": "2022-11-10T14:00:00Z",
-    "checkOut": "2022-11-15T12:00:00Z",
+    "orderDate": "2022-11-01",
+    "checkIn": "2022-11-10",
+    "checkOut": "2022-11-15",
     "room": "R-0003",
     "specialRequest": "Quiet room, please"
   },
   {
     "name": "William Jones",
     "id": "B-0008",
-    "orderDate": "2023-10-01T11:30:00Z",
-    "checkIn": "2023-10-10T15:00:00Z",
-    "checkOut": "2023-10-15T12:00:00Z",
+    "orderDate": "2023-10-01",
+    "checkIn": "2023-10-10",
+    "checkOut": "2023-10-15",
     "room": "R-0008",
     "specialRequest": "Room with balcony preferred"
   },
@@ -84,8 +84,8 @@
     "name": "Ava Hernandez",
     "id": "B-0009",
     "orderDate": "2022-04-20T09:15:00Z",
-    "checkIn": "2023-04-25T16:00:00Z",
-    "checkOut": "2023-05-30T12:00:00Z",
+    "checkIn": "2023-04-25",
+    "checkOut": "2023-05-30",
     "room": "R-0008",
     "specialRequest": "Extra towels, please"
   },
@@ -93,9 +93,9 @@
   {
     "name": "Mia Wilson",
     "id": "B-0010",
-    "orderDate": "2022-03-01T08:00:00Z",
-    "checkIn": "2022-03-10T14:00:00Z",
-    "checkOut": "2022-03-15T12:00:00Z",
+    "orderDate": "2022-03-01",
+    "checkIn": "2022-03-10",
+    "checkOut": "2022-03-15",
     "room": "R-0002",
     "specialRequest": ""
   },
@@ -103,9 +103,9 @@
   {
     "name": "Ethan Taylor",
     "id": "B-0011",
-    "orderDate": "2022-04-15T12:00:00Z",
-    "checkIn": "2022-04-20T14:00:00Z",
-    "checkOut": "2022-04-25T12:00:00Z",
+    "orderDate": "2022-04-15",
+    "checkIn": "2022-04-20",
+    "checkOut": "2022-04-25",
     "room":"R-0001",
     "specialRequest": "Extra pillows, please"
   },
@@ -113,9 +113,9 @@
   {
     "name": "Charlotte Anderson",
     "id": "B-0012",
-    "orderDate": "2023-04-01T14:00:00Z",
-    "checkIn": "2023-04-18T12:00:00Z",
-    "checkOut": "2023-06-20T10:00:00Z",
+    "orderDate": "2023-04-01",
+    "checkIn": "2023-04-18",
+    "checkOut": "2023-06-20",
     "room": "R-0004",
     "specialRequest": "Early check-in, please"
   }

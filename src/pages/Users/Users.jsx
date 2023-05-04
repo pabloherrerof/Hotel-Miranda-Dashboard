@@ -15,15 +15,14 @@ import {
   TableItem,
   TableLink,
   UserTableImage,
+  TableRow,
+  TableContainer,
+  TableTitle,
 } from "../../components/TableStyled";
 import { Wrapper } from "../../components/LayoutStyled";
 import { Modal } from "../../components/Modal";
-import { AiOutlineSearch } from "react-icons/ai";
-import { TableContainer } from "../../components/TableStyled";
-import { TableTitle } from "../../components/TableStyled";
-import { TableRow } from "../../components/TableStyled";
 import { dateConverter } from "../../features/otherFunctions";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineInfoCircle, AiOutlineSearch } from "react-icons/ai";
 import { VscTrash } from "react-icons/vsc";
 import {
   MdOutlineKeyboardArrowDown,
@@ -88,42 +87,41 @@ export const Users = (props) => {
         user.name.toLowerCase().includes(e.target.value.toLowerCase())
       )
     );
-    if(e.target.value === ""){
-      if(showAll === "true"){
-        console.log("holaqw")
-        setTableData(usersData)
+    if (e.target.value === "") {
+      if (showAll === "true") {
+        console.log("holaqw");
+        setTableData(usersData);
       }
-      if(showActive === "true"){
-        console.log("hola")
+      if (showActive === "true") {
+        console.log("hola");
         setTableData(usersData.filter((user) => user.state === "ACTIVE"));
       }
-      if(showInactive === "true"){
-        console.log("holasass")
+      if (showInactive === "true") {
+        console.log("holasass");
         setTableData(usersData.filter((user) => user.state === "INACTIVE"));
       }
     }
   };
 
   const onChangeHandler = (e) => {
-    let orderedData = usersData;
-    console.log(orderedData)
     if (e.value === "Name") {
       setTableData(
-        [...tableData].sort((a,b) => {
-          if(a.name < b.name) return -1;
-          if(a.name < b.name) return 1;
+        [...tableData].sort((a, b) => {
+          if (a.name < b.name) return -1;
+          if (a.name > b.name) return 1;
           return 0;
-
         })
       );
-    } if(e.value === "Date"){
-      console.log("Hola")
-      setTableData( [...tableData].sort((a,b) => {
-        if(a.startDate < b.startDate) return -1;
-        if(a.startDate < b.startDate) return 1;
-        return 0;
-
-      }))
+    }
+    if (e.value === "Date") {
+      console.log("Hola");
+      setTableData(
+        [...tableData].sort((a, b) => {
+          if (a.startDate < b.startDate) return -1;
+          if (a.startDate > b.startDate) return 1;
+          return 0;
+        })
+      );
     }
   };
 
@@ -165,18 +163,14 @@ export const Users = (props) => {
               <Button
                 onClick={() => {
                   setShowCreateModal(true);
-                }}
-              >
-                + New User
-              </Button>
-            ) : (
-              ""
+                }}>+ New </Button>) : (""
             )}
             <CustomDropdown
               arrowOpen={<MdOutlineKeyboardArrowUp />}
               arrowClosed={<MdOutlineKeyboardArrowDown />}
               options={options}
               onChange={onChangeHandler}
+              value={"Date"}
             />
           </RightActions>
         </TableActions>

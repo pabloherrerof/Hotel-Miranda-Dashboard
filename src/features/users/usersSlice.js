@@ -32,6 +32,7 @@ export const usersSlice = createSlice({
             const lastId = parseInt(state.usersListData[state.usersListData.length  -1].id.slice(2));    
             action.payload.id = "U-" + (lastId + 1).toString().padStart(4, "0");
             state.usersListData.push(action.payload)
+            console.log(state.usersListData)
         })
 
         .addCase(deleteUser.fulfilled, (state, action) =>{
@@ -62,7 +63,7 @@ export const usersSlice = createSlice({
         
 
         .addCase(editUser.fulfilled, (state,action) =>{
-            console.log(action.payload)
+            state.status = "fulfilled";
              for(let i = 0; i < state.usersListData.length; i++) {
                 if (state.usersListData[i].id === action.payload.id) {
                     state.usersListData[i] = action.payload;
@@ -70,6 +71,10 @@ export const usersSlice = createSlice({
                   return;
                 }
               }
+        })
+
+        .addCase(editUser.pending, (state, action) =>{
+            state.status = "pending";
         })
         
     },

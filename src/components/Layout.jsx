@@ -11,7 +11,7 @@ export const Layout = (props) => {
   let userMatch = useMatch("/user/:id");
 
   let title = "";
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const titleChooser = () => {
     if (location.pathname === "/") {

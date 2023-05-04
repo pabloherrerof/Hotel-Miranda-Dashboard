@@ -27,6 +27,14 @@ export const Input = styled.div`
   margin: 0;
   display: flex;
   flex-direction: column;
+
+  h6{
+    font-weight: normal;
+    font-family: "Poppins";
+    font-size: 14px;
+    color: #6e6e6e;
+    margin: 0;
+  }
   
 
   input {
@@ -35,6 +43,9 @@ export const Input = styled.div`
     background-color: #d4d4d4;
     border-radius: 6px;
     padding: 0.3rem 0.5rem;
+    font-weight: normal;
+  font-family: "Poppins";
+  font-size: 12px;
   }
 
   select {
@@ -65,3 +76,35 @@ export const Label = styled.label`
         }
     }};
 `
+
+export const InputBig = styled.div`
+  width: 100%;
+ 
+  
+  letter-spacing: 0px;
+  color: #212121;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  
+h6{
+  margin: 0;
+  font-weight: normal;
+    font-family: "Poppins";
+    font-size: 14px;
+    color: #6e6e6e;
+    margin: 0;
+}
+  input {
+    border: none;
+    box-shadow: 0px 3px 10px #00000005;
+    background-color: #d4d4d4;
+    border-radius: 6px;
+    padding: 0.3rem 0.5rem;
+    height: 100%;
+    font-weight: normal;
+  font-family: "Poppins";
+  font-size: 12px;
+
+  }`

@@ -71,6 +71,7 @@ export const SideBar = () => {
           <p>{state.user.email}</p>
           <button onClick={() => clickHandler()}>Edit User</button>
         </User>
+        
         <Copyright>
           <h6>Travl Hotel Admin Dashboard</h6>
           <p>2023 All Rights Reserved</p>
