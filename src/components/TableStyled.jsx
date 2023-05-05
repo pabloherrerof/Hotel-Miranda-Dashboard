@@ -67,7 +67,7 @@ export const TableItem = styled.td`
   font-family: "Poppins";
   font-weight: 500;
   font-size: 14px;
-  max-width: 80px;
+  max-width: ${props => props.big ? "120px" : "80px"};
 
   text-decoration: ${(props) => {
     if (props.discount > 0 && props.price) {
@@ -124,7 +124,8 @@ export const StyledLink = styled(Link)`
 `;
 
 export const RoomImageItem = styled.img`
-  width: 50%;
+  width: 80%;
+  border-radius: 10px;
   height: 70px;
   object-fit: cover;
 `;

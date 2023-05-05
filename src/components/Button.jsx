@@ -122,3 +122,19 @@ width: 100%;
         return "transparent";
     }}};;
 `
+
+export const ArchiveButton = styled.button`
+  font-family: "Poppins";
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  background-color: transparent;
+letter-spacing: 0px;
+color: ${props => props.archived ? "#E23428" : "#5AD07A"  } 
+;
+
+&:hover{
+  scale: 1.1;
+  cursor: pointer;
+}
+`

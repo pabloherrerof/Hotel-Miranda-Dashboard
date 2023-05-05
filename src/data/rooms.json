@@ -2,6 +2,7 @@
     {
       "roomType": "Single Bed",
       "roomNumber": "101",
+      "thumbnail": "https://images.unsplash.com/photo-1532344214108-1b6d425db572?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2969&q=80",
       "id": "R-0001",
       "description": "Cozy room with a single bed and a window facing the city.",
       "price": 80,
@@ -19,6 +20,7 @@
       
       "roomNumber": "102",
       "id": "R-0002",
+      "thumbnail":"https://images.unsplash.com/photo-1576354302919-96748cb8299e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=658&q=80",
       "description": "Spacious room with two double beds and a balcony with sea view.",
       "price": 120,
       "discount": 10,
@@ -30,6 +32,7 @@
       "roomType": "Suite",
       "roomNumber": "201",
       "id": "R-0003",
+      "thumbnail": "https://plus.unsplash.com/premium_photo-1661964402307-02267d1423f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1673&q=80",
       "description": "Elegant room with a queen bed, a sitting area, and a view of the garden.",
       "price": 150,
       "discount": 20,
@@ -49,6 +52,7 @@
       "roomType": "Double Superior",
       "roomNumber": "202",
       "id": "R-0004",
+      "thumbnail": "https://images.unsplash.com/photo-1621891334481-5c14b369d9d7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80",
       "description": "Luxurious room with a king bed, a private terrace, and a whirlpool tub.",
       "price": 200,
       "discount": 0,
@@ -66,6 +70,7 @@
       "roomType": "Suite",
       "roomNumber": "203",
       "id": "R-0005",
+      "thumbnail": "https://plus.unsplash.com/premium_photo-1661964402307-02267d1423f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1673&q=80",
       "description": "Comfortable room with two twin beds, a desk, and a view of the mountains.",
       "price": 100,
       "discount": 15,
@@ -82,6 +87,7 @@
     {
       "roomType": "Single Bed",
       "roomNumber": "301",
+      "thumbnail": "https://images.unsplash.com/photo-1532344214108-1b6d425db572?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2969&q=80",
       "id": "R-0006",
       "description": "Basic room with a single bed, a wardrobe, and a small window.",
       "price": 60,
@@ -98,6 +104,7 @@
       "roomType": "Double Bed",
       "roomNumber": "302",
       "id": "R-0007",
+      "thumbnail":"https://images.unsplash.com/photo-1576354302919-96748cb8299e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=658&q=80",
       "description": "Spacious room with two double beds and a balcony with sea view.",
       "price": 110,
       "discount": 10,
@@ -108,6 +115,7 @@
     {
       "roomType": "Single Bed",
       "roomNumber": "401",
+      "thumbnail": "https://images.unsplash.com/photo-1532344214108-1b6d425db572?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2969&q=80",
       "id": "R-0008",
       "description": "Cozy room with a single bed and a window facing the city.",
       "price": 140,

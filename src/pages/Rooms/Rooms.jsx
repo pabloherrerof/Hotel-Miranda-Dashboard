@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { fetchRooms } from "../../features/rooms/roomsThunks";
 import { HashLoader } from "react-spinners";
 import { Wrapper } from "../../components/LayoutStyled";
-import { AiOutlineInfoCircle, AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineInfoCircle} from "react-icons/ai";
 import { VscTrash } from "react-icons/vsc";
 import {
   MdOutlineKeyboardArrowDown,
@@ -144,8 +144,8 @@ export const Rooms = (props) => {
                 <TableItem>
                   <ImageItem>
                     <RoomImageItem
-                      src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
-                      alt=""
+                      src={element.thumbnail}
+                      alt="room"
                     />
                     <div>
                       {element.roomType + "-" + element.roomNumber}

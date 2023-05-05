@@ -42,7 +42,7 @@ export const Modal = (props) => {
   const [checkOut, setCheckOut] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
 
-  const [roomType, setRoomType] = useState("");
+  const [roomType, setRoomType] = useState("Single Bed");
   const [roomNumber, setRoomNumber] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
@@ -147,12 +147,14 @@ export const Modal = (props) => {
         roomNumber === "" ||
         roomType === "" ||
         price === "" ||
-        discount === "" ||
         roomStatus === "" ||
         description === ""
       ) {
         setFieldError("You have to enter all inputs!");
       } else {
+        if(discount === ""){
+          setDiscount(0)
+        }
         const room = {
           roomType: roomType,
           roomNumber: roomNumber,
@@ -161,13 +163,14 @@ export const Modal = (props) => {
           status: roomStatus,
           amenities: roomInfoChooser(roomType).amenities,
           cancellation: roomInfoChooser(roomType).cancelattion,
+          thumbnail: roomInfoChooser(roomType).thumbnail,
           description: description,
         };
         console.log(room);
         dispatch(addRoom(room));
         props.setShowCreateModal(false);
         setRoomNumber("");
-        setRoomType("");
+        setRoomType("Single Bed");
         setDiscount("");
         setPrice("");
         setDescription("");

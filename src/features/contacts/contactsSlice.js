@@ -23,9 +23,6 @@ export const contactsSlice = createSlice({
         .addCase(fetchContacts.fulfilled, (state, action) =>{
             state.status = "fulfilled";
             state.data = action.payload;
-            state.data.forEach((obj, index) => {
-                obj.id = "C" + (index + 1).toString().padStart(3, "0");
-              });
         })
 
 
@@ -34,12 +31,23 @@ export const contactsSlice = createSlice({
             state.status = "fullfilled";
         })
     
-
-        .addCase(archiveContacts.fulfilled, (state, action) =>{
-            state.data = state.data.find(item => item.id !== action.payload);
-            state.status = "fullfilled";
+        .addCase(archiveContacts.pending, (state, action) => {
+            state.status = "pending";
         })
-        
+        .addCase(archiveContacts.fulfilled, (state, action) =>{
+            state.status = "fullfilled";
+            for(let i = 0; i < state.data.length; i++) {
+                if (state.data[i].id === action.payload.id) {
+                    if(state.data[i].archived === true){
+                        state.data[i].archived = false
+                    } else {
+                        state.data[i].archived = true
+                    }
+                  return;
+                }
+              }
+            
+        })
     },
 })
 

@@ -67,7 +67,7 @@ export const Bookings = (props) => {
 
   const onClickHandler = (e) => {
     const option = e.target.innerText;
-    if (option === "All bookings") {
+    if (option === "All Bookings") {
       setShowAll("true");
       setShowCheckIn("false");
       setShowCheckOut("false");
@@ -103,7 +103,6 @@ export const Bookings = (props) => {
     );
     if (e.target.value === "") {
       if (showAll === "true") {
-        console.log("holaqw");
         setTableData(bookingsData);
       }
       if (showCheckIn === "true") {
@@ -172,7 +171,7 @@ export const Bookings = (props) => {
         <TableActions>
           <LeftActions>
             <TableLink active={showAll} onClick={onClickHandler}>
-              All bookings
+              All Bookings
             </TableLink>
             <TableLink active={showCheckIn} onClick={onClickHandler}>
               Checking In
