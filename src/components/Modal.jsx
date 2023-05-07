@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { Button } from "./Button";
+import { ArchiveButton, Button } from "./Button";
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled";
 import { IoClose } from "react-icons/io5";
 import { addUser, deleteUser } from "../features/users/usersThunks";
@@ -13,12 +13,18 @@ import {
   RadioInput,
 } from "./FormStyled";
 import {
+  dateConverter,
   getTodayString,
   jobDescriptionChooser,
   roomInfoChooser,
 } from "../features/otherFunctions";
 import { useState } from "react";
 import { searchBookingRoom } from "../features/API";
+import {
+  ReviewComment,
+  ReviewContainer,
+  ReviewInfo,
+} from "./LastReviewsStyled";
 
 export const Modal = (props) => {
   const dispatch = useDispatch();
@@ -152,8 +158,8 @@ export const Modal = (props) => {
       ) {
         setFieldError("You have to enter all inputs!");
       } else {
-        if(discount === ""){
-          setDiscount(0)
+        if (discount === "") {
+          setDiscount(0);
         }
         const room = {
           roomType: roomType,
@@ -165,6 +171,7 @@ export const Modal = (props) => {
           cancellation: roomInfoChooser(roomType).cancelattion,
           thumbnail: roomInfoChooser(roomType).thumbnail,
           description: description,
+          images: roomInfoChooser(roomType).images,
         };
         console.log(room);
         dispatch(addRoom(room));
@@ -450,39 +457,39 @@ export const Modal = (props) => {
               <Input>
                 <label htmlFor="roomType">Room Type</label>
                 <select
-                        name="RoomType"
-                        defaultValue={roomType}
-                        onChange={(e) => {
-                          setRoomType(e.target.value);
-                        }}
-                      >
-                        <option>Single Bed</option>
-                        <option>Double Bed</option>
-                        <option>Double Superior</option>
-                        <option>Suite</option>
-                      </select>
+                  name="RoomType"
+                  defaultValue={roomType}
+                  onChange={(e) => {
+                    setRoomType(e.target.value);
+                  }}
+                >
+                  <option>Single Bed</option>
+                  <option>Double Bed</option>
+                  <option>Double Superior</option>
+                  <option>Suite</option>
+                </select>
               </Input>
               <Input>
                 <label htmlFor="price">Price</label>
                 <input
-                        type="number"
-                        name="price"
-                        defaultValue={price}
-                        onInput={(e) => {
-                          setPrice(e.target.value);
-                        }}
-                      />
+                  type="number"
+                  name="price"
+                  defaultValue={price}
+                  onInput={(e) => {
+                    setPrice(e.target.value);
+                  }}
+                />
               </Input>
               <Input>
                 <label htmlFor="discount">Discount</label>
                 <input
-                        type="number"
-                        name="discount"
-                        defaultValue={discount}
-                        onInput={(e) => {
-                          setDiscount(e.target.value);
-                        }}
-                      />
+                  type="number"
+                  name="discount"
+                  defaultValue={discount}
+                  onInput={(e) => {
+                    setDiscount(e.target.value);
+                  }}
+                />
               </Input>
               <RadioInput>
                 <Label active htmlFor="state">
@@ -521,6 +528,67 @@ export const Modal = (props) => {
 
               <Button>Save!</Button>
             </FormContainer>
+          </ModalContainer>
+        </>
+      );
+    }
+  }
+
+  if (props.mode === "moreInfo") {
+    if (props.page === "contacts" && props.target !== undefined) {
+      return (
+        <>
+          <ModalContainer show={props.showModal}>
+            <ModalCloseRow>
+              <IoClose
+                onClick={() => {
+                  props.setShowModal(false);
+                }}
+              />
+            </ModalCloseRow>
+           
+              <ReviewComment>{props.target.comment}</ReviewComment>
+              <ReviewInfo>
+                <div>
+                  <h4>{props.target.customer.name}</h4>
+                  <p>{dateConverter(props.target.date).date}</p>
+                </div>
+                {props.target.archived !== true ? (
+                  <ArchiveButton archived>Archived</ArchiveButton>
+                ) : (
+                  ""
+                )}
+                {props.target.archived ? (
+                  <ArchiveButton unarchived>Unarchived</ArchiveButton>
+                ) : (
+                  ""
+                )}
+              </ReviewInfo>
+            
+          </ModalContainer>
+        </>
+      );
+    }
+    if(props.page === "bookings" && props.targetBooking !== undefined){
+      return (
+        <>
+          <ModalContainer show={props.showNotesModal}>
+            <ModalCloseRow>
+              <IoClose
+                onClick={() => {
+                  props.setShowNotesModal(false);
+                }}
+              />
+            </ModalCloseRow>
+           
+              <ReviewComment>{props.targetBooking.specialRequest}</ReviewComment>
+              <ReviewInfo>
+                <div>
+                  <h4>{props.targetBooking.name}</h4>
+                  <p>{dateConverter(props.targetBooking.date).date}</p>
+                </div>
+              </ReviewInfo>
+            
           </ModalContainer>
         </>
       );

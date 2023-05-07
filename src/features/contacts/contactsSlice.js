@@ -25,6 +25,8 @@ export const contactsSlice = createSlice({
             state.data = action.payload;
         })
 
+      
+
 
         .addCase(deleteContact.fulfilled, (state, action) =>{
             state.data = state.data.filter(item => item.id !== action.payload);
@@ -53,5 +55,6 @@ export const contactsSlice = createSlice({
 
 export const getContactsStatus = (state) => state.contacts.status;
 export const getContactsData = (state) => state.contacts.data;
+
 
 export default contactsSlice.reducer;

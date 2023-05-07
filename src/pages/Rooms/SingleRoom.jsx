@@ -11,6 +11,7 @@ import {
   FeaturesRow,
   CardHeader,
   CloseIcon,
+  CardImageText,
 } from "../../components/CardStyled";
 import { MySlider } from "../../components/Slider";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -60,7 +61,6 @@ export const SingleRoom = (props) => {
         dispatch(getRoom(roomId.id));
       }
     }
-    console.log(singleRoomData.roomType);
     setRoomType(singleRoomData.roomType);
     setRoomNumber(singleRoomData.roomNumber);
     setPrice(singleRoomData.price);
@@ -94,8 +94,9 @@ export const SingleRoom = (props) => {
         cancellation: roomInfoChooser(roomType).cancelattion,
         thumbnail: roomInfoChooser(roomType).thumbnail,
         description: description,
+        images: roomInfoChooser(roomType).images
       };
-      console.log(room);
+      console.log(roomInfoChooser(roomType).images);
       dispatch(editRoom(room));
       dispatch(getRoom(room));
       setEdit(false);
@@ -178,19 +179,17 @@ export const SingleRoom = (props) => {
                   );
                 })}
               </FeaturesRow>
-              <FeaturesRow>
-                <CardItem paragraph>
-                  <h3>Cancellation</h3>
-                  <p>{singleRoomData.cancellation}</p>
-                </CardItem>
-              </FeaturesRow>
             </Card>
             <CardImage>
-              <MySlider></MySlider>
+              <MySlider data={singleRoomData.images}/>
 
               <Booked bookStatus={offerChecker(singleRoomData.discount)}>
                 {offerChecker(singleRoomData.discount)}
               </Booked>
+              <CardImageText>
+              <h4>Cancellation</h4>
+                  <p>{singleRoomData.cancellation}</p>
+              </CardImageText>
             </CardImage>
           </CardContainer>
         </>

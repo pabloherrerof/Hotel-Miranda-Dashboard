@@ -6,6 +6,7 @@ export const CardContainer = styled.section`
   background-color: #ffffff;
   display: flex;
   border-radius: 30px;
+  max-height: 110vh;
 `;
 
 export const Card = styled.div`
@@ -58,10 +59,7 @@ export const CardImage = styled.div`
     z-index: 10;
   }
 
-  .slick-slide {
-    height: 100%;
-    object-fit: cover;
-  }
+  
 `;
 
 export const CardImageText = styled.div`

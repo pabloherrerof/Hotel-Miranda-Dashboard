@@ -13,6 +13,8 @@ export const ModalContainer = styled.div`
     box-shadow: 0px 3px 10px #00000005;
     border: 0.5px solid #212121 ;
     gap: 1rem;
+    z-index: 5;
+    max-width: 500px;
 
 
     h2{

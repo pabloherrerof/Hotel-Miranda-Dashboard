@@ -32,7 +32,7 @@ import { HashLoader } from "react-spinners";
 import { searchBookingRoom } from "../../features/API";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
 import { Button } from "../../components/Button";
-import { Input, InputBig, Label } from "../../components/FormStyled";
+import { Input, InputBig } from "../../components/FormStyled";
 
 export const SingleBooking = (props) => {
   const bookingId = useParams();
@@ -176,7 +176,7 @@ export const SingleBooking = (props) => {
               </FeaturesRow>
             </Card>
             <CardImage>
-              <MySlider></MySlider>
+              <MySlider data={searchBookingRoom(bookingData.room).images}/>
 
               <Booked
                 bookStatus={bookedStatusCalc(

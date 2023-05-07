@@ -6,6 +6,7 @@ export const fetchContacts = createAsyncThunk("contacts/fetchContacts", async ()
     return await delay(contactsList);
 });
 
+
 export const archiveContacts = createAsyncThunk("contacts/archiveContact", async (contactObject) => {
     return await delay(contactObject);
 })

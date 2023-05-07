@@ -2,8 +2,29 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import styled from "styled-components";
 
-export const MySlider = () => {
+
+const FotoSlider = styled(Slider)`
+ .slick-slide {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+}
+
+.slick-slide img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+`
+export const MySlider = (props) => {
   const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
     <span {...props}>{children}</span>
   );
@@ -19,21 +40,19 @@ export const MySlider = () => {
     slidesToScroll: 1,
   };
 
-  return (
-    <Slider {...settings}>
-      <div>hola</div>
-      <div>
-        <h3>Slide 2</h3>
-      </div>
-      <div>
-        <h3>Slide 3</h3>
-      </div>
-      <div>
-        <h3>Slide 4</h3>
-      </div>
-      <div>
-        <h3>Slide 5</h3>
-      </div>
-    </Slider>
+   return (
+    <FotoSlider {...settings}>
+      {props.data.map((image) => {
+        return (
+          
+          
+            <div>
+              <img src={image} alt="" />
+            </div>
+           
+         
+        )
+      })}
+    </FotoSlider>
   );
 };

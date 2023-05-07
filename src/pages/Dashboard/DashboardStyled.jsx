@@ -5,6 +5,7 @@ export const KpiRow = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 1.5rem;
   width: 100%;
+  margin-bottom: 2rem;
 `;
 
 export const KPI = styled.div`

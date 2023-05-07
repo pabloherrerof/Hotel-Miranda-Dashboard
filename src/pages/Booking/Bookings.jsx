@@ -2,7 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { HashLoader } from "react-spinners";
 import { useEffect, useState } from "react";
 import { fetchBookings } from "../../features/bookings/bookingThunks";
-import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
+import {
+  getBookingsData,
+  getBookingsStatus,
+} from "../../features/bookings/bookingsSlice";
 import { Wrapper } from "../../components/LayoutStyled";
 import { AiOutlineInfoCircle, AiOutlineSearch } from "react-icons/ai";
 import { VscTrash } from "react-icons/vsc";
@@ -28,7 +31,6 @@ import { Modal } from "../../components/Modal";
 import { bookedStatusCalc, dateConverter } from "../../features/otherFunctions";
 import { searchBookingRoom } from "../../features/API";
 
-
 export const Bookings = (props) => {
   const dispatch = useDispatch();
   const bookingsStatus = useSelector(getBookingsStatus);
@@ -42,7 +44,9 @@ export const Bookings = (props) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [targetId, setTargetId] = useState("");
   const [tableData, setTableData] = useState(bookingsData);
- 
+  const [targetBooking, setTargetBooking] = useState();
+  const [showNotesModal, setShowNotesModal] = useState(false);
+
   const tableTitles = [
     "Guest",
     "Order Date",
@@ -55,8 +59,7 @@ export const Bookings = (props) => {
     "Delete",
   ];
 
-  const options = ["Guest", "Order", "Check in", "Check out"];
-
+  const options = ["Guest", "Order Date", "Check in", "Check out"];
 
   useEffect(() => {
     if (bookingsStatus === "idle") {
@@ -71,26 +74,42 @@ export const Bookings = (props) => {
       setShowAll("true");
       setShowCheckIn("false");
       setShowCheckOut("false");
-      setShowInProgress("false")
+      setShowInProgress("false");
       setTableData(bookingsData);
     } else if (option === "Checking In") {
       setShowAll("false");
       setShowCheckIn("true");
       setShowCheckOut("false");
       setShowInProgress("false");
-      setTableData(bookingsData.filter((booking) => bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"));
+      setTableData(
+        bookingsData.filter(
+          (booking) =>
+            bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"
+        )
+      );
     } else if (option === "Checking Out") {
       setShowAll("false");
       setShowCheckIn("false");
       setShowCheckOut("true");
       setShowInProgress("false");
-      setTableData(bookingsData.filter((booking) => bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK OUT"));
-    } else if (option === "In Progress"){
+      setTableData(
+        bookingsData.filter(
+          (booking) =>
+            bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK OUT"
+        )
+      );
+    } else if (option === "In Progress") {
       setShowAll("false");
       setShowCheckIn("false");
       setShowCheckOut("false");
       setShowInProgress("true");
-      setTableData(bookingsData.filter((booking) => bookedStatusCalc(booking.checkIn, booking.checkOut) === "IN PROGRESS"));
+      setTableData(
+        bookingsData.filter(
+          (booking) =>
+            bookedStatusCalc(booking.checkIn, booking.checkOut) ===
+            "IN PROGRESS"
+        )
+      );
     }
   };
 
@@ -106,13 +125,30 @@ export const Bookings = (props) => {
         setTableData(bookingsData);
       }
       if (showCheckIn === "true") {
-        setTableData(bookingsData.filter((booking) => bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"));
+        setTableData(
+          bookingsData.filter(
+            (booking) =>
+              bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"
+          )
+        );
       }
       if (showCheckOut === "true") {
-        setTableData(bookingsData.filter((booking) => bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK OUT"));
+        setTableData(
+          bookingsData.filter(
+            (booking) =>
+              bookedStatusCalc(booking.checkIn, booking.checkOut) ===
+              "CHECK OUT"
+          )
+        );
       }
-      if(showInProgress === "true"){
-        setTableData(bookingsData.filter((booking) => bookedStatusCalc(booking.checkIn, booking.checkOut) === "IN PROGRESS"));
+      if (showInProgress === "true") {
+        setTableData(
+          bookingsData.filter(
+            (booking) =>
+              bookedStatusCalc(booking.checkIn, booking.checkOut) ===
+              "IN PROGRESS"
+          )
+        );
       }
     }
   };
@@ -122,16 +158,16 @@ export const Bookings = (props) => {
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.name < b.name) return -1;
-          if (a.name < b.name) return 1;
+          if (a.name > b.name) return 1;
           return 0;
         })
       );
     }
-    if (e.value === "Order") {
+    if (e.value === "Order Date") {
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.orderDate < b.orderDate) return -1;
-          if (a.orderDate < b.orderDate) return 1;
+          if (a.orderDate > b.orderDate) return 1;
           return 0;
         })
       );
@@ -140,7 +176,7 @@ export const Bookings = (props) => {
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.checkIn < b.checkIn) return -1;
-          if (a.checkIn < b.checkIn) return 1;
+          if (a.checkIn > b.checkIn) return 1;
           return 0;
         })
       );
@@ -149,14 +185,13 @@ export const Bookings = (props) => {
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.checkOut < b.checkOut) return -1;
-          if (a.checkOut < b.checkOut) return 1;
+          if (a.checkOut > b.checkOut) return 1;
           return 0;
         })
       );
     }
   };
-  
-  
+
   if (bookingsStatus === "pending" || bookingsStatus === "idle") {
     return (
       <>
@@ -167,7 +202,7 @@ export const Bookings = (props) => {
     );
   } else {
     return (
-        <>
+      <>
         <TableActions>
           <LeftActions>
             <TableLink active={showAll} onClick={onClickHandler}>
@@ -200,7 +235,7 @@ export const Bookings = (props) => {
                   setShowCreateModal(true);
                 }}
               >
-                + New 
+                + New
               </Button>
             ) : (
               ""
@@ -214,84 +249,93 @@ export const Bookings = (props) => {
             />
           </RightActions>
         </TableActions>
-       
+
         <TableContainer>
-        <thead>
-          <TableTitle>
-            {tableTitles.map((element) => (
-              <th key={tableTitles.indexOf(element)}>{element}</th>
+          <thead>
+            <TableTitle>
+              {tableTitles.map((element) => (
+                <th key={tableTitles.indexOf(element)}>{element}</th>
+              ))}
+            </TableTitle>
+          </thead>
+          <tbody>
+            {tableData.map((element) => (
+              <TableRow key={element.id}>
+                <TableItem>
+                  {element.name}
+                  <p>{element.id}</p>
+                </TableItem>
+                <TableItem>
+                  {dateConverter(element.orderDate).date}
+                  <p>{dateConverter(element.orderDate).hour}</p>
+                </TableItem>
+                <TableItem>
+                  {dateConverter(element.checkIn).date}
+                  <p>{dateConverter(element.checkIn).hour}</p>
+                </TableItem>
+                <TableItem>
+                  {dateConverter(element.checkOut).date}
+                  <p>{dateConverter(element.checkOut).hour}</p>
+                </TableItem>
+                <TableItem>
+                  <NotesButton
+                    onClick={() => {
+                      setTargetBooking(element);
+                      setShowNotesModal(true);
+                    }}
+                  >
+                    View Notes
+                  </NotesButton>
+                </TableItem>
+                <TableItem>
+                  {searchBookingRoom(element.room).roomType} -{" "}
+                  {searchBookingRoom(element.room).roomNumber}
+                </TableItem>
+                <TableItem>
+                  <StatusButton
+                    status={bookedStatusCalc(element.checkIn, element.checkOut)}
+                  >
+                    {bookedStatusCalc(element.checkIn, element.checkOut)}
+                  </StatusButton>
+                </TableItem>
+                <TableItem>
+                  <StyledLink to={`/bookings/${element.id}`}>
+                    <AiOutlineInfoCircle />
+                  </StyledLink>
+                </TableItem>
+                <TableItem>
+                  <VscTrash
+                    onClick={() => {
+                      setShowDeleteModal(true);
+                      setTargetId(element.id);
+                    }}
+                  />
+                </TableItem>
+              </TableRow>
             ))}
-          </TableTitle>
-        </thead>
-        <tbody>
-          {tableData.map((element) => (
-            <TableRow key={element.id}>
-               <TableItem>
-              {element.name}
-              <p>{element.id}</p>
-            </TableItem>
-            <TableItem>
-              {dateConverter(element.orderDate).date}
-              <p>{dateConverter(element.orderDate).hour}</p>
-            </TableItem>
-            <TableItem>
-              {dateConverter(element.checkIn).date}
-              <p>{dateConverter(element.checkIn).hour}</p>
-            </TableItem>
-            <TableItem>
-              {dateConverter(element.checkOut).date}
-              <p>{dateConverter(element.checkOut).hour}</p>
-            </TableItem>
-            <TableItem>
-              <NotesButton>View Notes</NotesButton>
-            </TableItem>
-            <TableItem>
-              {searchBookingRoom(element.room).roomType} - {searchBookingRoom(element.room).roomNumber}
-            </TableItem>
-            <TableItem>
-              <StatusButton
-                status={bookedStatusCalc(element.checkIn, element.checkOut)}
-              >
-                {bookedStatusCalc(element.checkIn, element.checkOut)}
-              </StatusButton>
-            </TableItem>
-            <TableItem>
-              <StyledLink to={`/bookings/${element.id}`}>
-                <AiOutlineInfoCircle />
-              </StyledLink>
-            </TableItem>
-            <TableItem>
-              <VscTrash
-                onClick={() => {
-                  setShowDeleteModal(true);
-                  setTargetId(element.id);
-                }}
-              />
-            </TableItem>
-            </TableRow>
-          ))}
-        </tbody>
-      </TableContainer>
-      <Modal
-        mode="delete"
-        page={"bookings"}
-        showDeleteModal={showDeleteModal}
-        setShowDeleteModal={setShowDeleteModal}
-        itemId={targetId}
-      />
-      <Modal
+          </tbody>
+        </TableContainer>
+        <Modal
+          mode="delete"
+          page={"bookings"}
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+          itemId={targetId}
+        />
+        <Modal
           mode="create"
           page={"bookings"}
           setShowCreateModal={setShowCreateModal}
           showCreateModal={showCreateModal}
         />
+        <Modal
+          mode="moreInfo"
+          page={"bookings"}
+          setShowNotesModal={setShowNotesModal}
+          showNotesModal={showNotesModal}
+          targetBooking={targetBooking}
+        />
       </>
     );
   }
-
 };
-
-
-
-    
-      

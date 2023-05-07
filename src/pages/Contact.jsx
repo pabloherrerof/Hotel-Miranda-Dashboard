@@ -8,6 +8,7 @@ import { LeftActions, RightActions, StyledLink, TableActions, TableContainer, Ta
 import { Modal } from "../components/Modal";
 import { dateConverter } from "../features/otherFunctions";
 import { ArchiveButton } from "../components/Button";
+import { LastReviews } from "../components/LastReviews";
 
 
 
@@ -18,13 +19,14 @@ export const Contact = (props) =>{
     const contactsStatus = useSelector(getContactsStatus);
     const contactsData = useSelector(getContactsData);
     const [tableData, setTableData] = useState(contactsData);
+    const [recentContacts, setRecentContacts] = useState()
     
-    const [targetId, setTargetId] = useState("");
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
     
 
     const [showAll, setShowAll] = useState("true");
     const [showArchived, setShowArchived] = useState("false")
+
+   
 
     const tableTitles = [
         "Date",
@@ -44,7 +46,15 @@ export const Contact = (props) =>{
         if(showArchived === "true"){
             setTableData(tableData.filter((contact) => contact.archived === true ))
         }
-      }, [dispatch, contactsStatus, contactsData, showArchived, tableData]);
+        if(contactsData.length > 0){
+            setRecentContacts([...contactsData].sort((a, b) => {
+                if (a.date < b.date) return -1;
+                if (a.date > b.date) return 1;
+                return 0;
+              }).slice(0, 6))
+        }
+        
+      }, [dispatch, contactsStatus, contactsData, showArchived, tableData, showAll]);
 
 
       const onClickHandler = (e) => {
@@ -61,15 +71,15 @@ export const Contact = (props) =>{
     }
 
     const onClickArchiveHandler = (contact) =>{
-        console.log(showArchived)
         dispatch(archiveContacts(contact));
         if(showArchived === "true"){
             setTableData(contactsData.filter((contact) => contact.archived === true ));
         }
     }
-   
+   console.log(recentContacts)
+   console.log(contactsData)
 
-     if (contactsStatus === "pending") {
+     if (contactsStatus === "pending" || contactsStatus === "idle" || !recentContacts) {
     return (
       <>
         <Wrapper>
@@ -79,6 +89,7 @@ export const Contact = (props) =>{
     )} else {
         return (
             <>
+            <LastReviews data={recentContacts}/>
               <TableActions>
                 <LeftActions>
                 <TableLink active={showAll} onClick={onClickHandler}>
@@ -124,6 +135,8 @@ export const Contact = (props) =>{
                   ))}
                 </tbody>
               </TableContainer>
+
+              
               
             </>
           );
