@@ -67,8 +67,9 @@ function App() {
 
           <Route exact path="/users" element={<Users />} /> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
           <Route  path="/users/:id" element= {<SingleUser/>} /> 
-          </Route>
           <Route path="*" element={<ErrorPage />} />
+          </Route>
+          
         </Routes>
         
       </BrowserRouter>
