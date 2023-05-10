@@ -27,7 +27,7 @@ export const Login = (props) => {
   return (
     <>
       <LogContainer>
-        <LogForm onSubmit={handleSubmit}>
+        <LogForm onSubmit={handleSubmit} data-testid="login__form">
           <Logo column>
             <img src={logo} alt="logo" />
             <h2>travl</h2>
@@ -43,18 +43,18 @@ export const Login = (props) => {
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
-              type="text"
+              type="text" data-testid="login__email__input"
             />
             <label htmlFor="password">Pasword:</label>
             <input
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
-              type="password"
+              type="password" data-testid="login__password__input"
             />
           </Inputs>
 
-          <EditButton type="submit">Login</EditButton>
+          <EditButton type="submit" data-testid="login__submit__button">Login</EditButton>
         </LogForm>
       </LogContainer>
     </>

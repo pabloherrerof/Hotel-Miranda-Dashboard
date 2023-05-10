@@ -31,6 +31,7 @@ import { Modal } from "../../components/Modal";
 import { bookedStatusCalc, dateConverter } from "../../features/otherFunctions";
 import { searchBookingRoom } from "../../features/API";
 
+
 export const Bookings = (props) => {
   const dispatch = useDispatch();
   const bookingsStatus = useSelector(getBookingsStatus);
@@ -46,6 +47,9 @@ export const Bookings = (props) => {
   const [tableData, setTableData] = useState(bookingsData);
   const [targetBooking, setTargetBooking] = useState();
   const [showNotesModal, setShowNotesModal] = useState(false);
+  const [orderValue, setOrderValue] = useState("ID")
+
+
 
   const tableTitles = [
     "Guest",
@@ -59,7 +63,7 @@ export const Bookings = (props) => {
     "Delete",
   ];
 
-  const options = ["Guest", "Order Date", "Check in", "Check out"];
+  const options = ["Guest","Date", "Check in", "Check out"];
 
   useEffect(() => {
     if (bookingsStatus === "idle") {
@@ -71,12 +75,14 @@ export const Bookings = (props) => {
   const onClickHandler = (e) => {
     const option = e.target.innerText;
     if (option === "All Bookings") {
+      setOrderValue("ID");
       setShowAll("true");
       setShowCheckIn("false");
       setShowCheckOut("false");
       setShowInProgress("false");
       setTableData(bookingsData);
     } else if (option === "Checking In") {
+      setOrderValue("ID");
       setShowAll("false");
       setShowCheckIn("true");
       setShowCheckOut("false");
@@ -88,6 +94,7 @@ export const Bookings = (props) => {
         )
       );
     } else if (option === "Checking Out") {
+      setOrderValue("ID");
       setShowAll("false");
       setShowCheckIn("false");
       setShowCheckOut("true");
@@ -99,6 +106,7 @@ export const Bookings = (props) => {
         )
       );
     } else if (option === "In Progress") {
+      setOrderValue("ID");
       setShowAll("false");
       setShowCheckIn("false");
       setShowCheckOut("false");
@@ -155,6 +163,7 @@ export const Bookings = (props) => {
 
   const onChangeHandler = (e) => {
     if (e.value === "Guest") {
+      setOrderValue("Guest");
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.name < b.name) return -1;
@@ -163,7 +172,8 @@ export const Bookings = (props) => {
         })
       );
     }
-    if (e.value === "Order Date") {
+    if (e.value === "Date") {
+      setOrderValue("Date");
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.orderDate < b.orderDate) return -1;
@@ -173,6 +183,7 @@ export const Bookings = (props) => {
       );
     }
     if (e.value === "Check in") {
+      setOrderValue("Check in");
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.checkIn < b.checkIn) return -1;
@@ -182,6 +193,7 @@ export const Bookings = (props) => {
       );
     }
     if (e.value === "Check out") {
+      setOrderValue("Check out");
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.checkOut < b.checkOut) return -1;
@@ -245,7 +257,7 @@ export const Bookings = (props) => {
               arrowClosed={<MdOutlineKeyboardArrowDown />}
               options={options}
               onChange={onChangeHandler}
-              value={"ID"}
+              value={orderValue}
             />
           </RightActions>
         </TableActions>
@@ -315,6 +327,7 @@ export const Bookings = (props) => {
             ))}
           </tbody>
         </TableContainer>
+        
         <Modal
           mode="delete"
           page={"bookings"}

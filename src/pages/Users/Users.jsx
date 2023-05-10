@@ -40,6 +40,7 @@ export const Users = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [targetId, setTargetId] = useState("");
   const [tableData, setTableData] = useState(usersData);
+  const [orderValue, setOrderValue] = useState("ID")
 
   const tableTitles = [
     "Name",
@@ -66,16 +67,19 @@ export const Users = (props) => {
       setShowAll("true");
       setShowActive("false");
       setShowInactive("false");
+      setOrderValue("ID");
       setTableData(usersData);
     } else if (option === "Active users") {
       setShowActive("true");
       setShowAll("false");
       setShowInactive("false");
+      setOrderValue("ID");
       setTableData(usersData.filter((user) => user.state === "ACTIVE"));
     } else if (option === "Inactive users") {
       setShowActive("false");
       setShowAll("false");
       setShowInactive("true");
+      setOrderValue("ID");
       setTableData(usersData.filter((user) => user.state === "INACTIVE"));
     }
   };
@@ -105,6 +109,7 @@ export const Users = (props) => {
 
   const onChangeHandler = (e) => {
     if (e.value === "Name") {
+      setOrderValue("Name")
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.name < b.name) return -1;
@@ -114,7 +119,7 @@ export const Users = (props) => {
       );
     }
     if (e.value === "Date") {
-      console.log("Hola");
+      setOrderValue("Date")
       setTableData(
         [...tableData].sort((a, b) => {
           if (a.startDate < b.startDate) return -1;
@@ -170,7 +175,7 @@ export const Users = (props) => {
               arrowClosed={<MdOutlineKeyboardArrowDown />}
               options={options}
               onChange={onChangeHandler}
-              value={"Date"}
+              value={orderValue}
             />
           </RightActions>
         </TableActions>

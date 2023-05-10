@@ -35,7 +35,7 @@ export const Button = styled.button`
         case "delete":
           return "#E23428"
         default:
-         return "#135846";
+         return "rgb(19, 88, 70)";
       }
     }};
     color: #FFFFFF;
@@ -57,7 +57,7 @@ export const NotesButton = styled.button`
     width: 100%;
     border-radius: 10px;
     border: ${props => props.empty ? "1px solid #799283" : "none"} ;
-    background: ${props => props.empty ? "#FFFFFF" : "#EEF9F2"} ;
+    background: ${props => props.empty ? "rgb(255, 255, 255)" : "rgb(238, 249, 242)"} ;
     color: ${props => props.empty ? "#799283" : "#212121"};
     &:hover{
         scale: 1.2;
@@ -79,7 +79,7 @@ width: 100%;
     switch (props.status) {
         
       case "CHECK IN":
-        return "#5AD07A";
+        return "rgb(90, 208, 122)";
       case "ACTIVE":
         return "#5AD07A";
       case "CHECK OUT":
@@ -103,7 +103,7 @@ width: 100%;
     background-color: ${props => {
     switch (props.status) {
       case "CHECK IN":
-        return "#E8FFEE";
+        return "rgb(232, 255, 238)";
       case "CHECK OUT":
         return "#FFEDEC";
         case "ACTIVE":

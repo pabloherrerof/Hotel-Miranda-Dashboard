@@ -46,7 +46,7 @@ export const Dashboard = (props) => {
   } else {
     return (
       <>
-        <KpiRow>
+        <KpiRow data-testid="dashboard__kpi">
           <KPI>
             <KpiIcon>
               <MdOutlineKingBed />
