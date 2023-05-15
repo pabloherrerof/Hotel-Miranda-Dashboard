@@ -36,7 +36,7 @@ describe("Login", ()=> {
         cy.get('[data-testid="login__form"]');
         cy.location('pathname').should('include', 'login')
 
-        cy.visit("http://localhost:3000/thisUrlNotExist");
+        cy.visit("http://localhost:3000/thisUrlDoesNotExist");
         cy.get('[data-testid="login__form"]');
         cy.location('pathname').should('include', 'login')
 
@@ -60,3 +60,22 @@ describe("Login", ()=> {
 })
 
 
+describe("Logout", ()=> {
+    beforeEach(() =>{
+        cy.visit("http://localhost:3000/");
+        cy.get('[data-testid="login__form"]')
+        cy.get('[data-testid="login__email__input"]').type("admin@admin.com");
+        cy.get('[data-testid="login__password__input"]').type("admin");
+        cy.get('[data-testid="login__submit__button"]').click();
+
+    })
+
+    it('If pressing on logout button should navigate to login', () => {
+    cy.get('[data-testid="logout__button"]').click();
+    cy.location('pathname').should('include', 'login');
+    cy.get('[data-testid="login__email__input"]')
+
+    
+    })
+
+})

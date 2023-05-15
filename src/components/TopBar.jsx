@@ -30,7 +30,7 @@ export const TopBar = (props) => {
           <NavItemContainer>
             <HiOutlineBell />
             <HiOutlineMail />
-            <HiOutlineLogout onClick={onLogOutClickHandler} />
+            <HiOutlineLogout onClick={onLogOutClickHandler} data-testid="logout__button"/>
           </NavItemContainer>
         </Nav>
       </>
@@ -46,7 +46,7 @@ export const TopBar = (props) => {
           <NavItemContainer>
             <HiOutlineBell />
             <HiOutlineMail />
-            <HiOutlineLogout onClick={onLogOutClickHandler} />
+            <HiOutlineLogout onClick={onLogOutClickHandler} data-testid="logout__button"/>
           </NavItemContainer>
         </Nav>
       </>
