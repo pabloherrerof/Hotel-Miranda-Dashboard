@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 interface ButtonProps {
-  type: any;
-  empty: boolean;
-  status: string;
-  archived: boolean;
+  type?: any;
+  empty?: boolean;
+  status?: string;
+  archived?: boolean;
 }
 export const EditButton = styled.button`
      font-family: "Poppins";

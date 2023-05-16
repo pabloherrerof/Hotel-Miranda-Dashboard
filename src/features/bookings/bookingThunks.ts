@@ -1,6 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import bookingsList from "../../data/bookings.json"
+import bookingsListJson from "../../data/bookings.json"
 import { delay } from "../otherFunctions";
+import { Booking } from "../../interfaces";
+
+
+
+const bookingsList = bookingsListJson as Booking[];
 
 export const fetchBookings = createAsyncThunk("bookings/fetchBookings", async () => {
     return await delay(bookingsList);
@@ -10,8 +15,8 @@ export const addBooking = createAsyncThunk("bookings/addBooking", async (booking
    return await delay (bookingObject);
 });
 
-export const getBooking = createAsyncThunk("bookings/getBooking", async (bookingId) =>{
-    if(bookingsList.find((item) => {
+export const getBooking = createAsyncThunk("bookings/getBooking", async (bookingId : Booking["id"]) =>{
+    if(bookingsList.find((item: Booking) => {
         return item.id === bookingId;
       }) !== undefined) {
         return await  delay (bookingsList.find((item) => {

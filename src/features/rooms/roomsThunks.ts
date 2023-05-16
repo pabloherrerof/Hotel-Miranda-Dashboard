@@ -1,6 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import roomsList from "../../data/rooms.json"
+import roomsListJson from "../../data/rooms.json"
 import { delay } from "../otherFunctions";
+import { Room } from "../../interfaces";
+
+const roomsList = roomsListJson as Room[]
 
 export const fetchRooms = createAsyncThunk("rooms/fetchRooms", async () => {
     return await delay(roomsList);
@@ -10,8 +13,8 @@ export const addRoom = createAsyncThunk("rooms/addRoom", async (roomObject) => {
    return await delay (roomObject);
 });
 
-export const getRoom = createAsyncThunk("rooms/getRoom", async (roomId) =>{
-    if(roomsList.find((item) => {
+export const getRoom = createAsyncThunk("rooms/getRoom", async (roomId : Room["id"]) =>{
+    if(roomsList.find((item : Room) => {
         return item.id === roomId;
       }) !== undefined) {
         return await  delay (roomsList.find((item) => {

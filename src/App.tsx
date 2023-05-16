@@ -14,14 +14,24 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { Layout } from "./components/Layout";
 import { SingleRoom } from "./pages/Rooms/SingleRoom";
 import { UserContext } from "./components/UserContext";
+import { User } from "./interfaces";
 
-const initialState = {
-    auth: false,
-    user:{},
+
+
+export interface AppState {
+  auth: boolean,
+  user: User | {},
+}
+
+export type Action = { type: string; payload?: any};
+
+const initialState : AppState = {
+  auth: false,
+  user:{},
 }
 
 
-const reducer = (state : any, action: any) => {
+const reducer = (state : AppState, action: Action) => {
   switch(action.type){
     case "LogIn":
     return {...state, auth: true, user: action.payload}
@@ -37,10 +47,6 @@ function App() {
 
 
   const [state, dispatch] = useReducer(reducer, initialState);
-
-
- 
-  
 
 
 

@@ -1,53 +1,68 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addUser, deleteUser, editUser, fetchUsers, getUser } from "./usersThunks";
-import { act } from "react-dom/test-utils";
+import { User } from "../../interfaces";
+import { RootState } from "../../app/store";
 
+interface UsersState {
+    usersListData: User[],
+        status: string,
+        singleUser: User | undefined | {},
+        singleUserStatus: string,
+}
 
+interface UsersAction {
+    type: string;
+    payload: any;
+}
+
+const initialState : UsersState =  {
+    usersListData: [],
+    status: "idle",
+    singleUser: {},
+    singleUserStatus: "idle",
+}
 
 
 export const usersSlice = createSlice({
     name: "users",
-    initialState: {
-        usersListData: [],
-        status: "idle",
-        singleUser: {},
-        singleUserStatus: "idle",
-    },
+    initialState,
+
+    reducers: {},
     
 
     extraReducers(builder){
         builder
-        .addCase(fetchUsers.rejected, (state, action) =>{
+        .addCase(fetchUsers.rejected, (state: UsersState) =>{
             state.status = "rejected";
         })
-        .addCase(fetchUsers.pending, (state, action) =>{
+        .addCase(fetchUsers.pending, (state: UsersState) =>{
             state.status = "pending";
         })
-        .addCase(fetchUsers.fulfilled, (state, action) =>{
+        .addCase(fetchUsers.fulfilled, (state: UsersState, action: UsersAction) =>{
             state.status = "fulfilled";
             state.usersListData = action.payload;
         })
 
-        .addCase(addUser.fulfilled, (state, action) =>{
+        .addCase(addUser.fulfilled, (state: UsersState, action : UsersAction) =>{
             const lastId = parseInt(state.usersListData[state.usersListData.length  -1].id.slice(2));    
             action.payload.id = "U-" + (lastId + 1).toString().padStart(4, "0");
             state.usersListData.push(action.payload)
             console.log(state.usersListData)
         })
 
-        .addCase(deleteUser.fulfilled, (state, action) =>{
+        .addCase(deleteUser.fulfilled, (state: UsersState, action : UsersAction) =>{
             state.usersListData = state.usersListData.filter(item => item.id !== action.payload);
             state.status = "fullfilled";
             
         })
 
-        .addCase(deleteUser.pending, (state, action) =>{
+        .addCase(deleteUser.pending, (state) =>{
             state.status = "pending";
         })
        
 
 
-        .addCase(getUser.fulfilled, (state, action) =>{
+        .addCase(getUser.fulfilled, (state, action : UsersAction) =>{
             if(typeof action.payload === "object"){
                 state.singleUser = action.payload
             } else{
@@ -57,12 +72,12 @@ export const usersSlice = createSlice({
             state.singleUserStatus = "fullfilled";
         })
 
-        .addCase(getUser.pending, (state, action) =>{
+        .addCase(getUser.pending, (state: UsersState) =>{
             state.singleUserStatus = "pending";
         })
         
 
-        .addCase(editUser.fulfilled, (state,action) =>{
+        .addCase(editUser.fulfilled, (state: UsersState,action : UsersAction) =>{
             state.status = "fulfilled";
              for(let i = 0; i < state.usersListData.length; i++) {
                 if (state.usersListData[i].id === action.payload.id) {
@@ -73,16 +88,16 @@ export const usersSlice = createSlice({
               }
         })
 
-        .addCase(editUser.pending, (state, action) =>{
+        .addCase(editUser.pending, (state: UsersState) =>{
             state.status = "pending";
         })
         
     },
 })
 
-export const getUsersStatus = (state) => state.users.status;
-export const getUsersData = (state) => state.users.usersListData;
-export const getUsersSingle = (state) => state.users.singleUser;
-export const getSingleUserStatus = (state) => state.users.singleUserStatus;
+export const getUsersStatus = (state : RootState) => state.users.status;
+export const getUsersData = (state : RootState) => state.users.usersListData;
+export const getUsersSingle = (state : RootState) => state.users.singleUser;
+export const getSingleUserStatus = (state : RootState) => state.users.singleUserStatus;
 
 export default usersSlice.reducer;
