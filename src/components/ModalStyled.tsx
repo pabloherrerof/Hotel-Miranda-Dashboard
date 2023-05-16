@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
-export const ModalContainer = styled.div`
+interface ModalProps {
+    show: boolean;
+    top: boolean;
+}
+
+export const ModalContainer = styled.div<ModalProps>`
 
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;

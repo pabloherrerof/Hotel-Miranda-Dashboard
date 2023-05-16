@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { ArchiveButton, Button } from "./Button";
+import { ArchiveButton, Button } from "./Button.tsx";
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled";
 import { IoClose } from "react-icons/io5";
 import { addUser, deleteUser } from "../features/users/usersThunks";

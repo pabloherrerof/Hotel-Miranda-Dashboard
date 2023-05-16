@@ -2,6 +2,15 @@ import ReactDropdown from "react-dropdown";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+interface TableProps{
+  big: boolean;
+  discount: number;
+  price: boolean;
+  offer: boolean;
+  active: string;
+  room: boolean;
+}
+
 export const TableActions = styled.div`
   display: flex;
   justify-content: space-between;
@@ -63,7 +72,7 @@ export const TableRow = styled.tr`
   box-shadow: 0px 3px 10px #00000005;
   position: relative;
 `;
-export const TableItem = styled.td`
+export const TableItem = styled.td<TableProps>`
   font-family: "Poppins";
   font-weight: 500;
   font-size: 14px;
@@ -130,7 +139,7 @@ export const RoomImageItem = styled.img`
   object-fit: cover;
 `;
 
-export const TableLink = styled(Link)`
+export const TableLink = styled(Link)<TableProps>`
   width: 100%;
   border-bottom: ${(props) => {if(props.active === "true"){
     return "#135846 2px solid";
@@ -174,7 +183,7 @@ export const SearchBar = styled.div`
   }
 `;
 
-export const CustomDropdown = styled(ReactDropdown)`
+export const CustomDropdown = styled(ReactDropdown)<TableProps>`
    font-family: "Poppins";
     font-size: 12px;
     font-weight: normal;

@@ -7,7 +7,7 @@ import { HashLoader } from "react-spinners";
 import { LeftActions, RightActions, StyledLink, TableActions, TableContainer, TableItem, TableLink, TableRow, TableTitle } from "../components/TableStyled";
 import { Modal } from "../components/Modal";
 import { dateConverter } from "../features/otherFunctions";
-import { ArchiveButton } from "../components/Button";
+import { ArchiveButton } from "../components/Button.tsx";
 import { LastReviews } from "../components/LastReviews";
 
 

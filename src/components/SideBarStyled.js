@@ -1,7 +1,12 @@
-import { NavLink } from "react-router-dom";
-import styled from "styled-components";
-
-export const Wrapper = styled.div`
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Copyright = exports.MenuLink = exports.SideBarUserImage = exports.User = exports.LinkContainer = exports.Logo = exports.Wrapper = void 0;
+const react_router_dom_1 = require("react-router-dom");
+const styled_components_1 = __importDefault(require("styled-components"));
+exports.Wrapper = styled_components_1.default.div `
   display: flex;
   flex-direction: column;
   box-shadow: 13px 3px 40px #00000005;
@@ -11,8 +16,7 @@ export const Wrapper = styled.div`
   padding-bottom: 5%;
   height: 100%;
 `;
-
-export const Logo = styled.div`
+exports.Logo = styled_components_1.default.div `
   height: 100px;
   display: flex;
   align-items: center;
@@ -36,8 +40,7 @@ export const Logo = styled.div`
     width: 60px;
   }
 `;
-
-export const LinkContainer = styled.ul`
+exports.LinkContainer = styled_components_1.default.ul `
   display: flex;
   flex-direction: column;
   list-style: none;
@@ -64,8 +67,7 @@ export const LinkContainer = styled.ul`
     gap: 1rem;
   }
 `;
-
-export const User = styled.div`
+exports.User = styled_components_1.default.div `
   box-shadow: 0px 20px 30px #00000014;
   border-radius: 12px;
   background: #ffffff;
@@ -120,16 +122,14 @@ export const User = styled.div`
     scale: 1.1;
   }
 `;
-
-export const SideBarUserImage = styled.img`
+exports.SideBarUserImage = styled_components_1.default.img `
     width: 70px;
     height: 70px;
     background-color: #c5c5c5;
     border-radius: 8px;
     object-fit: cover;
-`
-
-export const MenuLink = styled(NavLink)`
+`;
+exports.MenuLink = (0, styled_components_1.default)(react_router_dom_1.NavLink) `
   font-weight: normal;
   color: #799283;
   text-decoration: none;
@@ -139,8 +139,7 @@ export const MenuLink = styled(NavLink)`
     font-weight: 600;
   }
 `;
-
-export const Copyright = styled.div`
+exports.Copyright = styled_components_1.default.div `
   margin-top: 0;
   padding: 0 1%;
 

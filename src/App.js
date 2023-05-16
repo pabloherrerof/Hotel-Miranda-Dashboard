@@ -1,81 +1,87 @@
-import React, { useReducer } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Dashboard } from "./pages/Dashboard/Dashboard";
-import { Bookings } from "./pages/Booking/Bookings";
-import { Rooms } from "./pages/Rooms/Rooms";
-import { Contact } from "./pages/Contact";
-import { Users } from "./pages/Users/Users";
-import { AddRoom } from "./pages/Rooms/AddRoom";
-import { SingleUser } from "./pages/Users/SingleUser";
-import "./App.css";
-import { Login } from "./pages/Login/Login";
-import { SingleBooking } from "./pages/Booking/SingleBooking";
-import { ErrorPage } from "./pages/ErrorPage/ErrorPage";
-import { PrivateRoute } from "./components/PrivateRoute";
-import { Layout } from "./components/Layout";
-import { SingleRoom } from "./pages/Rooms/SingleRoom";
-import { UserContext } from "./components/UserContext";
-
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = __importStar(require("react"));
+const react_router_dom_1 = require("react-router-dom");
+const Dashboard_1 = require("./pages/Dashboard/Dashboard");
+const Bookings_1 = require("./pages/Booking/Bookings");
+const Rooms_1 = require("./pages/Rooms/Rooms");
+const Contact_1 = require("./pages/Contact");
+const Users_1 = require("./pages/Users/Users");
+const SingleUser_1 = require("./pages/Users/SingleUser");
+require("./App.css");
+const Login_1 = require("./pages/Login/Login");
+const SingleBooking_1 = require("./pages/Booking/SingleBooking");
+const ErrorPage_1 = require("./pages/ErrorPage/ErrorPage");
+const PrivateRoute_1 = require("./components/PrivateRoute");
+const Layout_1 = require("./components/Layout");
+const SingleRoom_1 = require("./pages/Rooms/SingleRoom");
+const UserContext_1 = require("./components/UserContext");
 const initialState = {
     auth: false,
-    user:{},
-}
-
-
+    user: {},
+};
 const reducer = (state, action) => {
-  switch(action.type){
-    case "LogIn":
-    return {...state, auth: true, user: action.payload}
-    case "LogOut":
-      return {...state, auth: false, user:{}}
-    default: 
-    return state;
-  }
-    
-}
-
+    switch (action.type) {
+        case "LogIn":
+            return Object.assign(Object.assign({}, state), { auth: true, user: action.payload });
+        case "LogOut":
+            return Object.assign(Object.assign({}, state), { auth: false, user: {} });
+        default:
+            return state;
+    }
+};
 function App() {
-
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  console.log(state);
- 
-  
-
-
-
-  return (
-    <>
-    <UserContext.Provider value={{state, dispatch}}>
-      <BrowserRouter>
+    const [state, dispatch] = (0, react_1.useReducer)(reducer, initialState);
+    return (<>
+    <UserContext_1.UserContext.Provider value={{ state, dispatch }}>
+      <react_router_dom_1.BrowserRouter>
       
-        <Routes>
-        <Route exact path = "/login" element={state.auth ? <Navigate to="/"/> : <Login/>} />
+        <react_router_dom_1.Routes>
+        <react_router_dom_1.Route path="/login" element={state.auth ? <react_router_dom_1.Navigate to="/"/> : <Login_1.Login />}/>
          
-         <Route element={<PrivateRoute auth={state.auth}><Layout/></PrivateRoute>}>
-          <Route exact path="/" element={<Dashboard/>} />
+         <react_router_dom_1.Route element={<PrivateRoute_1.PrivateRoute auth={state.auth}><Layout_1.Layout /></PrivateRoute_1.PrivateRoute>}>
+          <react_router_dom_1.Route path="/" element={<Dashboard_1.Dashboard />}/>
  
-          <Route exact path="/bookings" element={<Bookings /> } />
-          <Route exact path="/bookings/:id" element={<SingleBooking/>} />
+          <react_router_dom_1.Route path="/bookings" element={<Bookings_1.Bookings />}/>
+          <react_router_dom_1.Route path="/bookings/:id" element={<SingleBooking_1.SingleBooking />}/>
 
-          <Route exact path="/rooms" element={<Rooms />} />
-          <Route exact path = "/rooms/:id" element={<SingleRoom/>}/>
-          <Route exact path="/rooms/addRoom" element={<AddRoom />} />
+          <react_router_dom_1.Route path="/rooms" element={<Rooms_1.Rooms />}/>
+          <react_router_dom_1.Route path="/rooms/:id" element={<SingleRoom_1.SingleRoom />}/>
 
-          <Route exact path="/contact" element={<Contact />} />
+          <react_router_dom_1.Route path="/contact" element={<Contact_1.Contact />}/>
 
-          <Route exact path="/users" element={<Users />} /> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
-          <Route  path="/users/:id" element= {<SingleUser/>} /> 
-          <Route path="*" element={<ErrorPage />} />
-          </Route>
+          <react_router_dom_1.Route path="/users" element={<Users_1.Users />}/> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
+          <react_router_dom_1.Route path="/users/:id" element={<SingleUser_1.SingleUser />}/> 
+          <react_router_dom_1.Route path="*" element={<ErrorPage_1.ErrorPage />}/>
+          </react_router_dom_1.Route>
           
-        </Routes>
+        </react_router_dom_1.Routes>
         
-      </BrowserRouter>
-      </UserContext.Provider>
-    </>
-  );
+      </react_router_dom_1.BrowserRouter>
+      </UserContext_1.UserContext.Provider>
+    </>);
 }
-
-export default App;
+exports.default = App;

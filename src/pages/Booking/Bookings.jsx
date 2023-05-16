@@ -22,7 +22,7 @@ import {
   TableRow,
   TableTitle,
 } from "../../components/TableStyled";
-import { Button, NotesButton, StatusButton } from "../../components/Button";
+import { Button, NotesButton, StatusButton } from "../../components/Button.tsx";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,

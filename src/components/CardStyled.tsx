@@ -1,7 +1,20 @@
 import { IoClose } from "react-icons/io5";
 import styled from "styled-components";
 
-export const CardContainer = styled.section`
+interface CardProps {
+  full: boolean;
+  bookStatus: string;
+  amenitie: boolean;
+  paragraph: undefined;
+  discount: number;
+  price: boolean; 
+  state: string;
+  offer: boolean;
+  close: boolean;
+  amenities: boolean;
+}
+
+export const CardContainer = styled.section<CardProps>`
   width: ${(props) => (props.full ? "100%" : "80%")};
   background-color: #ffffff;
   display: flex;
@@ -9,7 +22,7 @@ export const CardContainer = styled.section`
   max-height: 110vh;
 `;
 
-export const Card = styled.div`
+export const Card = styled.div<CardProps>`
   width: ${(props) => (props.full ? "46%" : "100%")};
   background-color: #ffffff;
   border-radius: 12px;
@@ -103,7 +116,7 @@ export const CardImageText = styled.div`
   }
 `;
 
-export const Booked = styled.div`
+export const Booked = styled.div<CardProps>`
   position: absolute;
   text-align: center;
   padding: 1%;
@@ -168,7 +181,7 @@ export const UserImage = styled.div`
   }
 `;
 
-export const CardItem = styled.div`
+export const CardItem = styled.div<CardProps>`
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -273,7 +286,7 @@ export const TitleRow = styled.div`
   margin-bottom: 5%;
 `;
 
-export const FeaturesRow = styled.div`
+export const FeaturesRow = styled.div<CardProps>`
   display: flex;
   flex-direction: row;
   margin-top: 2.2rem;
@@ -281,7 +294,7 @@ export const FeaturesRow = styled.div`
   flex-wrap: wrap;
 `;
 
-export const CardHeader = styled.div`
+export const CardHeader = styled.div<CardProps>`
   width: 100%;
   display: flex;
   flex-direction: row;

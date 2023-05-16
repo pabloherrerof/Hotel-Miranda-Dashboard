@@ -1,5 +1,9 @@
 import styled, {css} from "styled-components";
 
+interface LayoutProps{
+  open: boolean;
+}
+
 export const Container = styled.div`
     min-height: 100vh;
     display: flex;
@@ -7,7 +11,7 @@ export const Container = styled.div`
     max-width: 100vw;
 `;
 
-export const LeftMenu = styled.div`
+export const LeftMenu = styled.div<LayoutProps>`
  display: inline-block;
  width: 300px;
  ${props => !props.open && css`
@@ -16,7 +20,7 @@ export const LeftMenu = styled.div`
  `;
 
 
-export const RightSection = styled.section`
+export const RightSection = styled.section<LayoutProps>`
 display: inline-block;
 width: ${props => props.open ? "calc(100% - 300px)" : "100%"};
 `

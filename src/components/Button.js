@@ -1,7 +1,11 @@
-import styled from "styled-components";
-
-
-export const EditButton = styled.button`
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ArchiveButton = exports.StatusButton = exports.NotesButton = exports.Button = exports.EditButton = void 0;
+const styled_components_1 = __importDefault(require("styled-components"));
+exports.EditButton = styled_components_1.default.button `
      font-family: "Poppins";
     font-size: 12px;
     font-weight: normal;
@@ -18,9 +22,8 @@ export const EditButton = styled.button`
     background-color: #135846;
     color: #FFFFFF;
     }
-`
-
-export const Button = styled.button`
+`;
+exports.Button = styled_components_1.default.button `
      font-family: "Poppins";
     font-size: 12px;
     font-weight: normal;
@@ -31,13 +34,13 @@ export const Button = styled.button`
     min-width: 100px;
     
     background-color: ${props => {
-      switch (props.type){
+    switch (props.type) {
         case "delete":
-          return "#E23428"
+            return "#E23428";
         default:
-         return "rgb(19, 88, 70)";
-      }
-    }};
+            return "rgb(19, 88, 70)";
+    }
+}};
     color: #FFFFFF;
 
     &:hover{
@@ -47,9 +50,8 @@ export const Button = styled.button`
     color: #135846;
   
     }
-`
-
-export const NotesButton = styled.button`
+`;
+exports.NotesButton = styled_components_1.default.button `
     font-family: "Poppins";
     font-size: 12px;
     font-weight: 500;
@@ -63,9 +65,8 @@ export const NotesButton = styled.button`
         scale: 1.2;
     cursor: pointer;
     }
-`
-
-export const StatusButton = styled.button`
+`;
+exports.StatusButton = styled_components_1.default.button `
 width: 100%;
      font-family: "Poppins";
     font-size: 12px;
@@ -75,66 +76,63 @@ width: 100%;
     border: none;
     border-radius: 10px;
     color: ${props => {
-       
     switch (props.status) {
-        
-      case "CHECK IN":
-        return "rgb(90, 208, 122)";
-      case "ACTIVE":
-        return "#5AD07A";
-      case "CHECK OUT":
-        return "#E23428";
+        case "CHECK IN":
+            return "rgb(90, 208, 122)";
+        case "ACTIVE":
+            return "#5AD07A";
+        case "CHECK OUT":
+            return "#E23428";
         case "INACTIVE":
-        return "#E23428";
-      case "IN PROGRESS":
-        return "#ebd90d";
+            return "#E23428";
+        case "IN PROGRESS":
+            return "#ebd90d";
         case "OFFER":
-        return "#c1ae8b";
+            return "#c1ae8b";
         case "AVAILABLE":
-        return "#5AD07A";
+            return "#5AD07A";
         case "BOOKED":
             return "#E23428";
-      default:
-        return "transparent";
+        default:
+            return "transparent";
     }
-    
-   }};
+}};
 
     background-color: ${props => {
     switch (props.status) {
-      case "CHECK IN":
-        return "rgb(232, 255, 238)";
-      case "CHECK OUT":
-        return "#FFEDEC";
+        case "CHECK IN":
+            return "rgb(232, 255, 238)";
+        case "CHECK OUT":
+            return "#FFEDEC";
         case "ACTIVE":
-        return "#E8FFEE";
+            return "#E8FFEE";
         case "INACTIVE":
-        return "#FFEDEC";
-      case "IN PROGRESS":
-        return "#fffeeb";
+            return "#FFEDEC";
+        case "IN PROGRESS":
+            return "#fffeeb";
         case "OFFER":
-        return "#c6b89eae";
+            return "#c6b89eae";
         case "BOOKED":
             return "#FFEDEC";
         case "AVAILABLE":
-        return "#E8FFEE";
-      default:
-        return "transparent";
-    }}};;
-`
-
-export const ArchiveButton = styled.button`
+            return "#E8FFEE";
+        default:
+            return "transparent";
+    }
+}};;
+`;
+exports.ArchiveButton = styled_components_1.default.button `
   font-family: "Poppins";
   font-size: 14px;
   font-weight: 500;
   border: none;
   background-color: transparent;
 letter-spacing: 0px;
-color: ${props => props.archived ? "#E23428" : "#5AD07A"  } 
+color: ${props => props.archived ? "#E23428" : "#5AD07A"} 
 ;
 
 &:hover{
   scale: 1.1;
   cursor: pointer;
 }
-`
+`;

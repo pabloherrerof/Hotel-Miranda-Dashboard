@@ -2,7 +2,7 @@
 import "slick-carousel/slick/slick-theme.css";
 import { ReviewComment, ReviewContainer, ReviewInfo, ReviewSlider } from "./LastReviewsStyled";
 import { dateConverter, maxCharString } from "../features/otherFunctions";
-import { ArchiveButton } from "./Button";
+import { ArchiveButton } from "./Button.tsx";
 import { archiveContacts  } from "../features/contacts/contactThunks";
 import { useDispatch } from "react-redux";
 import { Modal } from "./Modal";

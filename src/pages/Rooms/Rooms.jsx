@@ -22,7 +22,7 @@ import {
   TableRow,
   TableTitle,
 } from "../../components/TableStyled";
-import { Button, StatusButton } from "../../components/Button";
+import { Button, StatusButton } from "../../components/Button.tsx";
 import { offerPriceCalc } from "../../features/otherFunctions";
 import {
   CustomDropdown,

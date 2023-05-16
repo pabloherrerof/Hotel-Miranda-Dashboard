@@ -22,11 +22,11 @@ import {
 import { HashLoader } from "react-spinners";
 import { Wrapper } from "../../components/LayoutStyled";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/Button.tsx";
 import { Input, Label, RadioInput } from "../../components/FormStyled";
 import { jobDescriptionChooser } from "../../features/otherFunctions";
 
-export const SingleUser = ({ match }) => {
+export const SingleUser = () => {
   const userId = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();

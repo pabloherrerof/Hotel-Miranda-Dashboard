@@ -1,6 +1,6 @@
 import logo from "../../assets/logo-hotel.svg";
 import { Logo } from "../../components/SideBarStyled";
-import { EditButton } from "../../components/Button";
+import { EditButton } from "../../components/Button.tsx";
 import { useContext, useState } from "react";
 import { UserContext } from "../../components/UserContext";
 import { Inputs, LogContainer, LogForm } from "./LoginStyled";

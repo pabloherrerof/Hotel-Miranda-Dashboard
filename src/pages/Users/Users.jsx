@@ -3,7 +3,7 @@ import { getUsersStatus, getUsersData } from "../../features/users/usersSlice";
 import { useEffect, useState } from "react";
 import { fetchUsers } from "../../features/users/usersThunks";
 import { HashLoader } from "react-spinners";
-import { Button, StatusButton } from "../../components/Button";
+import { Button, StatusButton } from "../../components/Button.tsx";
 import {
   CustomDropdown,
   ImageItem,

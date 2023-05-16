@@ -1,6 +1,11 @@
-import styled from "styled-components";
-
-export const FormContainer = styled.form`
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InputBig = exports.Label = exports.RadioInput = exports.Input = exports.FormContainer = void 0;
+const styled_components_1 = __importDefault(require("styled-components"));
+exports.FormContainer = styled_components_1.default.form `
   width: 100%;
   background-color: #ffffff;
   border-radius: 12px;
@@ -15,8 +20,7 @@ export const FormContainer = styled.form`
     font-size: 10px;
   }
 `;
-
-export const Input = styled.div`
+exports.Input = styled_components_1.default.div `
   width: 75%;
   min-width: 200px;
   font-weight: normal;
@@ -59,25 +63,22 @@ export const Input = styled.div`
     border-bottom: 1px solid black;
   }
 `;
-
-
-export const RadioInput = styled.div`
+exports.RadioInput = styled_components_1.default.div `
     display: flex;
     flex-direction: row;
     gap: 1rem;
-`
-
-export const Label = styled.label`
+`;
+exports.Label = styled_components_1.default.label `
      color: ${props => {
-        if (props.active){
-            return "#5AD07A";
-        } if (props.inactive){
-            return "#E23428";
-        }
-    }};
-`
-
-export const InputBig = styled.div`
+    if (props.active) {
+        return "#5AD07A";
+    }
+    if (props.inactive) {
+        return "#E23428";
+    }
+}};
+`;
+exports.InputBig = styled_components_1.default.div `
   width: 100%;
  
   
@@ -107,4 +108,4 @@ h6{
   font-family: "Poppins";
   font-size: 12px;
 
-  }`
+  }`;

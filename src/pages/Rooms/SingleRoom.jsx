@@ -36,7 +36,7 @@ import {
   Label,
   RadioInput,
 } from "../../components/FormStyled";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/Button.tsx";
 
 export const SingleRoom = (props) => {
   const roomId = useParams();

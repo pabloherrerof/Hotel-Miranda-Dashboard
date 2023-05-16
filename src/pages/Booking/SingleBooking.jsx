@@ -31,7 +31,7 @@ import { Wrapper } from "../../components/LayoutStyled";
 import { HashLoader } from "react-spinners";
 import { searchBookingRoom } from "../../features/API";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/Button.tsx";
 import { Input, InputBig } from "../../components/FormStyled";
 
 export const SingleBooking = (props) => {
