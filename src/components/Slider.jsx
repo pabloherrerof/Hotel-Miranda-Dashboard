@@ -42,11 +42,11 @@ export const MySlider = (props) => {
 
    return (
     <FotoSlider {...settings}>
-      {props.data.map((image) => {
+      {props.data.map((image, i) => {
         return (
           
           
-            <div>
+            <div key={i}>
               <img src={image} alt="" />
             </div>
            

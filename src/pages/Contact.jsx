@@ -76,8 +76,7 @@ export const Contact = (props) =>{
             setTableData(contactsData.filter((contact) => contact.archived === true ));
         }
     }
-   console.log(recentContacts)
-   console.log(contactsData)
+
 
      if (contactsStatus === "pending" || contactsStatus === "idle" || !recentContacts) {
     return (

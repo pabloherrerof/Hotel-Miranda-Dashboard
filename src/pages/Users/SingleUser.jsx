@@ -142,7 +142,7 @@ export const SingleUser = ({ match }) => {
               <FeaturesRow>
                 <CardItem>
                   <h6>Password</h6>
-                  <h5>{getUserData.password}</h5>
+                  <h5>{"********"}</h5>
                 </CardItem>
               </FeaturesRow>
               <CardSeparator />

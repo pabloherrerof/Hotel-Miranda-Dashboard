@@ -171,9 +171,9 @@ export const SingleRoom = (props) => {
               <CardSeparator />
 
               <FeaturesRow amenities>
-                {singleRoomData.amenities.map((amenitie) => {
+                {singleRoomData.amenities.map((amenitie, i) => {
                   return (
-                    <CardItem amenitie>
+                    <CardItem amenitie key={i}>
                       <CardAmenitie>{amenitie}</CardAmenitie>
                     </CardItem>
                   );

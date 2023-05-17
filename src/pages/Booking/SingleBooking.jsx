@@ -52,7 +52,6 @@ export const SingleBooking = (props) => {
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    console.log(bookingId);
     if (singleBookingStatus === "idle" || bookingData) {
       if (bookingId.id !== bookingData.id) {
         dispatch(getBooking(bookingId.id));
@@ -71,7 +70,6 @@ export const SingleBooking = (props) => {
     e.preventDefault();
     if(guestName=== "" || checkIn ==="" || checkOut=== "" || orderDate==="" ||  roomId===""){
       setFieldError("You have to enter all inputs!")
-      console.log(searchBookingRoom(roomId))
       
   } if(!searchBookingRoom(roomId)){
     setFieldError("The room you've entered does not exists!")
@@ -85,7 +83,6 @@ export const SingleBooking = (props) => {
         specialRequest: specialRequest,
         room: roomId,
     }
-    console.log(booking);
     dispatch(editBooking(booking));
     dispatch(getBooking(booking))
     setEdit(false);
@@ -165,9 +162,9 @@ export const SingleBooking = (props) => {
               </FeaturesRow>
               <FeaturesRow amenities>
                 {searchBookingRoom(bookingData.room).amenities.map(
-                  (amenitie) => {
+                  (amenitie, i) => {
                     return (
-                      <CardItem amenitie>
+                      <CardItem amenitie key={i}>
                         <CardAmenitie>{amenitie}</CardAmenitie>
                       </CardItem>
                     );

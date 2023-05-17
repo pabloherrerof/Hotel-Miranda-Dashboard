@@ -5,7 +5,6 @@ import { Bookings } from "./pages/Booking/Bookings";
 import { Rooms } from "./pages/Rooms/Rooms";
 import { Contact } from "./pages/Contact";
 import { Users } from "./pages/Users/Users";
-import { AddRoom } from "./pages/Rooms/AddRoom";
 import { SingleUser } from "./pages/Users/SingleUser";
 import "./App.css";
 import { Login } from "./pages/Login/Login";
@@ -17,62 +16,54 @@ import { SingleRoom } from "./pages/Rooms/SingleRoom";
 import { UserContext } from "./components/UserContext";
 
 const initialState = {
-    auth: false,
-    user:{},
-}
-
+  auth: false,
+  user: {},
+};
 
 const reducer = (state, action) => {
-  switch(action.type){
+  switch (action.type) {
     case "LogIn":
-    return {...state, auth: true, user: action.payload}
+      return { ...state, auth: true, user: action.payload };
     case "LogOut":
-      return {...state, auth: false, user:{}}
-    default: 
-    return state;
+      return { ...state, auth: false, user: {} };
+    default:
+      return state;
   }
-    
-}
+};
 
 function App() {
-
-
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  console.log(state);
- 
-  
-
-
 
   return (
     <>
-    <UserContext.Provider value={{state, dispatch}}>
-      <BrowserRouter>
-      
-        <Routes>
-        <Route exact path = "/login" element={state.auth ? <Navigate to="/"/> : <Login/>} />
-         
-         <Route element={<PrivateRoute auth={state.auth}><Layout/></PrivateRoute>}>
-          <Route exact path="/" element={<Dashboard/>} />
- 
-          <Route exact path="/bookings" element={<Bookings /> } />
-          <Route exact path="/bookings/:id" element={<SingleBooking/>} />
+      <UserContext.Provider value={{ state, dispatch }}>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              exact
+              path="/login"
+              element={state.auth ? <Navigate to="/" /> : <Login />}
+            />
 
-          <Route exact path="/rooms" element={<Rooms />} />
-          <Route exact path = "/rooms/:id" element={<SingleRoom/>}/>
-          <Route exact path="/rooms/addRoom" element={<AddRoom />} />
-
-          <Route exact path="/contact" element={<Contact />} />
-
-          <Route exact path="/users" element={<Users />} /> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
-          <Route  path="/users/:id" element= {<SingleUser/>} /> 
-          <Route path="*" element={<ErrorPage />} />
-          </Route>
-          
-        </Routes>
-        
-      </BrowserRouter>
+            <Route
+              element={
+                <PrivateRoute auth={state.auth}>
+                  <Layout />
+                </PrivateRoute>
+              }
+            >
+              <Route exact path="/" element={<Dashboard />} />
+              <Route exact path="/bookings" element={<Bookings />} />
+              <Route exact path="/bookings/:id" element={<SingleBooking />} />
+              <Route exact path="/rooms" element={<Rooms />} />
+              <Route exact path="/rooms/:id" element={<SingleRoom />} />
+              <Route exact path="/contact" element={<Contact />} />
+              <Route exact path="/users" element={<Users />} />{" "}
+              <Route path="/users/:id" element={<SingleUser />} />
+              <Route path="*" element={<ErrorPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </UserContext.Provider>
     </>
   );
