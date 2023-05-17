@@ -36,70 +36,77 @@ import {
   Label,
   RadioInput,
 } from "../../components/FormStyled";
-import { Button } from "../../components/Button.tsx";
+import { Button } from "../../components/Button";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getUsersData } from "../../features/users/usersSlice";
+import { Room } from "../../interfaces";
 
-export const SingleRoom = (props) => {
+export const SingleRoom = () => {
   const roomId = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const singleRoomData = useSelector(getSingleRoom);
-  const singleRoomStatus = useSelector(getSingleRoomStatus);
+  const singleRoomData = useAppSelector(getSingleRoom);
+  const singleRoomStatus = useAppSelector(getSingleRoomStatus);
 
   const [fieldError, setFieldError] = useState("");
   const [roomType, setRoomType] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
-  const [price, setPrice] = useState("");
-  const [discount, setDiscount] = useState("");
+  const [price, setPrice] = useState<number>();
+  const [discount, setDiscount] = useState<number>();
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
 
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    if (singleRoomStatus === "idle" || singleRoomData) {
-      if (roomId.id !== singleRoomData.id) {
-        dispatch(getRoom(roomId.id));
+    if (singleRoomStatus === "idle" ) {
+      if(singleRoomData && roomId){
+        if (roomId.id !== singleRoomData.id) {
+          dispatch(getRoom(roomId.id as string));
+        }
       }
     }
+    if(singleRoomData){
     setRoomType(singleRoomData.roomType);
     setRoomNumber(singleRoomData.roomNumber);
     setPrice(singleRoomData.price);
     setDiscount(singleRoomData.discount);
     setStatus(singleRoomData.status);
     setDescription(singleRoomData.description);
+    }
+    
   }, [dispatch, singleRoomStatus, roomId.id, singleRoomData]);
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
       roomType === "" ||
       roomNumber === "" ||
-      price === "" ||
+      price === undefined ||
       status === "" ||
-      description === ""
+      description === "" || discount === undefined
     ) {
       setFieldError("You have to enter all inputs!");
+      setDiscount(0);
     } else {
-      if (discount === "") {
-        setDiscount(0);
+      if(singleRoomData){
+        const room = {
+          id: singleRoomData.id,
+          roomType: roomType,
+          roomNumber: roomNumber,
+          price: price,
+          discount: discount,
+          status: status,
+          amenities: roomInfoChooser(roomType).amenities,
+          cancellation: roomInfoChooser(roomType).cancelattion,
+          thumbnail: roomInfoChooser(roomType).thumbnail,
+          description: description,
+          images: roomInfoChooser(roomType).images
+        };
+        dispatch(editRoom(room));
+        dispatch(getRoom(room.id));
+        setEdit(false);
       }
-      const room = {
-        id: singleRoomData.id,
-        roomType: roomType,
-        roomNumber: roomNumber,
-        price: price,
-        discount: discount,
-        status: status,
-        amenities: roomInfoChooser(roomType).amenities,
-        cancellation: roomInfoChooser(roomType).cancelattion,
-        thumbnail: roomInfoChooser(roomType).thumbnail,
-        description: description,
-        images: roomInfoChooser(roomType).images
-      };
-      console.log(roomInfoChooser(roomType).images);
-      dispatch(editRoom(room));
-      dispatch(getRoom(room));
-      setEdit(false);
     }
   };
 
@@ -171,9 +178,9 @@ export const SingleRoom = (props) => {
               <CardSeparator />
 
               <FeaturesRow amenities>
-                {singleRoomData.amenities.map((amenitie) => {
+                {singleRoomData.amenities.map((amenitie, i) => {
                   return (
-                    <CardItem amenitie>
+                    <CardItem amenitie key={i}>
                       <CardAmenitie>{amenitie}</CardAmenitie>
                     </CardItem>
                   );
@@ -223,7 +230,7 @@ export const SingleRoom = (props) => {
                         name="roomNumber"
                         defaultValue={roomNumber}
                         onInput={(e) => {
-                          setRoomNumber(e.target.value);
+                          setRoomNumber(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -256,7 +263,7 @@ export const SingleRoom = (props) => {
                         name="price"
                         defaultValue={price}
                         onInput={(e) => {
-                          setPrice(e.target.value);
+                          setPrice(Number(e.currentTarget.value));
                         }}
                       />
                     </Input>
@@ -269,7 +276,7 @@ export const SingleRoom = (props) => {
                         name="discount"
                         defaultValue={discount}
                         onInput={(e) => {
-                          setDiscount(e.target.value);
+                          setDiscount(Number(e.currentTarget.value));
                         }}
                       />
                     </Input>
@@ -314,7 +321,7 @@ export const SingleRoom = (props) => {
                       name="description"
                       defaultValue={description}
                       onInput={(e) => {
-                        setDescription(e.target.value);
+                        setDescription(e.currentTarget.value);
                       }}
                     />
                   </InputBig>

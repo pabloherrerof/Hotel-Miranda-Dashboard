@@ -1,4 +1,4 @@
-export function delay(data, time = 1000) {
+export function delay(data: any, time = 1000) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(data);
@@ -6,21 +6,21 @@ export function delay(data, time = 1000) {
   });
 }
 
-export const offerChecker = (discount) => {
+export const offerChecker = (discount: number) => {
   if (discount > 0) {
     return "OFFER";
   } else return "";
 };
 
-export const offerPriceCalc = (price, discount) => {
+export const offerPriceCalc = (price: number, discount: number) => {
   return discount > 0 ? price - (price * discount) / 100 + "$" : "-";
 };
 
-export const dateConverter = (dateToConver) => {
+export const dateConverter = (dateToConver : string) => {
   const fecha = new Date(dateToConver);
 
-  const opcionesFecha = { day: "numeric", month: "long", year: "numeric" };
-  const opcionesHora = { hour12: true, hour: "numeric", minute: "numeric" };
+  const opcionesFecha: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+  const opcionesHora: Intl.DateTimeFormatOptions = { hour12: true, hour: "numeric", minute: "numeric" };
 
   const fechaString = fecha.toLocaleDateString("en-US", opcionesFecha);
   const horaString = fecha.toLocaleTimeString("en-US", opcionesHora);
@@ -31,7 +31,7 @@ export const dateConverter = (dateToConver) => {
   };
 };
 
-export const bookedStatusCalc = (checkIn, checkOut) => {
+export const bookedStatusCalc = (checkIn: string, checkOut: string) => {
   const actualDate = new Date();
   const checkInDate = new Date(checkIn);
   const checkOutDate = new Date(checkOut);
@@ -45,7 +45,7 @@ export const bookedStatusCalc = (checkIn, checkOut) => {
   }
 };
 
-export const totalPriceCalc = (pricePerNight, checkIn, checkOut) => {
+export const totalPriceCalc = (pricePerNight: number, checkIn: string, checkOut: string) => {
   var date1 = new Date(checkOut);
   var date2 = new Date(checkIn);
 
@@ -58,19 +58,23 @@ export function getTodayString() {
   let dd = today.getDate();
   let mm = today.getMonth() + 1;
   const yyyy = today.getFullYear();
+  let day = dd.toString()
+  let month = mm.toString()
+  let year = yyyy.toString()
 
   if (dd < 10) {
-    dd = "0" + dd;
+    day = "0" + day;
   }
 
   if (mm < 10) {
-    mm = "0" + mm;
+    
+    month = "0" + month;
   }
 
-  return yyyy + "-" + mm + "-" + dd;
+  return year + "-" + month + "-" + day;
 }
 
-export const jobDescriptionChooser = (position) => {
+export const jobDescriptionChooser = (position: string) => {
   if (position === "Manager") {
     return "Responsible for the hotel's daily management.";
   } else if (position === "Recepcionist") {
@@ -80,7 +84,7 @@ export const jobDescriptionChooser = (position) => {
   }
 };
 
-export const roomInfoChooser = (roomType) => {
+export const roomInfoChooser = (roomType: string) => {
   switch (roomType) {
     case "Single Bed":
       return {
@@ -141,10 +145,16 @@ export const roomInfoChooser = (roomType) => {
       };
 
     default:
-      return undefined;
+      return  {
+        cancelattion:"None",
+        amenities: [],
+        thumbnail: "none",
+        images: []
+      };;
   }
 };
 
-export const maxCharString = (string, maxChar) =>{
+export const maxCharString = (string :string, maxChar: number) =>{
   return string.slice(0, maxChar) +"..."
 }
+

@@ -5,6 +5,7 @@ interface ButtonProps {
   empty?: boolean;
   status?: string;
   archived?: boolean;
+  unarchived?: boolean;
 }
 export const EditButton = styled.button`
      font-family: "Poppins";

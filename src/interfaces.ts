@@ -16,9 +16,10 @@ export interface Booking {
     email: string;
     phone: string;
     startDate: string;
-    jobDescription: string,
+    jobDescription: string | undefined,
     state: string,
-    password: string
+    password: string,
+    position: string
   }
 
   export interface Room{
@@ -35,10 +36,16 @@ export interface Booking {
     status: string;
   }
 
+  type customer = {
+    name: string;
+    phone: string;
+    email: string;
+  }
+
   export interface Contact {
     date: string;
     archived: boolean;
-    customer: object;
+    customer: customer;
     id: string;
     subject: string;
     comment: string;

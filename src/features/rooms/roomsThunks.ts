@@ -9,27 +9,20 @@ export const fetchRooms = createAsyncThunk("rooms/fetchRooms", async () => {
     return await delay(roomsList);
 });
 
-export const addRoom = createAsyncThunk("rooms/addRoom", async (roomObject) => {
+export const addRoom = createAsyncThunk("rooms/addRoom", async (roomObject: Room) => {
    return await delay (roomObject);
 });
 
 export const getRoom = createAsyncThunk("rooms/getRoom", async (roomId : Room["id"]) =>{
-    if(roomsList.find((item : Room) => {
-        return item.id === roomId;
-      }) !== undefined) {
-        return await  delay (roomsList.find((item) => {
-          return item.id === roomId;
-        })
-        )
-      } else return roomId
+    return await delay(roomId);
    
 })
 
-export const deleteRoom = createAsyncThunk('rooms/deleteRooms', async (roomId) => {
+export const deleteRoom = createAsyncThunk('rooms/deleteRooms', async (roomId: Room["id"]) => {
     return await delay(roomId);
 });
 
-export const editRoom = createAsyncThunk("rooms/editRoom", async (updatedRoomObject)=>{
+export const editRoom = createAsyncThunk("rooms/editRoom", async (updatedRoomObject: Room)=>{
     return await delay(updatedRoomObject);
 })
 

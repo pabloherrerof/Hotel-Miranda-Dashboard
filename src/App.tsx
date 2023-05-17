@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Bookings } from "./pages/Booking/Bookings";
 import { Rooms } from "./pages/Rooms/Rooms";
-import { Contact } from "./pages/Contact";
+import { Contacts } from "./pages/Contact";
 import { Users } from "./pages/Users/Users";
 import { SingleUser } from "./pages/Users/SingleUser";
 import "./App.css";
@@ -11,7 +11,6 @@ import { Login } from "./pages/Login/Login";
 import { SingleBooking } from "./pages/Booking/SingleBooking";
 import { ErrorPage } from "./pages/ErrorPage/ErrorPage";
 import { PrivateRoute } from "./components/PrivateRoute";
-import { Layout } from "./components/Layout";
 import { SingleRoom } from "./pages/Rooms/SingleRoom";
 import { UserContext } from "./components/UserContext";
 import { User } from "./interfaces";
@@ -20,14 +19,25 @@ import { User } from "./interfaces";
 
 export interface AppState {
   auth: boolean,
-  user: User | {},
+  user: User,
 }
 
 export type Action = { type: string; payload?: any};
 
 const initialState : AppState = {
   auth: false,
-  user:{},
+  user:{
+    photo: "",
+    name: "",
+    id: "",
+    phone: "",
+    email: "",
+    startDate: "",
+    jobDescription: "",
+    state: "",
+    password: "",
+    position: "",
+  },
 }
 
 
@@ -43,12 +53,8 @@ const reducer = (state : AppState, action: Action) => {
     
 }
 
-function App() {
-
-
+export function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-
 
   return (
     <>
@@ -57,8 +63,7 @@ function App() {
       
         <Routes>
         <Route  path = "/login" element={state.auth ? <Navigate to="/"/> : <Login/>} />
-         
-         <Route element={<PrivateRoute auth={state.auth}><Layout/></PrivateRoute>}>
+         <Route element={<PrivateRoute></PrivateRoute>}>
           <Route  path="/" element={<Dashboard/>} />
  
           <Route  path="/bookings" element={<Bookings /> } />
@@ -67,7 +72,7 @@ function App() {
           <Route  path="/rooms" element={<Rooms />} />
           <Route  path = "/rooms/:id" element={<SingleRoom/>}/>
 
-          <Route  path="/contact" element={<Contact />} />
+          <Route  path="/contact" element={<Contacts />} />
 
           <Route  path="/users" element={<Users />} /> {/*/ Vista de datos de usuario loggeado con posibilidad de editar*/}
           <Route  path="/users/:id" element= {<SingleUser/>} /> 

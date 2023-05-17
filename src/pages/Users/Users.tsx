@@ -1,9 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
 import { getUsersStatus, getUsersData } from "../../features/users/usersSlice";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { fetchUsers } from "../../features/users/usersThunks";
 import { HashLoader } from "react-spinners";
-import { Button, StatusButton } from "../../components/Button.tsx";
+import { Button, StatusButton } from "../../components/Button";
 import {
   CustomDropdown,
   ImageItem,
@@ -28,11 +27,13 @@ import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { Option } from "react-dropdown";
 
-export const Users = (props) => {
-  const dispatch = useDispatch();
-  const usersStatus = useSelector(getUsersStatus);
-  const usersData = useSelector(getUsersData);
+export const Users = () => {
+  const dispatch = useAppDispatch();
+  const usersStatus = useAppSelector(getUsersStatus);
+  const usersData = useAppSelector(getUsersData);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAll, setShowAll] = useState("true");
   const [showActive, setShowActive] = useState("false");
@@ -61,8 +62,9 @@ export const Users = (props) => {
     setTableData(usersData);
   }, [dispatch, usersStatus, usersData]);
 
-  const onClickHandler = (e) => {
-    const option = e.target.innerText;
+  const onClickHandler = (e :  React.MouseEvent<HTMLInputElement>) => {
+    const input = e.target as HTMLElement;
+    const option= input.innerText;
     if (option === "All users") {
       setShowAll("true");
       setShowActive("false");
@@ -84,8 +86,8 @@ export const Users = (props) => {
     }
   };
 
-  const onSearchInputHandler = (e) => {
-    console.log(e.target.value);
+  const onSearchInputHandler = (e : React.ChangeEvent<HTMLInputElement> ) => {
+    
     setTableData(
       tableData.filter((user) =>
         user.name.toLowerCase().includes(e.target.value.toLowerCase())
@@ -93,22 +95,22 @@ export const Users = (props) => {
     );
     if (e.target.value === "") {
       if (showAll === "true") {
-        console.log("holaqw");
         setTableData(usersData);
       }
       if (showActive === "true") {
-        console.log("hola");
         setTableData(usersData.filter((user) => user.state === "ACTIVE"));
       }
       if (showInactive === "true") {
-        console.log("holasass");
         setTableData(usersData.filter((user) => user.state === "INACTIVE"));
       }
     }
   };
 
-  const onChangeHandler = (e) => {
-    if (e.value === "Name") {
+  const onChangeHandler = (e : any) => {
+        const option = e.value;
+        console.log(option)
+    
+    if ( option === "Name") {
       setOrderValue("Name")
       setTableData(
         [...tableData].sort((a, b) => {
@@ -118,7 +120,7 @@ export const Users = (props) => {
         })
       );
     }
-    if (e.value === "Date") {
+    if (option === "Date") {
       setOrderValue("Date")
       setTableData(
         [...tableData].sort((a, b) => {

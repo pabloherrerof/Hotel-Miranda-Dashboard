@@ -22,18 +22,19 @@ import {
   TableRow,
   TableTitle,
 } from "../../components/TableStyled";
-import { Button, StatusButton } from "../../components/Button.tsx";
+import { Button, StatusButton } from "../../components/Button";
 import { offerPriceCalc } from "../../features/otherFunctions";
 import {
   CustomDropdown,
   RightActions,
   TableActions,
 } from "../../components/TableStyled";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
-export const Rooms = (props) => {
-  const dispatch = useDispatch();
-  const roomsStatus = useSelector(getRoomsStatus);
-  const roomsData = useSelector(getRoomsData);
+export const Rooms = () => {
+  const dispatch = useAppDispatch();
+  const roomsStatus = useAppSelector(getRoomsStatus);
+  const roomsData = useAppSelector(getRoomsData);
   const [targetId, setTargetId] = useState("");
   const [tableData, setTableData] = useState(roomsData);
 
@@ -59,7 +60,7 @@ export const Rooms = (props) => {
     setTableData(roomsData);
   }, [dispatch, roomsStatus, roomsData]);
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e : any) => {
     if (e.value === "Room Number") {
       setTableData(
         [...tableData].sort((a, b) => {
@@ -117,7 +118,6 @@ export const Rooms = (props) => {
             <Button
               onClick={() => {
                 setShowCreateModal(true);
-                console.log(showCreateModal)
               }}
             >+ New </Button>
             <CustomDropdown

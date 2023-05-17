@@ -22,7 +22,7 @@ import {
   TableRow,
   TableTitle,
 } from "../../components/TableStyled";
-import { Button, NotesButton, StatusButton } from "../../components/Button.tsx";
+import { Button, NotesButton, StatusButton } from "../../components/Button";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
@@ -30,12 +30,14 @@ import {
 import { Modal } from "../../components/Modal";
 import { bookedStatusCalc, dateConverter } from "../../features/otherFunctions";
 import { searchBookingRoom } from "../../features/API";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { Booking } from "../../interfaces";
 
 
-export const Bookings = (props) => {
-  const dispatch = useDispatch();
-  const bookingsStatus = useSelector(getBookingsStatus);
-  const bookingsData = useSelector(getBookingsData);
+export const Bookings = () => {
+  const dispatch = useAppDispatch();
+  const bookingsStatus = useAppSelector(getBookingsStatus);
+  const bookingsData = useAppSelector(getBookingsData);
 
   const [showAll, setShowAll] = useState("true");
   const [showCheckIn, setShowCheckIn] = useState("false");
@@ -45,7 +47,7 @@ export const Bookings = (props) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [targetId, setTargetId] = useState("");
   const [tableData, setTableData] = useState(bookingsData);
-  const [targetBooking, setTargetBooking] = useState();
+  const [targetBooking, setTargetBooking] = useState<Booking>();
   const [showNotesModal, setShowNotesModal] = useState(false);
   const [orderValue, setOrderValue] = useState("ID")
 
@@ -72,8 +74,9 @@ export const Bookings = (props) => {
     setTableData(bookingsData);
   }, [dispatch, bookingsStatus, bookingsData]);
 
-  const onClickHandler = (e) => {
-    const option = e.target.innerText;
+  const onClickHandler = (e:  React.MouseEvent<HTMLInputElement>) => {
+    const input = e.target as HTMLElement;
+    const option= input.innerText;
     if (option === "All Bookings") {
       setOrderValue("ID");
       setShowAll("true");
@@ -121,7 +124,7 @@ export const Bookings = (props) => {
     }
   };
 
-  const onSearchInputHandler = (e) => {
+  const onSearchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     setTableData(
       tableData.filter((user) =>
@@ -161,7 +164,7 @@ export const Bookings = (props) => {
     }
   };
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: any) => {
     if (e.value === "Guest") {
       setOrderValue("Guest");
       setTableData(

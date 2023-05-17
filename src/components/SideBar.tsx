@@ -21,16 +21,23 @@ import { UserContext } from "./UserContext";
 
 export const SideBar = () => {
   const navigate = useNavigate();
-  const { state } = useContext(UserContext);
+
+  const appContext = useContext(UserContext);
+
+  if (!appContext) {
+    // Manejar el caso en el que el contexto no esté disponible
+    return null;
+  }
+  const { state } = appContext;
 
   const clickHandler = () => {
-    navigate(`/users/${state.user.id}`);
+      navigate(`/users/${state.user.id}`);
   };
 
   return (
     <>
       <Wrapper>
-        <Logo direction={"row"}>
+        <Logo>
           <img src={logo} alt="logo" />
           <div>
             <h2>travl</h2>

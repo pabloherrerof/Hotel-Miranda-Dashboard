@@ -2,22 +2,32 @@
 import "slick-carousel/slick/slick-theme.css";
 import { ReviewComment, ReviewContainer, ReviewInfo, ReviewSlider } from "./LastReviewsStyled";
 import { dateConverter, maxCharString } from "../features/otherFunctions";
-import { ArchiveButton } from "./Button.tsx";
+import { ArchiveButton } from "./Button";
 import { archiveContacts  } from "../features/contacts/contactThunks";
 import { useDispatch } from "react-redux";
 import { Modal } from "./Modal";
-import { useState } from "react";
+import React, { SetStateAction, useState } from "react";
+import { useAppDispatch } from "../app/hooks";
+import { Contact } from "../interfaces";
+
+interface LastReviewsProps {
+  data: Contact[]
+}
+
+export const LastReviews = ({data}: LastReviewsProps) => {
 
 
-export const LastReviews = (props) => {
-  const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
+
+  const SlickButtonFix  = ({ currentSlide, slideCount, children, ...props }: any) => (
     <span {...props}>{children}</span>
   );
 
-  const [showModal, setShowModal] = useState(true);
-  const [target, setTarget] = useState();
+  
 
-  const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(true);
+  const [target, setTarget] = React.useState<Contact>();
+
+  const dispatch = useAppDispatch();
 
  
 
@@ -36,7 +46,7 @@ export const LastReviews = (props) => {
 
   
 
-  const onClickArchiveHandler = (contact) =>{
+  const onClickArchiveHandler = (contact: Contact) =>{
     dispatch(archiveContacts(contact));
 }
 
@@ -45,8 +55,8 @@ export const LastReviews = (props) => {
         return(
           <>
           <ReviewSlider {...settings}>
-          {props.data.map((element) => (
-            <div>
+          {data.map((element: Contact, i: number) => (
+            <div key={i}>
               <ReviewContainer onClick={() => {setTarget(element)
                                                 setShowModal(true)}}>
                 <ReviewComment>
@@ -63,8 +73,6 @@ export const LastReviews = (props) => {
               </ReviewContainer>
             </div>
           ))}
-          
-          {console.log(target)}
         </ReviewSlider>
         <Modal
                mode="moreInfo"

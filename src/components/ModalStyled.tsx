@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 interface ModalProps {
-    show: boolean;
-    top: boolean;
+    show?: boolean;
+    top?: boolean;
 }
 
 export const ModalContainer = styled.div<ModalProps>`

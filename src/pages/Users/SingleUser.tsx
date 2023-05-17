@@ -22,17 +22,18 @@ import {
 import { HashLoader } from "react-spinners";
 import { Wrapper } from "../../components/LayoutStyled";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
-import { Button } from "../../components/Button.tsx";
+import { Button } from "../../components/Button";
 import { Input, Label, RadioInput } from "../../components/FormStyled";
 import { jobDescriptionChooser } from "../../features/otherFunctions";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 export const SingleUser = () => {
   const userId = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const getUserData = useSelector(getUsersSingle);
-  const getStatus = useSelector(getUsersStatus);
-  const getUserStatus = useSelector(getSingleUserStatus);
+  const getUserData = useAppSelector(getUsersSingle);
+  const getStatus = useAppSelector(getUsersStatus);
+  const getUserStatus = useAppSelector(getSingleUserStatus);
 
   const [fieldError, setFieldError] = useState("");
   const [userName, setUserName] = useState("");
@@ -47,41 +48,49 @@ export const SingleUser = () => {
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    if (getUserStatus === "idle" || getUserData) {
-      if (userId.id !== getUserData.id) {
-        dispatch(getUser(userId.id));
+    if (getUserStatus === "idle") {
+      if(getUserData && userId){
+        if (userId.id !== getUserData.id) {
+          dispatch(getUser(userId.id as string));
+        }
       }
+      
     }
-    setUserImage(getUserData.photo);
-    setUserEmail(getUserData.email);
-    setUserName(getUserData.name);
-    setUserPosition(getUserData.position);
-    setUserState(getUserData.state);
-    setUserPhone(getUserData.phone)
-    setUserStartDate(getUserData.startDate)
-    setUserPassword(getUserData.password)
+    if(getUserData){
+      setUserImage(getUserData.photo);
+      setUserEmail(getUserData.email);
+      setUserName(getUserData.name);
+      setUserPosition(getUserData.position);
+      setUserState(getUserData.state);
+      setUserPhone(getUserData.phone)
+      setUserStartDate(getUserData.startDate)
+      setUserPassword(getUserData.password)
+    }
   }, [dispatch, getStatus, getUserStatus, userId.id, getUserData]);
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement> ) => {
     e.preventDefault();
     if(userEmail=== "" || userImage ==="" || userName=== "" || userPosition==="" || userStartDate==="" || userState==="" || userPhone==="" || userPassword=== ""){
       setFieldError("You have to enter all inputs!")
   } else {
+    if(getUserData){
       const user = {
-          id: getUserData.id,
-          photo: userImage,
-          name: userName,
-          position: userPosition,
-          email: userEmail,
-          phone: userPhone,
-          startDate: userStartDate,
-          state: userState,
-          jobDescription: jobDescriptionChooser(userPosition),
-          password: userPassword,
-      }
-      dispatch(editUser(user));
-      dispatch(getUser(user))
-      setEdit(false);
+        id: getUserData.id,
+        photo: userImage,
+        name: userName,
+        position: userPosition,
+        email: userEmail,
+        phone: userPhone,
+        startDate: userStartDate,
+        state: userState,
+        jobDescription: jobDescriptionChooser(userPosition),
+        password: userPassword,
+    }
+    dispatch(editUser(user));
+    dispatch(getUser(user.id));
+    console.log(getUserData);
+    setEdit(false);
+    }
   }
   };
 
@@ -142,7 +151,7 @@ export const SingleUser = () => {
               <FeaturesRow>
                 <CardItem>
                   <h6>Password</h6>
-                  <h5>{getUserData.password}</h5>
+                  <h5>{"*********"}</h5>
                 </CardItem>
               </FeaturesRow>
               <CardSeparator />
@@ -185,7 +194,7 @@ export const SingleUser = () => {
                         name="image"
                         value={userImage}
                         onInput={(e) => {
-                          setUserImage(e.target.value);
+                          setUserImage(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -199,7 +208,7 @@ export const SingleUser = () => {
                         name="name"
                         defaultValue={userName}
                         onInput={(e) => {
-                          setUserName(e.target.value);
+                          setUserName(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -232,7 +241,7 @@ export const SingleUser = () => {
                         name="name"
                         defaultValue={userPhone}
                         onInput={(e) => {
-                          setUserPhone(e.target.value);
+                          setUserPhone(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -245,7 +254,7 @@ export const SingleUser = () => {
                         name="name"
                         defaultValue={userEmail}
                         onInput={(e) => {
-                          setUserEmail(e.target.value);
+                          setUserEmail(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -260,7 +269,7 @@ export const SingleUser = () => {
                         name="startDate"
                         defaultValue={userStartDate}
                         onInput={(e) => {
-                          setUserStartDate(e.target.value);
+                          setUserStartDate(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -299,7 +308,7 @@ export const SingleUser = () => {
                   <CardItem>
                     <Input>
                     <h6>Password</h6>
-                    <input type="password" defaultValue={userPassword} name="password" onInput= {(e)=>{setUserPassword(e.target.value)}}/>
+                    <input type="password" defaultValue={userPassword} name="password" onInput= {(e)=>{setUserPassword(e.currentTarget.value)}}/>
                     </Input>
                   </CardItem>
                 </FeaturesRow>

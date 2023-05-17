@@ -1,14 +1,35 @@
-import ReactDropdown from "react-dropdown";
+import ReactDropdown, { Option } from "react-dropdown";
+import { LinkProps, To } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface TableProps{
-  big: boolean;
-  discount: number;
-  price: boolean;
-  offer: boolean;
-  active: string;
-  room: boolean;
+  big?: boolean;
+  discount?: number;
+  price?: boolean;
+  offer?: boolean;
+  active?: string;
+  room?: boolean;
+  user?: boolean;
+}
+
+
+interface ReactDropdownProps {
+  options: any;
+  baseClassName?: string;
+  className?: string;
+  controlClassName?: string;
+  placeholderClassName?: string;
+  menuClassName?: string;
+  arrowClassName?: string;
+  disabled?: boolean;
+  arrowClosed?: React.ReactNode,
+  arrowOpen?: React.ReactNode,
+  onChange?: (arg: Option) => void;
+  onFocus?: (arg: boolean) => void;
+  value?: Option | string;
+  placeholder?: String;
+  room?: boolean,
 }
 
 export const TableActions = styled.div`
@@ -79,13 +100,15 @@ export const TableItem = styled.td<TableProps>`
   max-width: ${props => props.big ? "120px" : "80px"};
 
   text-decoration: ${(props) => {
-    if (props.discount > 0 && props.price) {
+    if(props.discount)
+      if (props.discount > 0 && props.price) {
       return "line-through";
     } else return "none";
   }};
 
   color: ${(props) => {
-    if (props.discount > 0 && props.offer) {
+    if(props.discount)
+      if (props.discount > 0 && props.offer) {
       return "#E23428";
     } else return "#393939";
   }};
@@ -112,7 +135,7 @@ export const TableItem = styled.td<TableProps>`
   }
 `;
 
-export const ImageItem = styled.div`
+export const ImageItem = styled.div<TableProps>`
   
   
   display: flex;
@@ -139,7 +162,7 @@ export const RoomImageItem = styled.img`
   object-fit: cover;
 `;
 
-export const TableLink = styled(Link)<TableProps>`
+export const TableLink = styled(Link)<any>`
   width: 100%;
   border-bottom: ${(props) => {if(props.active === "true"){
     return "#135846 2px solid";
@@ -183,7 +206,7 @@ export const SearchBar = styled.div`
   }
 `;
 
-export const CustomDropdown = styled(ReactDropdown)<TableProps>`
+export const CustomDropdown = styled(ReactDropdown)<ReactDropdownProps>`
    font-family: "Poppins";
     font-size: 12px;
     font-weight: normal;

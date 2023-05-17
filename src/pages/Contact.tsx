@@ -1,25 +1,25 @@
-import { useDispatch, useSelector } from "react-redux"
 import { getContactsData, getContactsStatus } from "../features/contacts/contactsSlice"
 import { useEffect, useState } from "react";
 import { archiveContacts, fetchContacts } from "../features/contacts/contactThunks";
 import { Wrapper } from "../components/LayoutStyled";
 import { HashLoader } from "react-spinners";
-import { LeftActions, RightActions, StyledLink, TableActions, TableContainer, TableItem, TableLink, TableRow, TableTitle } from "../components/TableStyled";
-import { Modal } from "../components/Modal";
+import { LeftActions, RightActions, TableActions, TableContainer, TableItem, TableLink, TableRow, TableTitle } from "../components/TableStyled";
 import { dateConverter } from "../features/otherFunctions";
-import { ArchiveButton } from "../components/Button.tsx";
+import { ArchiveButton } from "../components/Button";
 import { LastReviews } from "../components/LastReviews";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { Contact } from "../interfaces";
 
 
 
 
-export const Contact = (props) =>{
+export const Contacts = () =>{
 
-    const dispatch = useDispatch();
-    const contactsStatus = useSelector(getContactsStatus);
-    const contactsData = useSelector(getContactsData);
+    const dispatch = useAppDispatch();
+    const contactsStatus = useAppSelector(getContactsStatus);
+    const contactsData = useAppSelector(getContactsData);
     const [tableData, setTableData] = useState(contactsData);
-    const [recentContacts, setRecentContacts] = useState()
+    const [recentContacts, setRecentContacts] = useState<Contact[]>()
     
     
 
@@ -57,8 +57,9 @@ export const Contact = (props) =>{
       }, [dispatch, contactsStatus, contactsData, showArchived, tableData, showAll]);
 
 
-      const onClickHandler = (e) => {
-        const option = e.target.innerText;
+      const onClickHandler = (e: React.MouseEvent<HTMLInputElement>) => {
+        const input = e.target as HTMLElement;
+        const option= input.innerText
         if (option === "All Contacts") {
           setShowAll("true");
             setShowArchived("false");
@@ -70,14 +71,13 @@ export const Contact = (props) =>{
         }
     }
 
-    const onClickArchiveHandler = (contact) =>{
+    const onClickArchiveHandler = (contact: Contact) =>{
         dispatch(archiveContacts(contact));
         if(showArchived === "true"){
             setTableData(contactsData.filter((contact) => contact.archived === true ));
         }
     }
-   console.log(recentContacts)
-   console.log(contactsData)
+ 
 
      if (contactsStatus === "pending" || contactsStatus === "idle" || !recentContacts) {
     return (

@@ -1,5 +1,4 @@
-import { useDispatch } from "react-redux";
-import { ArchiveButton, Button } from "./Button.tsx";
+import { ArchiveButton, Button } from "./Button";
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled";
 import { IoClose } from "react-icons/io5";
 import { addUser, deleteUser } from "../features/users/usersThunks";
@@ -18,16 +17,33 @@ import {
   jobDescriptionChooser,
   roomInfoChooser,
 } from "../features/otherFunctions";
-import { useState } from "react";
+import { Dispatch, FormEvent, FormEventHandler, SetStateAction, useState } from "react";
 import { searchBookingRoom } from "../features/API";
 import {
   ReviewComment,
   ReviewContainer,
   ReviewInfo,
 } from "./LastReviewsStyled";
+import { useAppDispatch } from "../app/hooks";
+import { Booking, Contact } from "../interfaces";
 
-export const Modal = (props) => {
-  const dispatch = useDispatch();
+interface ModalProps {
+  mode?: string,
+  page?: string,
+  itemId?: string,
+  setShowDeleteModal?: Dispatch<SetStateAction<boolean>>,
+  setShowCreateModal?: Dispatch<SetStateAction<boolean>>,
+  showDeleteModal?: boolean,
+  showCreateModal?: boolean,
+  showModal?: boolean,
+  setShowModal?: Dispatch<SetStateAction<boolean>>,
+  target?: Contact,
+  showNotesModal?: boolean,
+  setShowNotesModal?: Dispatch<SetStateAction<boolean>>,
+  targetBooking?: Booking,
+}
+export const Modal = ({page, itemId, setShowDeleteModal, setShowCreateModal, showDeleteModal, showCreateModal, mode, target, showModal, setShowModal, showNotesModal, setShowNotesModal, targetBooking} : ModalProps) => {
+  const dispatch = useAppDispatch();
   const [fieldError, setFieldError] = useState("");
 
   const [userName, setUserName] = useState("");
@@ -50,32 +66,31 @@ export const Modal = (props) => {
 
   const [roomType, setRoomType] = useState("Single Bed");
   const [roomNumber, setRoomNumber] = useState("");
-  const [price, setPrice] = useState("");
-  const [discount, setDiscount] = useState("");
+  const [price, setPrice] = useState<number>();
+  const [discount, setDiscount] = useState<number>();
   const [roomStatus, setRoomStatus] = useState("");
   const [description, setDescription] = useState("");
 
   const onClickDeleteHandler = () => {
-    if (props.page === "users") {
-      dispatch(deleteUser(props.itemId));
-
-      props.setShowDeleteModal(false);
+    if (page === "users" && setShowDeleteModal && itemId) {
+      dispatch(deleteUser(itemId));
+      setShowDeleteModal(false);
     }
 
-    if (props.page === "bookings") {
-      dispatch(deleteBooking(props.itemId));
-      props.setShowDeleteModal(false);
+    if (page === "bookings" && setShowDeleteModal && itemId) {
+      dispatch(deleteBooking(itemId));
+      setShowDeleteModal(false);
     }
 
-    if (props.page === "rooms") {
-      dispatch(deleteRoom(props.itemId));
-      props.setShowDeleteModal(false);
+    if (page === "rooms" && setShowDeleteModal && itemId) {
+      dispatch(deleteRoom(itemId));
+      setShowDeleteModal(false);
     }
   };
 
-  const onCreateSubmitHandler = (e) => {
-    e.preventDefault();
-    if (props.page === "users") {
+  const onCreateSubmitHandler = (event:FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (page === "users") {
       if (
         userEmail === "" ||
         userImage === "" ||
@@ -89,6 +104,7 @@ export const Modal = (props) => {
         setFieldError("You have to enter all inputs!");
       } else {
         const user = {
+          id: "",
           photo: userImage,
           name: userName,
           position: userPosition,
@@ -100,22 +116,27 @@ export const Modal = (props) => {
           password: userPassword,
         };
         dispatch(addUser(user));
-        props.setShowCreateModal(false);
+        if(setShowCreateModal){
+          setShowCreateModal(false);
+        }
         setFieldError("");
         setUserEmail("");
         setUserName("");
         setUserImage(
           "https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png"
         );
+        const form = document.getElementById('createForm') as HTMLFormElement 
+        form.reset();
         setUserPassword("");
         setUserPosition("Manager");
         setUserStartDate(getTodayString());
         setUserState("");
         setUserPhone("");
-        e.target.reset();
+        
       }
     }
-    if (props.page === "bookings") {
+    if (page === "bookings") {
+      event.preventDefault();
       if (
         guestName === "" ||
         checkIn === "" ||
@@ -128,6 +149,7 @@ export const Modal = (props) => {
         setFieldError("The room you've entered does not exists!");
       } else {
         const booking = {
+          id: "",
           name: guestName,
           checkIn: checkIn,
           checkOut: checkOut,
@@ -137,7 +159,11 @@ export const Modal = (props) => {
         };
         console.log(booking);
         dispatch(addBooking(booking));
-        props.setShowCreateModal(false);
+        if(setShowCreateModal){
+          setShowCreateModal(false);
+        }
+        const form = document.getElementById('createForm') as HTMLFormElement 
+        form.reset();
         setGuestName("");
         setBookingRoomId("");
         setCheckIn("");
@@ -145,23 +171,22 @@ export const Modal = (props) => {
         setOrderDate(getTodayString());
         setSpecialRequest("");
         setFieldError("");
-        e.target.reset();
+        
       }
     }
-    if (props.page === "rooms") {
+    if (page === "rooms") {
       if (
         roomNumber === "" ||
         roomType === "" ||
-        price === "" ||
+        price === undefined ||
         roomStatus === "" ||
-        description === ""
+        description === "" || discount === undefined
       ) {
+        setDiscount(0);
         setFieldError("You have to enter all inputs!");
       } else {
-        if (discount === "") {
-          setDiscount(0);
-        }
         const room = {
+          id: "",
           roomType: roomType,
           roomNumber: roomNumber,
           price: price,
@@ -173,29 +198,33 @@ export const Modal = (props) => {
           description: description,
           images: roomInfoChooser(roomType).images,
         };
-        console.log(room);
         dispatch(addRoom(room));
-        props.setShowCreateModal(false);
+        if(setShowCreateModal){
+          setShowCreateModal(false);
+        }
         setRoomNumber("");
         setRoomType("Single Bed");
-        setDiscount("");
-        setPrice("");
+        setDiscount(undefined);
+        setPrice(undefined);
         setDescription("");
         setRoomStatus("");
         setFieldError("");
-        e.target.reset();
+        const form = document.getElementById('createForm') as HTMLFormElement 
+        form.reset();
+        
       }
     }
   };
 
-  if (props.mode === "delete") {
+  if (mode === "delete") {
     return (
       <>
-        <ModalContainer show={props.showDeleteModal}>
+        <ModalContainer show={showDeleteModal}>
           <ModalCloseRow>
             <IoClose
               onClick={() => {
-                props.setShowDeleteModal(false);
+                if(setShowDeleteModal)
+                setShowDeleteModal(false);
               }}
             />
           </ModalCloseRow>
@@ -206,7 +235,8 @@ export const Modal = (props) => {
             </Button>
             <Button
               onClick={() => {
-                props.setShowDeleteModal(false);
+                if(setShowDeleteModal)
+                  setShowDeleteModal(false);
               }}
             >
               Cancel
@@ -216,21 +246,21 @@ export const Modal = (props) => {
       </>
     );
   }
-  if (props.mode === "create") {
-    if (props.page === "users") {
+  if (mode === "create") {
+    if (page === "users") {
       return (
         <>
-          <ModalContainer show={props.showCreateModal} top>
+          <ModalContainer show={showCreateModal} top>
             <ModalCloseRow>
               <IoClose
-                onClick={() => {
-                  props.setShowCreateModal(false);
+                onClick={(e) => {
+                  if(setShowCreateModal)
+                  setShowCreateModal(false);
                   setFieldError("");
-                  document.getElementById("createUserForm").reset();
                 }}
               />
             </ModalCloseRow>
-            <FormContainer onSubmit={onCreateSubmitHandler} id="createUserForm">
+            <FormContainer onSubmit={onCreateSubmitHandler} id="createForm">
               <h2>New User</h2>
               <p>{fieldError}</p>
 
@@ -239,7 +269,7 @@ export const Modal = (props) => {
                 <input
                   type="link"
                   name="image"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setUserImage(e.target.value);
                   }}
                 />
@@ -249,7 +279,7 @@ export const Modal = (props) => {
                 <input
                   type="text"
                   name="name"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setUserName(e.target.value);
                   }}
                 />
@@ -273,7 +303,7 @@ export const Modal = (props) => {
                 <input
                   type="tel"
                   name="name"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setUserPhone(e.target.value);
                   }}
                 />
@@ -283,7 +313,7 @@ export const Modal = (props) => {
                 <input
                   type="email"
                   name="name"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setUserEmail(e.target.value);
                   }}
                 />
@@ -293,7 +323,7 @@ export const Modal = (props) => {
                 <input
                   type="password"
                   name="password"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setUserPassword(e.target.value);
                   }}
                 />
@@ -328,7 +358,7 @@ export const Modal = (props) => {
                   type="date"
                   name="startDate"
                   defaultValue={getTodayString()}
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setUserStartDate(e.target.value);
                   }}
                 />
@@ -339,20 +369,20 @@ export const Modal = (props) => {
         </>
       );
     }
-    if (props.page === "bookings") {
+    if (page === "bookings") {
       return (
         <>
-          <ModalContainer show={props.showCreateModal} top>
+          <ModalContainer show={showCreateModal} top>
             <ModalCloseRow>
               <IoClose
                 onClick={() => {
-                  props.setShowCreateModal(false);
-                  setFieldError("");
-                  document.getElementById("createUserForm").reset();
+                  if(setShowCreateModal)
+                 setShowCreateModal(false);
+                  setFieldError("");             
                 }}
               />
             </ModalCloseRow>
-            <FormContainer onSubmit={onCreateSubmitHandler} id="createUserForm">
+            <FormContainer onSubmit={onCreateSubmitHandler} id="createForm">
               <h2>New Booking</h2>
               <p>{fieldError}</p>
 
@@ -361,7 +391,7 @@ export const Modal = (props) => {
                 <input
                   type="text"
                   name="guestName"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setGuestName(e.target.value);
                   }}
                 />
@@ -372,7 +402,7 @@ export const Modal = (props) => {
                   type="date"
                   name="orderDate"
                   defaultValue={getTodayString()}
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setOrderDate(e.target.value);
                   }}
                 />
@@ -382,7 +412,7 @@ export const Modal = (props) => {
                 <input
                   type="date"
                   name="checkIn"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setCheckIn(e.target.value);
                   }}
                 />
@@ -392,7 +422,7 @@ export const Modal = (props) => {
                 <input
                   type="date"
                   name="checkOut"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setCheckOut(e.target.value);
                   }}
                 />
@@ -402,7 +432,7 @@ export const Modal = (props) => {
                 <input
                   type="text"
                   name="room"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setBookingRoomId(e.target.value);
                   }}
                 />
@@ -413,7 +443,7 @@ export const Modal = (props) => {
                   type="text"
                   name="specialRequest"
                   defaultValue={specialRequest}
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setSpecialRequest(e.target.value);
                   }}
                 />
@@ -426,20 +456,20 @@ export const Modal = (props) => {
       );
     }
 
-    if (props.page === "rooms") {
+    if (page === "rooms") {
       return (
         <>
-          <ModalContainer show={props.showCreateModal} top>
+          <ModalContainer show={showCreateModal} top>
             <ModalCloseRow>
               <IoClose
                 onClick={() => {
-                  props.setShowCreateModal(false);
+                  if(setShowCreateModal)
+                  setShowCreateModal(false);
                   setFieldError("");
-                  document.getElementById("createUserForm").reset();
                 }}
               />
             </ModalCloseRow>
-            <FormContainer onSubmit={onCreateSubmitHandler} id="createUserForm">
+            <FormContainer onSubmit={onCreateSubmitHandler} id="createForm">
               <h2>New Room</h2>
               <p>{fieldError}</p>
 
@@ -449,7 +479,7 @@ export const Modal = (props) => {
                   type="number"
                   name="roomNumber"
                   defaultValue={roomNumber}
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setRoomNumber(e.target.value);
                   }}
                 />
@@ -475,8 +505,8 @@ export const Modal = (props) => {
                   type="number"
                   name="price"
                   defaultValue={price}
-                  onInput={(e) => {
-                    setPrice(e.target.value);
+                  onChange={(e) => {
+                    setPrice(Number(e.target.value));
                   }}
                 />
               </Input>
@@ -486,8 +516,8 @@ export const Modal = (props) => {
                   type="number"
                   name="discount"
                   defaultValue={discount}
-                  onInput={(e) => {
-                    setDiscount(e.target.value);
+                  onChange={(e) => {
+                    setDiscount(Number(e.target.value));
                   }}
                 />
               </Input>
@@ -520,7 +550,7 @@ export const Modal = (props) => {
                 <input
                   type="text"
                   name="description"
-                  onInput={(e) => {
+                  onChange={(e) => {
                     setDescription(e.target.value);
                   }}
                 />
@@ -532,33 +562,35 @@ export const Modal = (props) => {
         </>
       );
     }
+    else return(<></>)
   }
 
-  if (props.mode === "moreInfo") {
-    if (props.page === "contacts" && props.target !== undefined) {
+  if (mode === "moreInfo") {
+    if (page === "contacts" && target !== undefined) {
       return (
         <>
-          <ModalContainer show={props.showModal}>
+          <ModalContainer show={showModal}>
             <ModalCloseRow>
               <IoClose
                 onClick={() => {
-                  props.setShowModal(false);
+                  if(setShowModal)
+                  setShowModal(false);
                 }}
               />
             </ModalCloseRow>
            
-              <ReviewComment>{props.target.comment}</ReviewComment>
+              <ReviewComment>{target.comment}</ReviewComment>
               <ReviewInfo>
                 <div>
-                  <h4>{props.target.customer.name}</h4>
-                  <p>{dateConverter(props.target.date).date}</p>
+                  <h4>{target.customer.name}</h4>
+                  <p>{dateConverter(target.date).date}</p>
                 </div>
-                {props.target.archived !== true ? (
+                {target.archived !== true ? (
                   <ArchiveButton archived>Archived</ArchiveButton>
                 ) : (
                   ""
                 )}
-                {props.target.archived ? (
+                {target.archived ? (
                   <ArchiveButton unarchived>Unarchived</ArchiveButton>
                 ) : (
                   ""
@@ -569,23 +601,24 @@ export const Modal = (props) => {
         </>
       );
     }
-    if(props.page === "bookings" && props.targetBooking !== undefined){
+    if(page === "bookings" && targetBooking !== undefined){
       return (
         <>
-          <ModalContainer show={props.showNotesModal}>
+          <ModalContainer show={showNotesModal}>
             <ModalCloseRow>
               <IoClose
                 onClick={() => {
-                  props.setShowNotesModal(false);
+                  if(setShowNotesModal)
+                  setShowNotesModal(false);
                 }}
               />
             </ModalCloseRow>
            
-              <ReviewComment>{props.targetBooking.specialRequest}</ReviewComment>
+              <ReviewComment>{targetBooking.specialRequest}</ReviewComment>
               <ReviewInfo>
                 <div>
-                  <h4>{props.targetBooking.name}</h4>
-                  <p>{dateConverter(props.targetBooking.date).date}</p>
+                  <h4>{targetBooking.name}</h4>
+                  <p>{dateConverter(targetBooking.orderDate).date}</p>
                 </div>
               </ReviewInfo>
             
@@ -593,5 +626,7 @@ export const Modal = (props) => {
         </>
       );
     }
+    else return(<></>)
   }
+  else return(<></>)
 };

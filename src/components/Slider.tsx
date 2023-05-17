@@ -20,12 +20,13 @@ const FotoSlider = styled(Slider)`
   height: 100%;
   object-fit: cover;
 }
-
-
-
 `
-export const MySlider = (props) => {
-  const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
+
+interface MySliderProps{
+  data: string[],
+}
+export const MySlider = ({data}: MySliderProps) => {
+  const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }: any)=> (
     <span {...props}>{children}</span>
   );
 
@@ -42,11 +43,11 @@ export const MySlider = (props) => {
 
    return (
     <FotoSlider {...settings}>
-      {props.data.map((image) => {
+      {data.map((image, i) => {
         return (
           
           
-            <div>
+            <div key={i}>
               <img src={image} alt="" />
             </div>
            

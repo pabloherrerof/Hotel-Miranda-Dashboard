@@ -31,15 +31,16 @@ import { Wrapper } from "../../components/LayoutStyled";
 import { HashLoader } from "react-spinners";
 import { searchBookingRoom } from "../../features/API";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
-import { Button } from "../../components/Button.tsx";
+import { Button } from "../../components/Button";
 import { Input, InputBig } from "../../components/FormStyled";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
-export const SingleBooking = (props) => {
+export const SingleBooking = () => {
   const bookingId = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const bookingData = useSelector(getSingleBooking);
-  const singleBookingStatus = useSelector(getSingleBookingStatus);
+  const bookingData = useAppSelector(getSingleBooking);
+  const singleBookingStatus = useAppSelector(getSingleBookingStatus);
 
   const [fieldError, setFieldError] = useState("");
   const [guestName, setGuestName] = useState("");
@@ -52,22 +53,25 @@ export const SingleBooking = (props) => {
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    console.log(bookingId);
-    if (singleBookingStatus === "idle" || bookingData) {
-      if (bookingId.id !== bookingData.id) {
-        dispatch(getBooking(bookingId.id));
+    if (singleBookingStatus === "idle") {
+      if(bookingData && bookingId){
+        if (bookingId.id !== bookingData.id) {
+          dispatch(getBooking(bookingId.id as string));
+        }
       }
     }
-    setGuestName(bookingData.name);
-    setOrderDate(bookingData.orderDate);
-    setRoomId(bookingData.room);
-    setCheckIn(bookingData.checkIn);
-    setCheckOut(bookingData.checkOut);
-    setSpecialRequest(bookingData.specialRequest);
-  }, [dispatch, singleBookingStatus, bookingId, bookingData]);
+    if(bookingData){
+      setGuestName(bookingData.name);
+      setOrderDate(bookingData.orderDate);
+      setRoomId(bookingData.room);
+      setCheckIn(bookingData.checkIn);
+      setCheckOut(bookingData.checkOut);
+      setSpecialRequest(bookingData.specialRequest);
+    }
+  }, [dispatch, singleBookingStatus, bookingId.id, bookingData]);
 
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(guestName=== "" || checkIn ==="" || checkOut=== "" || orderDate==="" ||  roomId===""){
       setFieldError("You have to enter all inputs!")
@@ -76,7 +80,8 @@ export const SingleBooking = (props) => {
   } if(!searchBookingRoom(roomId)){
     setFieldError("The room you've entered does not exists!")
   }  else {
-    const booking = {
+    if(bookingData){
+      const booking = {
         id: bookingData.id,
         name: guestName,
         checkIn: checkIn,
@@ -87,15 +92,16 @@ export const SingleBooking = (props) => {
     }
     console.log(booking);
     dispatch(editBooking(booking));
-    dispatch(getBooking(booking))
+    dispatch(getBooking(booking.id))
     setEdit(false);
     setFieldError("");
+    } 
 } 
   };
 
 
 
-  if (singleBookingStatus === "pending" || singleBookingStatus === "idle") {
+  if (singleBookingStatus === "pending") {
     return (
       <Wrapper>
         <HashLoader color="#799283" size={100} />
@@ -165,9 +171,9 @@ export const SingleBooking = (props) => {
               </FeaturesRow>
               <FeaturesRow amenities>
                 {searchBookingRoom(bookingData.room).amenities.map(
-                  (amenitie) => {
+                  (amenitie, i) => {
                     return (
-                      <CardItem amenitie>
+                      <CardItem key={i} amenitie>
                         <CardAmenitie>{amenitie}</CardAmenitie>
                       </CardItem>
                     );
@@ -222,7 +228,7 @@ export const SingleBooking = (props) => {
                       name="name"
                       value={guestName}
                       onInput={(e) => {
-                        setGuestName(e.target.value);
+                        setGuestName(e.currentTarget.value);
                       }}
                     />
                   </Input>
@@ -236,7 +242,7 @@ export const SingleBooking = (props) => {
                         name="checkIn"
                         defaultValue={checkIn}
                         onInput={(e) => {
-                          setCheckIn(e.target.value);
+                          setCheckIn(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -249,7 +255,7 @@ export const SingleBooking = (props) => {
                         name="checkOut"
                         defaultValue={checkOut}
                         onInput={(e) => {
-                          setCheckOut(e.target.value);
+                          setCheckOut(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -264,7 +270,7 @@ export const SingleBooking = (props) => {
                         name="orderDate"
                         defaultValue={orderDate}
                         onInput={(e) => {
-                          setOrderDate(e.target.value);
+                          setOrderDate(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -277,7 +283,7 @@ export const SingleBooking = (props) => {
                         name="room"
                         defaultValue={roomId}
                         onInput={(e) => {
-                          setRoomId(e.target.value);
+                          setRoomId(e.currentTarget.value);
                         }}
                       />
                     </Input>
@@ -292,7 +298,7 @@ export const SingleBooking = (props) => {
                         name="specialRequest"
                         defaultValue={specialRequest}
                         onInput={(e) => {
-                          setSpecialRequest(e.target.value);
+                          setSpecialRequest(e.currentTarget.value);
                         }}
                       />
                     </InputBig>

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 interface FormProps {
-  active: boolean;
-  inactive: boolean;
+  active?: boolean;
+  inactive?: boolean;
 }
 
 export const FormContainer = styled.form`

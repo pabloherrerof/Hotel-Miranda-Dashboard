@@ -1,31 +1,44 @@
 import { BsArrowBarLeft, BsArrowBarRight } from "react-icons/bs";
 import { HiOutlineLogout, HiOutlineBell, HiOutlineMail } from "react-icons/hi";
 import { Nav, NavItemContainer } from "./TopBarStyled";
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { UserContext } from "./UserContext";
 
-export const TopBar = (props) => {
-  const { dispatch } = useContext(UserContext);
+
+interface TopBarProps {
+  open: boolean,
+  page: string,
+  showSideBar: Dispatch<SetStateAction<boolean>>;
+}
+export const TopBar = ({open, page, showSideBar}: TopBarProps) => {
+  const appContext = useContext(UserContext);
+
+  if (!appContext) {
+    // Manejar el caso en el que el contexto no esté disponible
+    return null;
+  }
+  const { dispatch } = appContext;
+
 
   const onLogOutClickHandler = () => {
     dispatch({ type: "LogOut" });
   };
 
   const onClickSideBarHandler = () => {
-    if (props.open) {
-      props.showSideBar(false);
+    if (open) {
+      showSideBar(false);
     } else {
-      props.showSideBar(true);
+      showSideBar(true);
     }
   };
 
-  if (props.open) {
+  if (open) {
     return (
       <>
         <Nav>
           <NavItemContainer>
             <BsArrowBarLeft onClick={onClickSideBarHandler} />
-            <h2>{props.page}</h2>
+            <h2>{page}</h2>
           </NavItemContainer>
           <NavItemContainer>
             <HiOutlineBell />
@@ -41,7 +54,7 @@ export const TopBar = (props) => {
         <Nav>
           <NavItemContainer>
             <BsArrowBarRight onClick={onClickSideBarHandler} />
-            <h2>{props.page}</h2>
+            <h2>{page}</h2>
           </NavItemContainer>
           <NavItemContainer>
             <HiOutlineBell />

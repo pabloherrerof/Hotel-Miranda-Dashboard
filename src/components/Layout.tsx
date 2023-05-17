@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SideBar } from "./SideBar";
 import { Container, Content, LeftMenu, RightSection } from "./LayoutStyled";
 
-export const Layout = (props) => {
+export const Layout = () => {
   let location = useLocation();
   let roomMatch = useMatch("/rooms/:id");
   let bookingMatch = useMatch("/booking/:bookingId");
@@ -25,14 +25,11 @@ export const Layout = (props) => {
     } else if (location.pathname === "/users") {
       title = "Users";
     } else if (userMatch != null && location.pathname === userMatch.pathname) {
-      console.log(bookingMatch);
       title = "User";
     } else if (
       bookingMatch != null &&
       location.pathname === bookingMatch.pathname
     ) {
-      console.log(userMatch);
-      console.log("booking");
       title = "Booking detail";
     } else if (roomMatch != null && location.pathname === roomMatch.pathname) {
       title = "Room detail";
@@ -50,7 +47,6 @@ export const Layout = (props) => {
         <RightSection open={open}>
           <TopBar
             page={titleChooser()}
-            setAuth={props.setAuth}
             showSideBar={setOpen}
             open={open}
           />

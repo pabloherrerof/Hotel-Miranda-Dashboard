@@ -6,20 +6,23 @@ import {
 } from "react-icons/hi2";
 import { KPI, KpiIcon, KpiRow, KpiText } from "./DashboardStyled";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { getContactsData, getContactsStatus } from "../../features/contacts/contactsSlice";
 import { fetchContacts } from "../../features/contacts/contactThunks";
 import { Wrapper } from "../../components/LayoutStyled";
 import { HashLoader } from "react-spinners";
 import { LastReviews } from "../../components/LastReviews";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { Contact } from "../../interfaces";
 
 
 
-export const Dashboard = (props) => {
-  const dispatch = useDispatch("");
-  const [recentContacts, setRecentContacts] = useState();
-  const contactsStatus = useSelector(getContactsStatus);
-  const contactsData = useSelector(getContactsData);
+
+export const Dashboard = () => {
+  const dispatch = useAppDispatch();
+  const [recentContacts, setRecentContacts] = useState<Contact[]>();
+  const contactsStatus = useAppSelector(getContactsStatus);
+  const contactsData = useAppSelector(getContactsData);
+ 
 
 
   useEffect(() => {

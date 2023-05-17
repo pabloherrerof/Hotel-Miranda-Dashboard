@@ -2,16 +2,16 @@ import { IoClose } from "react-icons/io5";
 import styled from "styled-components";
 
 interface CardProps {
-  full: boolean;
-  bookStatus: string;
-  amenitie: boolean;
-  paragraph: undefined;
-  discount: number;
-  price: boolean; 
-  state: string;
-  offer: boolean;
-  close: boolean;
-  amenities: boolean;
+  full?: boolean;
+  bookStatus?: string;
+  amenitie?: boolean;
+  paragraph?: boolean;
+  discount?: number;
+  price?: boolean;
+  state?: string;
+  offer?: boolean;
+  close?: boolean;
+  amenities?: boolean;
 }
 
 export const CardContainer = styled.section<CardProps>`
@@ -71,8 +71,6 @@ export const CardImage = styled.div`
     left: 30px;
     z-index: 10;
   }
-
-  
 `;
 
 export const CardImageText = styled.div`
@@ -95,7 +93,6 @@ export const CardImageText = styled.div`
   padding-bottom: 3rem;
 
   h4 {
-
     padding-left: 5%;
     padding-right: 5%;
     font-size: 22px;
@@ -201,28 +198,32 @@ export const CardItem = styled.div<CardProps>`
     font-family: "Poppins";
     font-size: 16px;
     text-decoration: ${(props) => {
-    if (props.discount > 0 && props.price) {
-      return "line-through";
-    } else return "none";
-  }};
-    color:${(props) => {if(props.state){
-      switch(props.state){
-        case "ACTIVE":
-            return "#5AD07A"
-        case "INACTIVE":
-        return "#E23428";
-        case "AVAILABLE":
-          return "#5AD07A";
-        case "BOOKED":
-          return "#E23428";
-        default: 
-        return "#212121";
-  }} else {
-    if (props.discount > 0 && props.offer) {
-      return "#E23428";
-    } else return "#212121";
-  }
-  }};
+      if (props.discount)
+        if (props.discount > 0 && props.price) {
+          return "line-through";
+        } else return "none";
+    }};
+    color: ${(props) => {
+      if (props.state) {
+        switch (props.state) {
+          case "ACTIVE":
+            return "#5AD07A";
+          case "INACTIVE":
+            return "#E23428";
+          case "AVAILABLE":
+            return "#5AD07A";
+          case "BOOKED":
+            return "#E23428";
+          default:
+            return "#212121";
+        }
+      } else {
+        if (props.discount)
+          if (props.discount > 0 && props.offer) {
+            return "#E23428";
+          } else return "#212121";
+      }
+    }};
     margin: 0;
   }
 
@@ -239,7 +240,6 @@ export const CardItem = styled.div<CardProps>`
     font-size: 14px;
     color: #799283;
     margin: 0;
-    
   }
 
   p {
@@ -301,18 +301,17 @@ export const CardHeader = styled.div<CardProps>`
   justify-content: space-between;
   font-size: 30px;
   margin-bottom: 2rem;
-  color: ${(props) => props.close ? "#E23428" : "gray"};
-  svg:hover{
+  color: ${(props) => (props.close ? "#E23428" : "gray")};
+  svg:hover {
     scale: 1.1;
-    cursor:pointer;
+    cursor: pointer;
   }
-  p{
+  p {
     color: red;
     font-size: 10px;
   }
-`
-
+`;
 
 export const CloseIcon = styled(IoClose)`
- color:  #E23428;
-`
+  color: #e23428;
+`;

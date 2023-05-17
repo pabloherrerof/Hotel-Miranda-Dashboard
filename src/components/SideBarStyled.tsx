@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 interface SideBarProps{
-  column: boolean;
+  column?: boolean;
 }
 
 export const Wrapper = styled.div`
