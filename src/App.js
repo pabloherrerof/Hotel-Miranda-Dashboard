@@ -40,7 +40,6 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route
-              exact
               path="/login"
               element={state.auth ? <Navigate to="/" /> : <Login />}
             />
@@ -52,13 +51,13 @@ function App() {
                 </PrivateRoute>
               }
             >
-              <Route exact path="/" element={<Dashboard />} />
-              <Route exact path="/bookings" element={<Bookings />} />
-              <Route exact path="/bookings/:id" element={<SingleBooking />} />
-              <Route exact path="/rooms" element={<Rooms />} />
-              <Route exact path="/rooms/:id" element={<SingleRoom />} />
-              <Route exact path="/contact" element={<Contact />} />
-              <Route exact path="/users" element={<Users />} />{" "}
+              <Route  path="/" element={<Dashboard />} />
+              <Route  path="/bookings" element={<Bookings />} />
+              <Route  path="/bookings/:id" element={<SingleBooking />} />
+              <Route  path="/rooms" element={<Rooms />} />
+              <Route  path="/rooms/:id" element={<SingleRoom />} />
+              <Route  path="/contact" element={<Contact />} />
+              <Route  path="/users" element={<Users />} />{" "}
               <Route path="/users/:id" element={<SingleUser />} />
               <Route path="*" element={<ErrorPage />} />
             </Route>
