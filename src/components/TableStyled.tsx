@@ -162,8 +162,10 @@ export const RoomImageItem = styled.img`
   object-fit: cover;
 `;
 
-export const TableLink = styled(Link)<any>`
+export const TableLink = styled.button<TableProps>`
   width: 100%;
+  background-color: transparent;
+  border: none;
   border-bottom: ${(props) => {if(props.active === "true"){
     return "#135846 2px solid";
   } else{

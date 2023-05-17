@@ -1,8 +1,8 @@
 import React, { createContext } from "react";
-import { Action, AppState } from "../App";
+import { ContextAction, AppState } from "../App";
 
 interface AppContextType {
     state: AppState;
-    dispatch: React.Dispatch<Action>;
+    dispatch: React.Dispatch<ContextAction>;
 }
 export const UserContext = createContext<AppContextType | undefined>(undefined);

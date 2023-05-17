@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   addBooking,
   deleteBooking,
@@ -14,11 +14,6 @@ interface BookingsState {
   status: string;
   singleBookingData: Booking | undefined;
   singleBookingStatus: string;
-}
-
-interface BookingsAction {
-  type: string;
-  payload: any;
 }
 
 const initialState: BookingsState = {
@@ -42,17 +37,17 @@ export const bookingsSlice = createSlice({
 
   reducers: {},
 
-  extraReducers(builder) {
+  extraReducers: (builder) => {
     builder
-      .addCase(fetchBookings.rejected, (state) => {
+      .addCase(fetchBookings.rejected, (state, action) => {
         state.status = "rejected";
       })
-      .addCase(fetchBookings.pending, (state) => {
+      .addCase(fetchBookings.pending, (state, action) => {
         state.status = "pending";
       })
       .addCase(
         fetchBookings.fulfilled,
-        (state: BookingsState, action: BookingsAction) => {
+        (state, action: PayloadAction<any>) => {
           state.bookingListData = action.payload;
           state.status = "fulfilled";
         }
@@ -60,7 +55,7 @@ export const bookingsSlice = createSlice({
 
       .addCase(
         addBooking.fulfilled,
-        (state: BookingsState, action: BookingsAction) => {
+        (state: BookingsState, action: PayloadAction<any>) => {
           const lastId = parseInt(
             state.bookingListData[state.bookingListData.length - 1].id.slice(2)
           );
@@ -70,7 +65,7 @@ export const bookingsSlice = createSlice({
         }
       )
 
-      .addCase(deleteBooking.fulfilled, (state, action: BookingsAction) => {
+      .addCase(deleteBooking.fulfilled, (state, action: PayloadAction<any>) => {
         state.bookingListData = state.bookingListData.filter(
           (item) => item.id !== action.payload
         );
@@ -80,18 +75,18 @@ export const bookingsSlice = createSlice({
         state.status = "pending";
       })
 
-      .addCase(getBooking.fulfilled, (state, action: BookingsAction) => {
+      .addCase(getBooking.fulfilled, (state, action: PayloadAction<any>) => {
         state.singleBookingData = state.bookingListData.find(
           (booking: Booking) => booking.id === action.payload
         );
         state.singleBookingStatus = "fulfilled";
       })
 
-      .addCase(getBooking.pending, (state) => {
+      .addCase(getBooking.pending, (state, action) => {
         state.singleBookingStatus = "pending";
       })
 
-      .addCase(editBooking.fulfilled, (state, action: BookingsAction) => {
+      .addCase(editBooking.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = "fulfilled";
         for (let i = 0; i < state.bookingListData.length; i++) {
           if (state.bookingListData[i].id === action.payload.id) {
@@ -102,7 +97,7 @@ export const bookingsSlice = createSlice({
         }
       })
 
-      .addCase(editBooking.pending, (state) => {
+      .addCase(editBooking.pending, (state, action) => {
         state.status = "pending";
       });
   },

@@ -22,7 +22,7 @@ export interface AppState {
   user: User,
 }
 
-export type Action = { type: string; payload?: any};
+export type ContextAction = { type: string; payload?: any};
 
 const initialState : AppState = {
   auth: false,
@@ -41,7 +41,7 @@ const initialState : AppState = {
 }
 
 
-const reducer = (state : AppState, action: Action) => {
+const reducer = (state : AppState, action: ContextAction) => {
   switch(action.type){
     case "LogIn":
     return {...state, auth: true, user: action.payload}

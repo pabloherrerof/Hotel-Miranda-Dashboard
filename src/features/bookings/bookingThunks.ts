@@ -15,11 +15,11 @@ export const addBooking = createAsyncThunk("bookings/addBooking", async (booking
    return await delay (bookingObject);
 });
 
-export const getBooking = createAsyncThunk("bookings/getBooking", async (bookingId : Booking["id"]) =>{
+export const getBooking = createAsyncThunk("bookings/getBooking", async (bookingId : string) =>{
     return delay(bookingId);
 })
 
-export const deleteBooking = createAsyncThunk('bookings/deleteBooking', async (bookingId: Booking["id"]) => {
+export const deleteBooking = createAsyncThunk('bookings/deleteBooking', async (bookingId: string) => {
     return await delay(bookingId);
 });
 

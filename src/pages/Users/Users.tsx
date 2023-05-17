@@ -62,7 +62,7 @@ export const Users = () => {
     setTableData(usersData);
   }, [dispatch, usersStatus, usersData]);
 
-  const onClickHandler = (e :  React.MouseEvent<HTMLInputElement>) => {
+  const onClickHandler = (e :  React.MouseEvent<HTMLButtonElement>) => {
     const input = e.target as HTMLElement;
     const option= input.innerText;
     if (option === "All users") {
