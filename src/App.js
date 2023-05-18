@@ -37,7 +37,7 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ state, dispatch }}>
-        <BrowserRouter>
+        <BrowserRouter basename="/Hotel-Miranda-Dashboard">
           <Routes>
             <Route
               path="/login"
