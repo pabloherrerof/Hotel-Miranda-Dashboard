@@ -1,5 +1,5 @@
 import { getUsersStatus, getUsersData } from "../../features/users/usersSlice";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchUsers } from "../../features/users/usersThunks";
 import { HashLoader } from "react-spinners";
 import { Button, StatusButton } from "../../components/Button";
@@ -28,7 +28,6 @@ import {
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { Option } from "react-dropdown";
 
 export const Users = () => {
   const dispatch = useAppDispatch();

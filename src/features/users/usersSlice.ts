@@ -9,16 +9,11 @@ import {
 import { User } from "../../interfaces";
 import { RootState } from "../../app/store";
 
-interface UsersState {
+export interface UsersState {
   usersListData: User[];
   status: string;
   singleUser: User | undefined;
   singleUserStatus: string;
-}
-
-interface UsersAction {
-  type: string;
-  payload: any;
 }
 
 const initialState: UsersState = {
@@ -34,7 +29,7 @@ const initialState: UsersState = {
     jobDescription: undefined,
     state: "",
     password: "",
-    position: ""
+    position: "",
   },
   singleUserStatus: "idle",
 };
@@ -53,15 +48,12 @@ export const usersSlice = createSlice({
       .addCase(fetchUsers.pending, (state: UsersState) => {
         state.status = "pending";
       })
-      .addCase(
-        fetchUsers.fulfilled,
-        (state: UsersState, action: UsersAction) => {
-          state.status = "fulfilled";
-          state.usersListData = action.payload;
-        }
-      )
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.usersListData = action.payload;
+      })
 
-      .addCase(addUser.fulfilled, (state: UsersState, action: UsersAction) => {
+      .addCase(addUser.fulfilled, (state, action) => {
         const lastId = parseInt(
           state.usersListData[state.usersListData.length - 1].id.slice(2)
         );
@@ -69,33 +61,29 @@ export const usersSlice = createSlice({
         state.usersListData.push(action.payload);
       })
 
-      .addCase(
-        deleteUser.fulfilled,
-        (state: UsersState, action: UsersAction) => {
-          state.usersListData = state.usersListData.filter(
-            (item) => item.id !== action.payload
-          );
-          state.status = "fullfilled";
-        }
-      )
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.usersListData = state.usersListData.filter(
+          (item) => item.id !== action.payload
+        );
+        state.status = "fullfilled";
+      })
 
       .addCase(deleteUser.pending, (state) => {
         state.status = "pending";
       })
 
-      .addCase(getUser.fulfilled, (state, action: UsersAction) => {
-        
-          state.singleUser = state.usersListData.find(
-            (user) => user.id === action.payload
-          );
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.singleUser = state.usersListData.find(
+          (user) => user.id === action.payload
+        );
         state.singleUserStatus = "fullfilled";
       })
 
-      .addCase(getUser.pending, (state: UsersState) => {
+      .addCase(getUser.pending, (state) => {
         state.singleUserStatus = "pending";
       })
 
-      .addCase(editUser.fulfilled, (state: UsersState, action: UsersAction) => {
+      .addCase(editUser.fulfilled, (state, action) => {
         state.status = "fulfilled";
         for (let i = 0; i < state.usersListData.length; i++) {
           if (state.usersListData[i].id === action.payload.id) {

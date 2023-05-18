@@ -15,7 +15,6 @@ import {
 } from "../../components/CardStyled";
 import { MySlider } from "../../components/Slider";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import {
   getSingleRoom,
   getSingleRoomStatus,
@@ -38,8 +37,6 @@ import {
 } from "../../components/FormStyled";
 import { Button } from "../../components/Button";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getUsersData } from "../../features/users/usersSlice";
-import { Room } from "../../interfaces";
 
 export const SingleRoom = () => {
   const roomId = useParams();
@@ -75,7 +72,7 @@ export const SingleRoom = () => {
     setDescription(singleRoomData.description);
     }
     
-  }, [dispatch, singleRoomStatus, roomId.id, singleRoomData]);
+  }, [dispatch, singleRoomStatus, roomId, singleRoomData]);
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

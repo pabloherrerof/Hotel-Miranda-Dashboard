@@ -1,4 +1,7 @@
-export function delay(data: any, time = 1000) {
+import { Booking } from "../interfaces";
+
+type data = Booking | Booking[] 
+export function delay(data: data, time = 1000) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(data);

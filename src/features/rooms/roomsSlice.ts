@@ -9,16 +9,11 @@ import {
 import { Room } from "../../interfaces";
 import { RootState } from "../../app/store";
 
-interface RoomsState {
+export interface RoomsState {
   roomsListData: Room[];
   status: string;
   singleRoomData: Room | undefined;
   singleRoomStatus: string;
-}
-
-interface RoomsAction {
-  type: string;
-  payload: any;
 }
 
 const initialState: RoomsState = {
@@ -48,21 +43,18 @@ export const roomSlice = createSlice({
 
   extraReducers(builder) {
     builder
-      .addCase(fetchRooms.rejected, (state: RoomsState) => {
+      .addCase(fetchRooms.rejected, (state) => {
         state.status = "rejected";
       })
-      .addCase(fetchRooms.pending, (state: RoomsState) => {
+      .addCase(fetchRooms.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(
-        fetchRooms.fulfilled,
-        (state: RoomsState, action: RoomsAction) => {
-          state.status = "fulfilled";
-          state.roomsListData = action.payload;
-        }
-      )
+      .addCase(fetchRooms.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.roomsListData = action.payload;
+      })
 
-      .addCase(addRoom.fulfilled, (state: RoomsState, action: RoomsAction) => {
+      .addCase(addRoom.fulfilled, (state, action) => {
         state.status = "fulfilled";
         const lastId = parseInt(
           state.roomsListData[state.roomsListData.length - 1].id.slice(2)
@@ -70,35 +62,32 @@ export const roomSlice = createSlice({
         action.payload.id = "R-" + (lastId + 1).toString().padStart(4, "0");
         state.roomsListData.push(action.payload);
       })
-      .addCase(addRoom.pending, (state: RoomsState) => {
+      .addCase(addRoom.pending, (state) => {
         state.status = "pending";
       })
 
-      .addCase(
-        deleteRoom.fulfilled,
-        (state: RoomsState, action: RoomsAction) => {
-          state.roomsListData = state.roomsListData.filter(
-            (item) => item.id !== action.payload
-          );
-          state.status = "fulfilled";
-        }
-      )
-      .addCase(deleteRoom.pending, (state: RoomsState) => {
+      .addCase(deleteRoom.fulfilled, (state: RoomsState, action) => {
+        state.roomsListData = state.roomsListData.filter(
+          (item) => item.id !== action.payload
+        );
+        state.status = "fulfilled";
+      })
+      .addCase(deleteRoom.pending, (state) => {
         state.status = "pending";
       })
 
-      .addCase(getRoom.fulfilled, (state: RoomsState, action: RoomsAction) => {
+      .addCase(getRoom.fulfilled, (state, action) => {
         state.singleRoomStatus = "fulfilled";
 
         state.singleRoomData = state.roomsListData.find(
           (booking) => booking.id === action.payload
         );
       })
-      .addCase(getRoom.pending, (state: RoomsState) => {
+      .addCase(getRoom.pending, (state) => {
         state.singleRoomStatus = "pending";
       })
 
-      .addCase(editRoom.fulfilled, (state: RoomsState, action: RoomsAction) => {
+      .addCase(editRoom.fulfilled, (state, action) => {
         state.status = "fulfilled";
         for (let i = 0; i < state.roomsListData.length; i++) {
           if (state.roomsListData[i].id === action.payload.id) {
@@ -109,7 +98,7 @@ export const roomSlice = createSlice({
         }
       })
 
-      .addCase(editRoom.pending, (state: RoomsState) => {
+      .addCase(editRoom.pending, (state) => {
         state.status = "pending";
       });
   },

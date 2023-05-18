@@ -1,17 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchContacts, archiveContacts, deleteContact } from "./contactThunks";
+import { fetchContacts, archiveContacts } from "./contactThunks";
 import { Contact } from "../../interfaces";
 import { RootState } from "../../app/store";
 
-interface ContactsState {
+export interface ContactsState {
   data: Contact[];
   status: string;
 }
 
-interface ContactsAction {
-    type: string;
-    payload: any;
-}
 
 const initialState : ContactsState = {
     data: [],
@@ -26,26 +22,23 @@ export const contactsSlice = createSlice({
 
   extraReducers(builder) {
     builder
-      .addCase(fetchContacts.rejected, (state: ContactsState) => {
+      .addCase(fetchContacts.rejected, (state) => {
         state.status = "rejected";
       })
-      .addCase(fetchContacts.pending, (state: ContactsState) => {
+      .addCase(fetchContacts.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(fetchContacts.fulfilled, (state: ContactsState, action: ContactsAction) => {
+      .addCase(fetchContacts.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.data = action.payload;
       })
 
-      .addCase(deleteContact.fulfilled, (state: ContactsState, action: ContactsAction) => {
-        state.data = state.data.filter((item) => item.id !== action.payload);
-        state.status = "fullfilled";
-      })
+     
 
-      .addCase(archiveContacts.pending, (state: ContactsState) => {
+      .addCase(archiveContacts.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(archiveContacts.fulfilled, (state: ContactsState, action: ContactsAction) => {
+      .addCase(archiveContacts.fulfilled, (state, action) => {
         state.status = "fullfilled";
         for (let i = 0; i < state.data.length; i++) {
           if (state.data[i].id === action.payload.id) {

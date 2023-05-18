@@ -9,7 +9,7 @@ import {
 import { RootState } from "../../app/store";
 import { Booking } from "../../interfaces";
 
-interface BookingsState {
+export interface BookingsState {
   bookingListData: Booking[];
   status: string;
   singleBookingData: Booking | undefined;
@@ -34,20 +34,19 @@ const initialState: BookingsState = {
 export const bookingsSlice = createSlice({
   name: "bookings",
   initialState,
-
   reducers: {},
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBookings.rejected, (state, action) => {
+      .addCase(fetchBookings.rejected, (state) => {
         state.status = "rejected";
       })
-      .addCase(fetchBookings.pending, (state, action) => {
+      .addCase(fetchBookings.pending, (state) => {
         state.status = "pending";
       })
       .addCase(
         fetchBookings.fulfilled,
-        (state, action: PayloadAction<any>) => {
+        (state, action) => {
           state.bookingListData = action.payload;
           state.status = "fulfilled";
         }
@@ -55,7 +54,7 @@ export const bookingsSlice = createSlice({
 
       .addCase(
         addBooking.fulfilled,
-        (state: BookingsState, action: PayloadAction<any>) => {
+        (state, action) => {
           const lastId = parseInt(
             state.bookingListData[state.bookingListData.length - 1].id.slice(2)
           );
@@ -65,7 +64,7 @@ export const bookingsSlice = createSlice({
         }
       )
 
-      .addCase(deleteBooking.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase(deleteBooking.fulfilled, (state, action) => {
         state.bookingListData = state.bookingListData.filter(
           (item) => item.id !== action.payload
         );
@@ -75,18 +74,18 @@ export const bookingsSlice = createSlice({
         state.status = "pending";
       })
 
-      .addCase(getBooking.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase(getBooking.fulfilled, (state, action) => {
         state.singleBookingData = state.bookingListData.find(
           (booking: Booking) => booking.id === action.payload
         );
         state.singleBookingStatus = "fulfilled";
       })
 
-      .addCase(getBooking.pending, (state, action) => {
+      .addCase(getBooking.pending, (state) => {
         state.singleBookingStatus = "pending";
       })
 
-      .addCase(editBooking.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase(editBooking.fulfilled, (state, action) => {
         state.status = "fulfilled";
         for (let i = 0; i < state.bookingListData.length; i++) {
           if (state.bookingListData[i].id === action.payload.id) {
@@ -97,7 +96,7 @@ export const bookingsSlice = createSlice({
         }
       })
 
-      .addCase(editBooking.pending, (state, action) => {
+      .addCase(editBooking.pending, (state) => {
         state.status = "pending";
       });
   },
