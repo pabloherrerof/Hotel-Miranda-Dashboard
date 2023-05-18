@@ -22,7 +22,6 @@ import { useState } from "react";
 import { searchBookingRoom } from "../features/API";
 import {
   ReviewComment,
-  ReviewContainer,
   ReviewInfo,
 } from "./LastReviewsStyled";
 

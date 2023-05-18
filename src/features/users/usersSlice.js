@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addUser, deleteUser, editUser, fetchUsers, getUser } from "./usersThunks";
-import { act } from "react-dom/test-utils";
-
-
 
 
 export const usersSlice = createSlice({

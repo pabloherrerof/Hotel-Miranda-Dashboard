@@ -7,8 +7,8 @@ import { Inputs, LogContainer, LogForm } from "./LoginStyled";
 import { searchObjectByEmailAndPassword } from "../../features/API";
 
 export const Login = (props) => {
-  const [email, setEmail] = useState("admin@admin.com");
-  const [password, setPassword] = useState("admin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { dispatch } = useContext(UserContext);
 
 
