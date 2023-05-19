@@ -9,8 +9,8 @@ import logoSVG from "../../assets/logo-hotel.svg"
 
 export const Login = () => {
 
-  const [email, setEmail] = useState("admin@admin.com");
-  const [password, setPassword] = useState("admin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const appContext = useContext(UserContext);
 
   if (!appContext) {
