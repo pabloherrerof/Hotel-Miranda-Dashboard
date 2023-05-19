@@ -4,6 +4,35 @@ import styled from "styled-components";
 export const ReviewSlider = styled(Slider)`
     width: 100%;
     margin-bottom: 2rem;
+    padding: 1rem;
+    .slick-prev:before{
+      font-size: 20px;
+    font-family: "Courier";
+    background-color: #25232346;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: 2px;
+    }
+  .slick-next:before {
+    font-size: 20px;
+    font-family: "Courier";
+    background-color: #25232346;
+    border-radius: 8px;
+    border: 1px solid;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `
 export const ReviewContainer = styled.div`
   display: flex;
@@ -20,6 +49,9 @@ export const ReviewContainer = styled.div`
     scale: 1.1;
     cursor: pointer;
   }
+
+  
+
 `;
 
 export const ReviewComment = styled.div`

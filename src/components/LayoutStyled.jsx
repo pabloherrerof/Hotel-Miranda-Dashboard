@@ -26,9 +26,10 @@ display: flex;
 align-items: center;
 flex-direction: column;
 background-color: #00000005;
-padding: 3% 30px;
+padding: 3% 5%;
 height: calc(100% - 100px);
 position: relative;
+
 `
 
 export const Wrapper = styled.div`
