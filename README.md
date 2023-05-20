@@ -34,7 +34,7 @@ Start the server
   npm run start
 ```
 
-## Deployment
+## 📤 Deployment
 
 Go to package.json file and replace -
 "homepage": "https://pabloherrerof.github.io/Hotel-Miranda-Dashboard"
