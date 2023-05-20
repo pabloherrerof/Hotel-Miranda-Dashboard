@@ -34,9 +34,22 @@ Start the server
   npm run start
 ```
 
+## Deployment
+
+Go to package.json file and replace -
+"homepage": "https://pabloherrerof.github.io/Hotel-Miranda-Dashboard"
+
+with "homepage": "https://yourusername.github.io".
+
+```bash
+  npm run deploy
+```
 
 ## 🚀 Contact me
 
 📩 pabloherrerof@gmail.com
 
 👷🏼‍♂️ https://www.linkedin.com/in/pablo-herrero-ferr%C3%A1n-3b442a266
+
+
+
