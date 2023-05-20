@@ -39,28 +39,28 @@ export const SideBar = () => {
         </Logo>
         <LinkContainer>
           <li>
-            <TbLayoutDashboard />
-            <MenuLink to={"/"}>Dashboard</MenuLink>
+            
+            <MenuLink to={"/"}><TbLayoutDashboard />Dashboard</MenuLink>
           </li>
 
           <li>
-            <TbKey />
-            <MenuLink to={"/rooms"}>Rooms</MenuLink>
+            
+            <MenuLink to={"/rooms"}><TbKey />Rooms</MenuLink>
           </li>
 
           <li>
-            <TbCalendarEvent />
-            <MenuLink to={"/bookings"}>Bookings</MenuLink>
+            
+            <MenuLink to={"/bookings"}><TbCalendarEvent />Bookings</MenuLink>
           </li>
 
           <li>
-            <TbMessageCircle />
-            <MenuLink to={"/contact"}>Contact</MenuLink>
+           
+            <MenuLink to={"/contact"}> <TbMessageCircle />Contact</MenuLink>
           </li>
 
           <li>
-            <MdPersonOutline />
-            <MenuLink to={"/users"}>Users</MenuLink>
+            
+            <MenuLink to={"/users"}><MdPersonOutline />Users</MenuLink>
           </li>
         </LinkContainer>
         <User>

@@ -98,7 +98,7 @@ export const BookingCalendar = styled.div`
     background-color: transparent;
     color: #393939;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 12px;
     border: none;
   }
   .fc-titleCustom-button:hover {
@@ -106,7 +106,7 @@ export const BookingCalendar = styled.div`
     background-color: transparent;
     color: #393939;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 12px;
     border: none;
     cursor: default;
   }
@@ -116,11 +116,11 @@ export const BookingCalendar = styled.div`
     background-color: transparent;
     color: #393939;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 12px;
   }
 
   .fc .fc-toolbar {
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .fc-toolbar-chunk {
@@ -175,6 +175,11 @@ export const BookingCalendar = styled.div`
   }
   .fc-event {
     background-color: #ebd90d;
+  }
+
+  .fc-event:hover{
+    scale: 1.1;
+    cursor: pointer;
   }
 
   .fc-event-future {

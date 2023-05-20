@@ -122,7 +122,6 @@ export const Bookings = (props) => {
   };
 
   const onSearchInputHandler = (e) => {
-    console.log(e.target.value);
     setTableData(
       tableData.filter((user) =>
         user.name.toLowerCase().includes(e.target.value.toLowerCase())

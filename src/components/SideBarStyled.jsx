@@ -133,10 +133,14 @@ export const MenuLink = styled(NavLink)`
   font-weight: normal;
   color: #799283;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 
   &.active {
     color: #135846;
     font-weight: 600;
+
   }
 `;
 

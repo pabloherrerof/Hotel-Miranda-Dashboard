@@ -96,7 +96,7 @@ export const SingleRoom = (props) => {
         description: description,
         images: roomInfoChooser(roomType).images
       };
-      console.log(roomInfoChooser(roomType).images);
+      
       dispatch(editRoom(room));
       dispatch(getRoom(room));
       setEdit(false);
