@@ -129,9 +129,10 @@ export const Dashboard = (props) => {
             right: "prev,title,next",
         }}
         events={bookingsData.map((booking) => {
-          console.log( {title: booking.id, start: booking.checkIn, end: booking.checkOut})
+          
           return {title: booking.id, start: booking.checkIn, end: booking.checkOut}
         })}
+        eventClick={(info) => {navigate(`/bookings/${info.el.innerText}`)}}
       />
           </BookingCalendar>
         </CalendarRow>
