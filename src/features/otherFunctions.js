@@ -73,7 +73,7 @@ export function getTodayString() {
 export const jobDescriptionChooser = (position) => {
   if (position === "Manager") {
     return "Responsible for the hotel's daily management.";
-  } else if (position === "Recepcionist") {
+  } else if (position === "Receptionist") {
     return "Responsible for greeting guests and checking them in and out of the hotel.";
   } else if (position === "Room Service") {
     return "Responsible for preparing and delivering food and beverages to guest rooms.";
