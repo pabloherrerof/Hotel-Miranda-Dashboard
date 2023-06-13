@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const WrapperSideBar = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 13px 3px 40px #00000005;
@@ -11,6 +11,13 @@ export const Wrapper = styled.div`
   padding-bottom: 5%;
   height: 100%;
 `;
+
+export const LoaderWrapper = styled.div`
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+`
 
 export const Logo = styled.div`
   height: 100px;

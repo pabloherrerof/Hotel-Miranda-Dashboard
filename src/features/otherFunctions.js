@@ -1,10 +1,3 @@
-export function delay(data, time = 1000) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(data);
-    }, time);
-  });
-}
 
 export const offerChecker = (discount) => {
   if (discount > 0) {
@@ -13,7 +6,7 @@ export const offerChecker = (discount) => {
 };
 
 export const offerPriceCalc = (price, discount) => {
-  return discount > 0 ? price - (price * discount) / 100 + "$" : "-";
+  return discount > 0 ? (price - (price * discount) / 100).toFixed(2) + "$" : "-";
 };
 
 export const dateConverter = (dateToConver) => {
@@ -147,4 +140,24 @@ export const roomInfoChooser = (roomType) => {
 
 export const maxCharString = (string, maxChar) =>{
   return string.slice(0, maxChar) +"..."
+}
+
+export const dateToCalendar = (dateToConvert)=> {
+  
+const date = new Date(dateToConvert);
+
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, '0');
+const day = String(date.getDate()).padStart(2, '0');
+
+return `${year}-${month}-${day}`;
+}
+
+export const bookingDatesValidator = (checkIn, checkOut)=> {
+  const checkInTime = new Date(checkIn).getTime();
+  const checkOutTime = new Date(checkIn).getTime();
+  const currentTime = new Date().getTime()
+  if(checkInTime <= currentTime && checkOutTime >= currentTime){
+    return true
+  } return false;
 }

@@ -1,8 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchContacts, archiveContacts, deleteContact } from "./contactThunks";
+import { fetchContacts, archiveContacts } from "./contactThunks";
+import { toast } from "react-toastify";
 
 
+const toastSuccess = (msg)=>{
+    toast.success(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });    
+}
 
+const toastError = (msg) =>{
+    toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+}
 
 export const contactsSlice = createSlice({
     name: "contacts",
@@ -16,6 +41,7 @@ export const contactsSlice = createSlice({
         builder
         .addCase(fetchContacts.rejected, (state, action) =>{
             state.status = "rejected";
+            toastError("Error! Couldn't load contacts.");
         })
         .addCase(fetchContacts.pending, (state, action) =>{
             state.status = "pending";
@@ -28,15 +54,16 @@ export const contactsSlice = createSlice({
       
 
 
-        .addCase(deleteContact.fulfilled, (state, action) =>{
-            state.data = state.data.filter(item => item.id !== action.payload);
-            state.status = "fullfilled";
+        .addCase(archiveContacts.rejected, (state, action) => {
+            state.status = "rejected";
+           toastError("Error! Couldn't update the contact.");
         })
     
         .addCase(archiveContacts.pending, (state, action) => {
             state.status = "pending";
         })
         .addCase(archiveContacts.fulfilled, (state, action) =>{
+            toastSuccess('Changes saved!');
             state.status = "fullfilled";
             for(let i = 0; i < state.data.length; i++) {
                 if (state.data[i].id === action.payload.id) {
@@ -48,6 +75,7 @@ export const contactsSlice = createSlice({
                   return;
                 }
               }
+              
             
         })
     },

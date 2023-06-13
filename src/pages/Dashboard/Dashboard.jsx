@@ -4,7 +4,7 @@ import {
   HiOutlineArrowLeftOnRectangle,
   HiOutlineCalendarDays,
 } from "react-icons/hi2";
-import { BookingCalendar, CalendarRow, KPI, KpiIcon, KpiRow, KpiText, LastBookings, ViewMore, ViewMoreButton } from "./DashboardStyled";
+import { CalendarRow, KPI, KpiIcon, KpiRow, KpiText } from "./DashboardStyled";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getContactsData, getContactsStatus } from "../../features/contacts/contactsSlice";
@@ -12,22 +12,16 @@ import { fetchContacts } from "../../features/contacts/contactThunks";
 import { Wrapper } from "../../components/LayoutStyled";
 import { HashLoader } from "react-spinners";
 import { LastReviews } from "../../components/LastReviews";
-import dayGridPlugin from '@fullcalendar/daygrid' 
-import FullCalendar from "@fullcalendar/react";
 import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
 import { fetchBookings } from "../../features/bookings/bookingThunks";
-import {  RoomImageItem, StyledLink, TableItem, TableRow } from "../../components/TableStyled";
-import { searchBookingRoom } from "../../features/API";
-import { useNavigate } from "react-router-dom";
-import { StatusButton } from "../../components/Button";
-import { bookedStatusCalc } from "../../features/otherFunctions";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { LastBookings } from "../../components/LastBookings";
+import { BookingChart } from "../../components/BookingChart";
+import { Calendar } from "../../components/Calendar";
 
 
 
 export const Dashboard = (props) => {
   const dispatch = useDispatch("");
-  const navigate = useNavigate();
   const [recentContacts, setRecentContacts] = useState();
   const contactsStatus = useSelector(getContactsStatus);
   const contactsData = useSelector(getContactsData);
@@ -41,26 +35,41 @@ export const Dashboard = (props) => {
     }
     if(contactsData.length > 0){
       setRecentContacts([...contactsData].sort((a, b) => {
-        if (a.date < b.date) return -1;
-        if (a.date > b.date) return 1;
-        return 0;
+        const currentDate = new Date();
+        const startDateA = new Date(a.startDate);
+        const startDateB = new Date(b.startDate);
+    
+       const differenceA = Math.abs(startDateA - currentDate);
+        const differenceB = Math.abs(startDateB - currentDate);
+
+    if (differenceA < differenceB) return -1;
+    if (differenceA > differenceB) return 1;
+    return 0;
       }).slice(0, 6))
     }
   }, [contactsData, contactsStatus, dispatch])
 
   useEffect(() => {
-    if(bookingsStatus === "idle"){
+    if(bookingsStatus === "idle" && contactsStatus==="fulfilled"){
       dispatch(fetchBookings());
     }
     if(bookingsData.length > 0){
       setRecentBookings([...bookingsData].sort((a, b) => {
-        if (a.checkIn > b.checkIn) return -1;
-        if (a.checkIn < b.checkIn) return 1;
-        return 0;
+        const currentDate = new Date();
+        const startDateA = new Date(a.checkIn);
+        const startDateB = new Date(b.checkIn);
+    
+       const differenceA = Math.abs(startDateA - currentDate);
+        const differenceB = Math.abs(startDateB - currentDate);
+
+    if (differenceA < differenceB) return -1;
+    if (differenceA > differenceB) return 1;
+    return 0;
       }).slice(0, 5))
     }
-  }, [bookingsData, bookingsStatus, dispatch])
+  }, [bookingsData, bookingsStatus, dispatch, contactsStatus])
 
+ 
   if (contactsStatus === "pending" || contactsStatus === "idle" || !recentContacts || !recentBooking || bookingsStatus ==="pending" || bookingsStatus==="idle" || bookingsData.length <= 0) {
     return (
       <>
@@ -113,74 +122,10 @@ export const Dashboard = (props) => {
         
         <LastReviews data={recentContacts}/>
         <CalendarRow>
-          <BookingCalendar>
-          <FullCalendar
-        plugins={[ dayGridPlugin ]}
-        initialView="dayGridMonth"
-        themeSystem="unthemed"
-        customButtons={{
-          titleCustom: {
-            text: "Recent Booking Schedule"
-          }
-        }}
-        headerToolbar={{
-            left: "titleCustom",
-            center: "today",
-            right: "prev,title,next",
-        }}
-        events={bookingsData.map((booking) => {
-          
-          return {title: booking.id, start: booking.checkIn, end: booking.checkOut}
-        })}
-        eventClick={(info) => {navigate(`/bookings/${info.el.innerText}`)}}
-      />
-          </BookingCalendar>
+          <Calendar data={bookingsData}/>
+          <BookingChart/>
         </CalendarRow>
-
-        <LastBookings>
-          {recentBooking.map(booking => {
-              return (<TableRow>
-                <TableItem>
-                
-                          <RoomImageItem
-                            src={searchBookingRoom(booking.room).thumbnail}
-                            alt="room"
-                          />
-                         
-                </TableItem>
-                <TableItem>
-                {searchBookingRoom(booking.room).roomType + "-" + searchBookingRoom(booking.room).roomNumber}
-                            <p>{booking.name}</p>
-                </TableItem>
-                <TableItem>
-                  {booking.orderDate}
-                </TableItem>
-                <TableItem>
-                  <StatusButton
-                    status={bookedStatusCalc(booking.checkIn, booking.checkOut)}
-                  >
-                    {bookedStatusCalc(booking.checkIn, booking.checkOut)}
-                  </StatusButton>
-                  </TableItem>
-                
-                <TableItem>
-                  {booking.checkIn + " - " + booking.checkOut}
-                </TableItem>
-                <TableItem>
-                  <StyledLink to={`/bookings/${booking.id}`}>
-                    <AiOutlineInfoCircle />
-                  </StyledLink>
-                </TableItem>
-                </TableRow>)
-          })}
-          <ViewMore>
-
-            <ViewMoreButton onClick={() => {navigate("/bookings")}}>View More</ViewMoreButton>
-            
-          </ViewMore>
-
-        </LastBookings>
-       
+        <LastBookings data={recentBooking}/>
       </>
     );
   }

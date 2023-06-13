@@ -3,14 +3,13 @@ import styled from "styled-components";
 
 export const CardContainer = styled.section`
   width: ${(props) => (props.full ? "100%" : "80%")};
-  background-color: #ffffff;
   display: flex;
-  border-radius: 30px;
+  justify-content: center;
   max-height: 110vh;
 `;
 
 export const Card = styled.div`
-  width: ${(props) => (props.full ? "46%" : "100%")};
+  width: ${(props) => (props.full ? "50%" : "70%")};
   background-color: #ffffff;
   border-radius: 12px;
   padding: 4%;

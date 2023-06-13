@@ -35,16 +35,11 @@ export const Contact = (props) =>{
       ];
     
       useEffect(() => {
-        if (contactsStatus === "idle") {
+        if (contactsStatus === "idle" || tableData.length < 1) {
           dispatch(fetchContacts());
         }
-        if(showAll === "true"){
-            setTableData(contactsData);
-        }
+        setTableData(contactsData)
         
-        if(showArchived === "true"){
-            setTableData(tableData.filter((contact) => contact.archived === true ))
-        }
         if(contactsData.length > 0){
             setRecentContacts([...contactsData].sort((a, b) => {
                 if (a.date < b.date) return -1;
@@ -60,7 +55,7 @@ export const Contact = (props) =>{
         const option = e.target.innerText;
         if (option === "All Contacts") {
           setShowAll("true");
-            setShowArchived("false");
+          setShowArchived("false");
           setTableData(contactsData);
         } else if (option === "Archived") {
           setShowAll("false");
@@ -70,6 +65,7 @@ export const Contact = (props) =>{
     }
 
     const onClickArchiveHandler = (contact) =>{
+      
         dispatch(archiveContacts(contact));
         if(showArchived === "true"){
             setTableData(contactsData.filter((contact) => contact.archived === true ));

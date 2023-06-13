@@ -53,7 +53,7 @@ export const Rooms = (props) => {
   const options = ["Room Number", "State", "Lowest Price", "Highest Price"];
 
   useEffect(() => {
-    if (roomsStatus === "idle") {
+    if (roomsStatus === "idle"|| roomsData.length ===0) {
       dispatch(fetchRooms());
     }
     setTableData(roomsData);
@@ -100,7 +100,7 @@ export const Rooms = (props) => {
     }
   };
 
-  if (roomsStatus === "pending") {
+  if (roomsStatus=== "idle" || roomsStatus=== "pending") {
     return (
       <>
         <Wrapper>
@@ -108,7 +108,7 @@ export const Rooms = (props) => {
         </Wrapper>
       </>
     );
-  } else {
+  } else if (roomsStatus=== "fulfilled") {
     return (
       <>
         <TableActions>

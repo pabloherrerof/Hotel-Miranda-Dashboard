@@ -8,7 +8,9 @@ export const TopBar = (props) => {
   const { dispatch } = useContext(UserContext);
 
   const onLogOutClickHandler = () => {
-    dispatch({ type: "LogOut" });
+    dispatch({ type: "LogOut" })
+    localStorage.removeItem("login");
+    
   };
 
   const onClickSideBarHandler = () => {

@@ -4,23 +4,38 @@ import { EditButton } from "../../components/Button";
 import { useContext, useState } from "react";
 import { UserContext } from "../../components/UserContext";
 import { Inputs, LogContainer, LogForm } from "./LoginStyled";
-import { searchObjectByEmailAndPassword } from "../../features/API";
+import {fetchLoginApi } from "../../features/API";
+import { toast } from "react-toastify";
+
 
 export const Login = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const fieldError = (msg) => {
+    toast.warn(msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+  const [email, setEmail] = useState("admin@admin.com");
+  const [password, setPassword] = useState("admin");
   const { dispatch } = useContext(UserContext);
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const res = await fetchLoginApi({email: email, password: password})
+    console.log(await res)
 
-    const user = searchObjectByEmailAndPassword(email, password);
-
-    if (user) {
-      dispatch({ type: "LogIn", payload: user });
+    if (await res !== undefined) {    
+      localStorage.setItem("login", JSON.stringify({token: res.token, id: res.id}))
+      dispatch({ type: "LogIn", payload: await res.id});
     } else {
-      alert("Invalid credentials!");
+      fieldError("Invalid credentials!");
     }
   };
 

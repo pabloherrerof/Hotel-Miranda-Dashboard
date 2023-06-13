@@ -1,39 +1,52 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import usersList from "../../data/users.json";
-import { delay } from "../otherFunctions";
+import { fetchApi } from "../API";
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers ", async () => {
-  return await delay(usersList);
+  const res = await fetchApi("api/users/", "GET", undefined);
+  return await res.data;
 });
 
 export const addUser = createAsyncThunk(
   "users/addUser ",
   async (userObject) => {
-    return await delay(userObject);
+    const res = await fetchApi(
+      "api/users/",
+      "POST",
+      JSON.stringify(userObject)
+    );
+    return await res.data;
   }
 );
 
 export const getUser = createAsyncThunk("users/getUser ", async (userId) => {
-  if(usersList.find((item) => {
-    return item.id === userId;
-  }) !== undefined) {
-    return await  delay (usersList.find((item) => {
-      return item.id === userId;
-    })
-    )
-  } else return userId
+  const res = await fetchApi(`api/users/${userId}`, "GET", undefined);
+  return await res.data;
 });
 
 export const deleteUser = createAsyncThunk(
   "users/deleteUser",
   async (userId) => {
-    return await delay(userId);
+    const res = await fetchApi(`api/users/${userId}`, "DELETE", undefined);
+    return await res.data;
   }
 );
 
 export const editUser = createAsyncThunk(
   "users/editUser",
   async (updatedUserObject) => {
-    return await delay(updatedUserObject);
+    const res = await fetchApi(
+      `api/users/${updatedUserObject.id}`,
+      "PUT",
+      JSON.stringify(updatedUserObject)
+    );
+    return await res.data;
+  }
+);
+
+export const getLoggedUser = createAsyncThunk(
+  "users/getLoggedUser ",
+  async (userId) => {
+    const res = await fetchApi(`api/users/${userId}`, "GET", undefined);
+    return await res.data;
   }
 );

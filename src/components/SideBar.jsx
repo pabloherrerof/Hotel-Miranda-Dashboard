@@ -14,22 +14,21 @@ import {
   MenuLink,
   SideBarUserImage,
   User,
-  Wrapper,
+  WrapperSideBar,
 } from "./SideBarStyled";
-import { useContext } from "react";
-import { UserContext } from "./UserContext";
 
-export const SideBar = () => {
+
+export const SideBar = (props) => {
   const navigate = useNavigate();
-  const { state } = useContext(UserContext);
 
   const clickHandler = () => {
-    navigate(`/users/${state.user.id}`);
+    navigate(`/users/${"U-0001"}`);
   };
 
   return (
+    
     <>
-      <Wrapper>
+      <WrapperSideBar>
         <Logo direction={"row"}>
           <img src={logo} alt="logo" />
           <div>
@@ -64,19 +63,19 @@ export const SideBar = () => {
           </li>
         </LinkContainer>
         <User>
-        <SideBarUserImage src={state.user.photo}>
+        <SideBarUserImage src={props.user.photo}>
            
         </SideBarUserImage>
-          <h5>{state.user.name}</h5>
-          <p>{state.user.email}</p>
-          <button onClick={() => clickHandler()}>Edit User</button>
+          <h5>{props.user.name}</h5>
+          <p>{props.user.email}</p>
+          <button onClick={() => clickHandler()}>View User</button>
         </User>
         
         <Copyright>
           <h6>Travl Hotel Admin Dashboard</h6>
           <p>2023 All Rights Reserved</p>
         </Copyright>
-      </Wrapper>
+      </WrapperSideBar>
     </>
   );
 };

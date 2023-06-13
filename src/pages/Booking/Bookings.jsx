@@ -29,13 +29,16 @@ import {
 } from "react-icons/md";
 import { Modal } from "../../components/Modal";
 import { bookedStatusCalc, dateConverter } from "../../features/otherFunctions";
-import { searchBookingRoom } from "../../features/API";
+import { getRoomsData, getRoomsStatus } from "../../features/rooms/roomsSlice";
+import { fetchRooms } from "../../features/rooms/roomsThunks";
 
 
 export const Bookings = (props) => {
   const dispatch = useDispatch();
   const bookingsStatus = useSelector(getBookingsStatus);
   const bookingsData = useSelector(getBookingsData);
+  const roomsStatus = useSelector(getRoomsStatus);
+  const roomsData =useSelector(getRoomsData);
 
   const [showAll, setShowAll] = useState("true");
   const [showCheckIn, setShowCheckIn] = useState("false");
@@ -66,11 +69,18 @@ export const Bookings = (props) => {
   const options = ["Guest","Date", "Check in", "Check out"];
 
   useEffect(() => {
-    if (bookingsStatus === "idle") {
+    if (bookingsStatus === "idle" || bookingsData.length ===0) {
       dispatch(fetchBookings());
     }
     setTableData(bookingsData);
   }, [dispatch, bookingsStatus, bookingsData]);
+
+  useEffect(() => {
+    if (roomsStatus === "idle" || roomsData.length === 0) {
+      dispatch(fetchRooms());
+    }
+    
+  }, [dispatch, roomsStatus, roomsData ]);
 
   const onClickHandler = (e) => {
     const option = e.target.innerText;
@@ -175,8 +185,8 @@ export const Bookings = (props) => {
       setOrderValue("Date");
       setTableData(
         [...tableData].sort((a, b) => {
-          if (a.orderDate < b.orderDate) return -1;
-          if (a.orderDate > b.orderDate) return 1;
+          if (new Date(a.orderDate).getTime() < new Date(b.orderDate).getTime()) return -1;
+          if (new Date(a.orderDate).getTime() > new Date(b.orderDate).getTime()) return 1;
           return 0;
         })
       );
@@ -185,8 +195,8 @@ export const Bookings = (props) => {
       setOrderValue("Check in");
       setTableData(
         [...tableData].sort((a, b) => {
-          if (a.checkIn < b.checkIn) return -1;
-          if (a.checkIn > b.checkIn) return 1;
+          if (new Date(a.checkIn).getTime() < new Date(b.checkIn).getTime()) return -1;
+          if (new Date(a.checkIn).getTime() > new Date(b.checkIn).getTime()) return 1;
           return 0;
         })
       );
@@ -195,15 +205,15 @@ export const Bookings = (props) => {
       setOrderValue("Check out");
       setTableData(
         [...tableData].sort((a, b) => {
-          if (a.checkOut < b.checkOut) return -1;
-          if (a.checkOut > b.checkOut) return 1;
+          if (new Date(a.checkOut).getTime() < new Date(b.checkOut).getTime()) return -1;
+          if (new Date(a.checkOut).getTime() > new Date(b.checkOut).getTime()) return 1;
           return 0;
         })
       );
     }
   };
 
-  if (bookingsStatus === "pending" || bookingsStatus === "idle") {
+  if (bookingsStatus === "pending" || bookingsStatus === "idle" || roomsStatus=== "idle" || roomsStatus === "pending" || !roomsData || !bookingsData) {
     return (
       <>
         <Wrapper>
@@ -270,7 +280,10 @@ export const Bookings = (props) => {
             </TableTitle>
           </thead>
           <tbody>
-            {tableData.map((element) => (
+            {tableData.map((element) => {
+              const room = roomsData.find((room) => room.id === element.room);
+              console.log(room)
+              return (
               <TableRow key={element.id}>
                 <TableItem>
                   {element.name}
@@ -299,8 +312,8 @@ export const Bookings = (props) => {
                   </NotesButton>
                 </TableItem>
                 <TableItem>
-                  {searchBookingRoom(element.room).roomType} -{" "}
-                  {searchBookingRoom(element.room).roomNumber}
+                  {room.roomType} - {room.roomNumber}
+                  {}
                 </TableItem>
                 <TableItem>
                   <StatusButton
@@ -323,7 +336,7 @@ export const Bookings = (props) => {
                   />
                 </TableItem>
               </TableRow>
-            ))}
+            )})}
           </tbody>
         </TableContainer>
         

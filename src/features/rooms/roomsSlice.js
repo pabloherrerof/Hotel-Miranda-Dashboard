@@ -1,5 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchRooms, addRoom, deleteRoom, getRoom, editRoom } from "./roomsThunks";
+import { toast } from "react-toastify";
+
+const toastSuccess =(msg)=>{
+    toast.success(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });    
+}
+
+const toastError = (msg) =>{
+    toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+}
 
 
 export const roomSlice = createSlice({
@@ -17,6 +44,7 @@ export const roomSlice = createSlice({
         builder
         .addCase(fetchRooms.rejected, (state, action) =>{
             state.status = "rejected";
+            toastError("Error! Couldn't load rooms.")
         })
         .addCase(fetchRooms.pending, (state, action) =>{
             state.status = "pending";
@@ -30,38 +58,46 @@ export const roomSlice = createSlice({
 
         .addCase(addRoom.fulfilled, (state, action) =>{
             state.status = "fulfilled"
-            const lastId = parseInt(state.roomsListData[state.roomsListData.length  -1].id.slice(2));    
-            action.payload.id = "R-" + (lastId + 1).toString().padStart(4, "0");
             state.roomsListData.push(action.payload)
+            toastSuccess('The room has been saved!')
         })
         .addCase(addRoom.pending, (state) =>{
             state.status = "pending";
         })
+        .addCase(addRoom.rejected, (state) =>{
+            state.status = "rejected";
+            toastError("Error! Couldn't create room.")
+        })
 
 
         .addCase(deleteRoom.fulfilled, (state, action) =>{
-            state.roomsListData = state.roomsListData.filter(item => item.id !== action.payload);
+            state.roomsListData = state.roomsListData.filter(item => item.id !== action.payload.deletedRoom.id);
             state.status = "fulfilled";
+            toastSuccess('The room has been deleted!')
         })
-        .addCase(deleteRoom.pending, (state, action) =>{
+        .addCase(deleteRoom.pending, (state) =>{
             state.status = "pending";
         })
-
+        .addCase(deleteRoom.rejected, (state) =>{
+            state.status = "rejected";
+            toastError("Error! Couldn't delete the room.")
+        })
 
         .addCase(getRoom.fulfilled, (state, action) =>{
             state.singleRoomStatus = "fulfilled";
-             if(typeof action.payload === "object"){
-                state.singleRoomData = action.payload
-            } else{
-                state.singleRoomData = state.roomsListData.find(booking => booking.id === action.payload)
-            }
+            state.singleRoomData = action.payload
         })
-        .addCase(getRoom.pending, (state, action) =>{
+        .addCase(getRoom.pending, (state) =>{
             state.singleRoomStatus = "pending";
+        })
+        .addCase(getRoom.rejected, (state) =>{
+            state.singleRoomStatus.status = "rejected";
+            toastError("Error! Couldn't get the room.")
         })
 
         .addCase(editRoom.fulfilled, (state,action) =>{
-            state.status = "fulfilled"
+            state.singleRoomStatus = "fulfilled"
+            toastSuccess('Changes saved!')
             for(let i = 0; i < state.roomsListData.length; i++) {
                 if (state.roomsListData[i].id === action.payload.id) {
                     state.roomsListData[i] = action.payload;
@@ -71,8 +107,12 @@ export const roomSlice = createSlice({
               }
         })
 
-        .addCase(editRoom.pending, (state, action) =>{
-            state.status = "pending";
+        .addCase(editRoom.pending, (state) =>{
+            state.singleRoomStatus = "pending";
+        })    
+        .addCase(editRoom.rejected, (state) =>{
+            state.singleRoomStatus = "rejected";
+            toastError("Error! Couldn't update the room.")
         })    
     },
 })

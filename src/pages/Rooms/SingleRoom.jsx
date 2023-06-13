@@ -37,6 +37,7 @@ import {
   RadioInput,
 } from "../../components/FormStyled";
 import { Button } from "../../components/Button";
+import { toast } from "react-toastify";
 
 export const SingleRoom = (props) => {
   const roomId = useParams();
@@ -45,7 +46,17 @@ export const SingleRoom = (props) => {
   const singleRoomData = useSelector(getSingleRoom);
   const singleRoomStatus = useSelector(getSingleRoomStatus);
 
-  const [fieldError, setFieldError] = useState("");
+  const fieldError = (msg) => {toast.warn(msg, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+    })};
+
   const [roomType, setRoomType] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [price, setPrice] = useState("");
@@ -78,7 +89,7 @@ export const SingleRoom = (props) => {
       status === "" ||
       description === ""
     ) {
-      setFieldError("You have to enter all inputs!");
+      fieldError("Error! You have to enter all inputs.")
     } else {
       if (discount === "") {
         setDiscount(0);
@@ -98,7 +109,7 @@ export const SingleRoom = (props) => {
       };
       
       dispatch(editRoom(room));
-      dispatch(getRoom(room));
+      dispatch(getRoom(room.id));
       setEdit(false);
     }
   };
@@ -205,11 +216,9 @@ export const SingleRoom = (props) => {
                     navigate("/rooms");
                   }}
                 />
-                <p>{fieldError}</p>
                 <CloseIcon
                   onClick={() => {
                     setEdit(false);
-                    setFieldError("");
                   }}
                 />
               </CardHeader>

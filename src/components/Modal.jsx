@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ArchiveButton, Button } from "./Button";
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled";
 import { IoClose } from "react-icons/io5";
@@ -13,22 +13,31 @@ import {
   RadioInput,
 } from "./FormStyled";
 import {
+  bookingDatesValidator,
   dateConverter,
   getTodayString,
-  jobDescriptionChooser,
-  roomInfoChooser,
 } from "../features/otherFunctions";
 import { useState } from "react";
-import { searchBookingRoom } from "../features/API";
-import {
-  ReviewComment,
-  ReviewInfo,
-} from "./LastReviewsStyled";
+import { ReviewComment, ReviewInfo } from "./LastReviewsStyled";
+import { toast } from "react-toastify";
+import { getRoomsData } from "../features/rooms/roomsSlice";
 
 export const Modal = (props) => {
   const dispatch = useDispatch();
-  const [fieldError, setFieldError] = useState("");
+  const fieldError = (msg) => {
+    toast.warn(msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
 
+  const roomsData = useSelector(getRoomsData);
   const [userName, setUserName] = useState("");
   const [userPhone, setUserPhone] = useState("");
   const [userPosition, setUserPosition] = useState("Manager");
@@ -41,7 +50,6 @@ export const Modal = (props) => {
   const [userPassword, setUserPassword] = useState("");
 
   const [guestName, setGuestName] = useState("");
-  const [orderDate, setOrderDate] = useState(getTodayString());
   const [bookingRoomId, setBookingRoomId] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -85,7 +93,9 @@ export const Modal = (props) => {
         userPhone === "" ||
         userPassword === ""
       ) {
-        setFieldError("You have to enter all inputs!");
+        fieldError("You have to enter all inputs.");
+      } else if (/[a-zA-Z]/.test(userPhone)) {
+        fieldError("Error! Phone must be a valid phone number");
       } else {
         const user = {
           photo: userImage,
@@ -93,14 +103,16 @@ export const Modal = (props) => {
           position: userPosition,
           email: userEmail,
           phone: userPhone,
-          startDate: userStartDate,
+          startDate: new Date(userStartDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }),
           state: userState,
-          jobDescription: jobDescriptionChooser(userPosition),
           password: userPassword,
         };
         dispatch(addUser(user));
         props.setShowCreateModal(false);
-        setFieldError("");
         setUserEmail("");
         setUserName("");
         setUserImage(
@@ -119,18 +131,27 @@ export const Modal = (props) => {
         guestName === "" ||
         checkIn === "" ||
         checkOut === "" ||
-        orderDate === "" ||
         bookingRoomId === ""
       ) {
-        setFieldError("You have to enter all inputs!");
-      } else if (!searchBookingRoom(bookingRoomId)) {
-        setFieldError("The room you've entered does not exists!");
+        fieldError("You have to enter all inputs.");
+      } else if (!roomsData.find((room) => room.id === bookingRoomId)) {
+        fieldError("The room you've entered does not exists!");
+      } else if (!bookingDatesValidator(checkIn, checkOut)) {
+        fieldError("Invalid Dates!");
       } else {
         const booking = {
           name: guestName,
-          checkIn: checkIn,
-          checkOut: checkOut,
-          orderDate: orderDate,
+          checkIn: new Date(checkIn).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }),
+          checkOut: new Date(checkOut).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }),
+
           specialRequest: specialRequest,
           room: bookingRoomId,
         };
@@ -141,9 +162,7 @@ export const Modal = (props) => {
         setBookingRoomId("");
         setCheckIn("");
         setCheckOut("");
-        setOrderDate(getTodayString());
         setSpecialRequest("");
-        setFieldError("");
         e.target.reset();
       }
     }
@@ -155,34 +174,32 @@ export const Modal = (props) => {
         roomStatus === "" ||
         description === ""
       ) {
-        setFieldError("You have to enter all inputs!");
+        fieldError("You have to enter all inputs.");
       } else {
         if (discount === "") {
           setDiscount(0);
         }
-        const room = {
-          roomType: roomType,
-          roomNumber: roomNumber,
-          price: price,
-          discount: discount,
-          status: roomStatus,
-          amenities: roomInfoChooser(roomType).amenities,
-          cancellation: roomInfoChooser(roomType).cancelattion,
-          thumbnail: roomInfoChooser(roomType).thumbnail,
-          description: description,
-          images: roomInfoChooser(roomType).images,
-        };
-        console.log(room);
-        dispatch(addRoom(room));
-        props.setShowCreateModal(false);
-        setRoomNumber("");
-        setRoomType("Single Bed");
-        setDiscount("");
-        setPrice("");
-        setDescription("");
-        setRoomStatus("");
-        setFieldError("");
-        e.target.reset();
+        if (discount > 100) {
+          fieldError("Discount must be smaller than 100!");
+        } else {
+          const room = {
+            roomType: roomType,
+            roomNumber: roomNumber,
+            price: price,
+            discount: discount,
+            status: roomStatus,
+            description: description,
+          };
+          dispatch(addRoom(room));
+          props.setShowCreateModal(false);
+          setRoomNumber("");
+          setRoomType("Single Bed");
+          setDiscount("");
+          setPrice("");
+          setDescription("");
+          setRoomStatus("");
+          e.target.reset();
+        }
       }
     }
   };
@@ -224,14 +241,12 @@ export const Modal = (props) => {
               <IoClose
                 onClick={() => {
                   props.setShowCreateModal(false);
-                  setFieldError("");
                   document.getElementById("createUserForm").reset();
                 }}
               />
             </ModalCloseRow>
             <FormContainer onSubmit={onCreateSubmitHandler} id="createUserForm">
               <h2>New User</h2>
-              <p>{fieldError}</p>
 
               <Input>
                 <label htmlFor="image">Image Link</label>
@@ -263,7 +278,7 @@ export const Modal = (props) => {
                   }}
                 >
                   <option>Manager</option>
-                  <option>Recepcionist</option>
+                  <option>Receptionist</option>
                   <option>Room Service</option>
                 </select>
               </Input>
@@ -346,15 +361,12 @@ export const Modal = (props) => {
               <IoClose
                 onClick={() => {
                   props.setShowCreateModal(false);
-                  setFieldError("");
                   document.getElementById("createUserForm").reset();
                 }}
               />
             </ModalCloseRow>
             <FormContainer onSubmit={onCreateSubmitHandler} id="createUserForm">
               <h2>New Booking</h2>
-              <p>{fieldError}</p>
-
               <Input>
                 <label htmlFor="guestName">Guest Name</label>
                 <input
@@ -362,17 +374,6 @@ export const Modal = (props) => {
                   name="guestName"
                   onInput={(e) => {
                     setGuestName(e.target.value);
-                  }}
-                />
-              </Input>
-              <Input>
-                <label htmlFor="orderDate">Order Date</label>
-                <input
-                  type="date"
-                  name="orderDate"
-                  defaultValue={getTodayString()}
-                  onInput={(e) => {
-                    setOrderDate(e.target.value);
                   }}
                 />
               </Input>
@@ -433,14 +434,12 @@ export const Modal = (props) => {
               <IoClose
                 onClick={() => {
                   props.setShowCreateModal(false);
-                  setFieldError("");
                   document.getElementById("createUserForm").reset();
                 }}
               />
             </ModalCloseRow>
             <FormContainer onSubmit={onCreateSubmitHandler} id="createUserForm">
               <h2>New Room</h2>
-              <p>{fieldError}</p>
 
               <Input>
                 <label htmlFor="roomNumber">Room Number</label>
@@ -545,30 +544,29 @@ export const Modal = (props) => {
                 }}
               />
             </ModalCloseRow>
-           
-              <ReviewComment>{props.target.comment}</ReviewComment>
-              <ReviewInfo>
-                <div>
-                  <h4>{props.target.customer.name}</h4>
-                  <p>{dateConverter(props.target.date).date}</p>
-                </div>
-                {props.target.archived !== true ? (
-                  <ArchiveButton archived>Archived</ArchiveButton>
-                ) : (
-                  ""
-                )}
-                {props.target.archived ? (
-                  <ArchiveButton unarchived>Unarchived</ArchiveButton>
-                ) : (
-                  ""
-                )}
-              </ReviewInfo>
-            
+
+            <ReviewComment>{props.target.comment}</ReviewComment>
+            <ReviewInfo>
+              <div>
+                <h4>{props.target.customer.name}</h4>
+                <p>{dateConverter(props.target.date).date}</p>
+              </div>
+              {props.target.archived !== true ? (
+                <ArchiveButton archived>Archived</ArchiveButton>
+              ) : (
+                ""
+              )}
+              {props.target.archived ? (
+                <ArchiveButton unarchived>Unarchived</ArchiveButton>
+              ) : (
+                ""
+              )}
+            </ReviewInfo>
           </ModalContainer>
         </>
       );
     }
-    if(props.page === "bookings" && props.targetBooking !== undefined){
+    if (props.page === "bookings" && props.targetBooking !== undefined) {
       return (
         <>
           <ModalContainer show={props.showNotesModal}>
@@ -579,15 +577,14 @@ export const Modal = (props) => {
                 }}
               />
             </ModalCloseRow>
-           
-              <ReviewComment>{props.targetBooking.specialRequest}</ReviewComment>
-              <ReviewInfo>
-                <div>
-                  <h4>{props.targetBooking.name}</h4>
-                  <p>{dateConverter(props.targetBooking.date).date}</p>
-                </div>
-              </ReviewInfo>
-            
+
+            <ReviewComment>{props.targetBooking.specialRequest}</ReviewComment>
+            <ReviewInfo>
+              <div>
+                <h4>{props.targetBooking.name}</h4>
+                <p>{dateConverter(props.targetBooking.date).date}</p>
+              </div>
+            </ReviewInfo>
           </ModalContainer>
         </>
       );

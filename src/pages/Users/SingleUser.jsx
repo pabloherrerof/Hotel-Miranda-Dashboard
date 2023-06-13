@@ -17,24 +17,22 @@ import { editUser, getUser } from "../../features/users/usersThunks";
 import {
   getSingleUserStatus,
   getUsersSingle,
-  getUsersStatus,
 } from "../../features/users/usersSlice";
 import { HashLoader } from "react-spinners";
 import { Wrapper } from "../../components/LayoutStyled";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
 import { Button } from "../../components/Button";
 import { Input, Label, RadioInput } from "../../components/FormStyled";
-import { jobDescriptionChooser } from "../../features/otherFunctions";
+import {  dateToCalendar } from "../../features/otherFunctions";
+import { toast } from "react-toastify";
 
-export const SingleUser = ({ match }) => {
+export const SingleUser = () => {
   const userId = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const getUserData = useSelector(getUsersSingle);
-  const getStatus = useSelector(getUsersStatus);
   const getUserStatus = useSelector(getSingleUserStatus);
 
-  const [fieldError, setFieldError] = useState("");
   const [userName, setUserName] = useState("");
   const [userPhone, setUserPhone] = useState("");
   const [userPosition, setUserPosition] = useState("Manager");
@@ -43,6 +41,17 @@ export const SingleUser = ({ match }) => {
   const [userImage, setUserImage] = useState("");
   const [userState, setUserState] = useState("");
   const [userPassword, setUserPassword] = useState("");
+
+  const fieldError = (msg) => {toast.warn(msg, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+    })};
 
   const [edit, setEdit] = useState(false);
 
@@ -59,14 +68,16 @@ export const SingleUser = ({ match }) => {
     setUserState(getUserData.state);
     setUserPhone(getUserData.phone)
     setUserStartDate(getUserData.startDate)
-    setUserPassword(getUserData.password)
-  }, [dispatch, getStatus, getUserStatus, userId.id, getUserData]);
+  }, [dispatch, getUserStatus, userId.id, getUserData]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if(userEmail=== "" || userImage ==="" || userName=== "" || userPosition==="" || userStartDate==="" || userState==="" || userPhone==="" || userPassword=== ""){
-      setFieldError("You have to enter all inputs!")
+    if(userEmail=== "" || userImage ==="" || userName=== "" || userPosition==="" || userStartDate==="" || userState==="" || userPhone===""){
+      fieldError("Error! You have to enter all inputs.")
+  } else if(/[a-zA-Z]/.test(userPhone)){
+    fieldError("Error! Phone must be a valid phone number")
   } else {
+    console.log(!/[a-zA-Z]/.test(userPhone))
       const user = {
           id: getUserData.id,
           photo: userImage,
@@ -74,14 +85,22 @@ export const SingleUser = ({ match }) => {
           position: userPosition,
           email: userEmail,
           phone: userPhone,
-          startDate: userStartDate,
+          startDate: new Date(userStartDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }),
           state: userState,
-          jobDescription: jobDescriptionChooser(userPosition),
           password: userPassword,
       }
+      if(user.password === ""){
+        delete user.password;
+      }
+      console.log(user)
       dispatch(editUser(user));
-      dispatch(getUser(user))
       setEdit(false);
+      dispatch(getUser(user.id))
+
   }
   };
 
@@ -103,13 +122,13 @@ export const SingleUser = ({ match }) => {
                     navigate("/users");
                   }}
                 />
-                <FiEdit
+                {getUserData.email === "admin@admin.com" ? "": <FiEdit
                   onClick={() => {
                     setEdit(true);
                   }}
-                />
+                />}
+               
               </CardHeader>
-
               <TitleRow>
                 <UserImage>
                   <img src={getUserData.photo} alt="" />
@@ -167,11 +186,9 @@ export const SingleUser = ({ match }) => {
                     navigate("/users");
                   }}
                 />
-                <p>{fieldError}</p>
                 <CloseIcon
                   onClick={() => {
                     setEdit(false);
-                    setFieldError("");
                   }}
                 />
               </CardHeader>
@@ -215,7 +232,7 @@ export const SingleUser = ({ match }) => {
                         }}
                       >
                         <option>Manager</option>
-                        <option>Recepcionist</option>
+                        <option>Receptionist</option>
                         <option>Room Service</option>
                       </select>
                     </Input>
@@ -258,7 +275,7 @@ export const SingleUser = ({ match }) => {
                       <input
                         type="date"
                         name="startDate"
-                        defaultValue={userStartDate}
+                        defaultValue={dateToCalendar(userStartDate)}
                         onInput={(e) => {
                           setUserStartDate(e.target.value);
                         }}
@@ -299,7 +316,7 @@ export const SingleUser = ({ match }) => {
                   <CardItem>
                     <Input>
                     <h6>Password</h6>
-                    <input type="password" defaultValue={userPassword} name="password" onInput= {(e)=>{setUserPassword(e.target.value)}}/>
+                    <input type="password" name="password" onInput= {(e)=>{setUserPassword(e.target.value)}}/>
                     </Input>
                   </CardItem>
                 </FeaturesRow>

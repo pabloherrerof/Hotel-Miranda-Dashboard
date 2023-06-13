@@ -1,16 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import contactsList from "../../data/contacts.json"
-import { delay } from "../otherFunctions";
+import { fetchApi } from "../API";
 
 export const fetchContacts = createAsyncThunk("contacts/fetchContacts", async () => {
-    return await delay(contactsList);
+        const res=  await fetchApi("api/contacts", "GET", undefined);
+    return res.data
+   
 });
 
 
 export const archiveContacts = createAsyncThunk("contacts/archiveContact", async (contactObject) => {
-    return await delay(contactObject);
+
+        const copyObject = {...contactObject}
+        if(copyObject.archived === true){
+            copyObject.archived = false
+      } else {
+        copyObject.archived = true
+      }
+        const res=  await fetchApi(`api/contacts/${contactObject.id}`, "PATCH", JSON.stringify({archived: copyObject.archived}));
+    return res.data
+   
 })
 
-export const deleteContact = createAsyncThunk("contacts/deleteContact", async (contactObject) => {
-    return await delay(contactObject);
-})

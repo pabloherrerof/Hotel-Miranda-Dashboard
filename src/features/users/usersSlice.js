@@ -1,6 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addUser, deleteUser, editUser, fetchUsers, getUser } from "./usersThunks";
+import { addUser, deleteUser, editUser, fetchUsers, getUser, getLoggedUser } from "./usersThunks";
+import { toast } from "react-toastify";
 
+const toastSuccess = (msg)=>{
+    toast.success(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });    
+}
+
+const toastError = (msg) =>{
+    toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+}
 
 export const usersSlice = createSlice({
     name: "users",
@@ -9,6 +35,8 @@ export const usersSlice = createSlice({
         status: "idle",
         singleUser: {},
         singleUserStatus: "idle",
+        loggedUser: {},
+        loggedUserStatus: "idle"
     },
     
 
@@ -16,6 +44,7 @@ export const usersSlice = createSlice({
         builder
         .addCase(fetchUsers.rejected, (state, action) =>{
             state.status = "rejected";
+            toastError("Error! Couldn't load users.");
         })
         .addCase(fetchUsers.pending, (state, action) =>{
             state.status = "pending";
@@ -26,60 +55,87 @@ export const usersSlice = createSlice({
         })
 
         .addCase(addUser.fulfilled, (state, action) =>{
-            const lastId = parseInt(state.usersListData[state.usersListData.length  -1].id.slice(2));    
-            action.payload.id = "U-" + (lastId + 1).toString().padStart(4, "0");
+            toastSuccess('The user has been saved!')  
             state.usersListData.push(action.payload)
-            console.log(state.usersListData)
+            state.status = "fulfilled";
+        })
+        .addCase(addUser.pending, (state, action) =>{
+            state.status = "pending";
+        })
+        .addCase(addUser.rejected, (state, action) =>{
+            state.status = "rejected";
+            toastError("Error! Couldn't create user.")
         })
 
         .addCase(deleteUser.fulfilled, (state, action) =>{
-            state.usersListData = state.usersListData.filter(item => item.id !== action.payload);
+            state.usersListData = state.usersListData.filter(item => item.id !== action.payload.deletedUser.id);
             state.status = "fullfilled";
-            
+            toastSuccess('The user has been deleted!')
         })
 
         .addCase(deleteUser.pending, (state, action) =>{
             state.status = "pending";
         })
        
-
+        .addCase(deleteUser.rejected, (state, action) =>{
+            state.status = "rejected";
+            toastError("Error! Couldn't delete the user.")
+        })
+        
 
         .addCase(getUser.fulfilled, (state, action) =>{
-            if(typeof action.payload === "object"){
-                state.singleUser = action.payload
-            } else{
-                state.singleUser = state.usersListData.find(user => user.id === action.payload)
-            }
-            
+            state.singleUser = action.payload    
             state.singleUserStatus = "fullfilled";
+
         })
 
         .addCase(getUser.pending, (state, action) =>{
             state.singleUserStatus = "pending";
         })
+        .addCase(getUser.rejected, (state, action) =>{
+            state.singleUserStatus = "rejected";
+            toastError("Error! Couldn't get the user.")
+        })
+
+        .addCase(getLoggedUser.fulfilled, (state, action) =>{
+        state.loggedUser = action.payload
+            state.loggedUserStatus = "fullfilled";
+        })
+
+        .addCase(getLoggedUser.pending, (state, ) =>{
+            state.loggedUserStatus = "pending";
+        })
         
 
         .addCase(editUser.fulfilled, (state,action) =>{
-            state.status = "fulfilled";
+            toastSuccess('Changes saved!')
+            state.singleUserStatus = "fulfilled";
              for(let i = 0; i < state.usersListData.length; i++) {
                 if (state.usersListData[i].id === action.payload.id) {
+                    console.log(action.payload)
                     state.usersListData[i] = action.payload;
                     state.singleUser = action.payload
                   return;
                 }
-              }
+              }   
         })
 
-        .addCase(editUser.pending, (state, action) =>{
-            state.status = "pending";
+        .addCase(editUser.pending, (state) =>{
+            state.singleUserStatus = "pending";
         })
-        
+        .addCase(editUser.rejected, (state) =>{
+            state.singleUserStatus = "rejected";
+            console.log("hola")
+            toastError("Error! Couldn't update the user.")
+        })
     },
 })
 
 export const getUsersStatus = (state) => state.users.status;
 export const getUsersData = (state) => state.users.usersListData;
 export const getUsersSingle = (state) => state.users.singleUser;
+export const getLoggedUserData = (state) => state.users.loggedUser;
 export const getSingleUserStatus = (state) => state.users.singleUserStatus;
+export const getLoggedUserStatus = (state) => state.users.loggedUserStatus;
 
 export default usersSlice.reducer;

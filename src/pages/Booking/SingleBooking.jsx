@@ -24,15 +24,23 @@ import { useEffect, useState } from "react";
 import { editBooking, getBooking } from "../../features/bookings/bookingThunks";
 import {
   bookedStatusCalc,
+  bookingDatesValidator,
   dateConverter,
+  dateToCalendar,
   totalPriceCalc,
 } from "../../features/otherFunctions";
 import { Wrapper } from "../../components/LayoutStyled";
 import { HashLoader } from "react-spinners";
-import { searchBookingRoom } from "../../features/API";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
 import { Button } from "../../components/Button";
 import { Input, InputBig } from "../../components/FormStyled";
+import {
+  getRoomsData,
+  getSingleRoom,
+  getSingleRoomStatus,
+} from "../../features/rooms/roomsSlice";
+import { getRoom } from "../../features/rooms/roomsThunks";
+import { toast } from "react-toastify";
 
 export const SingleBooking = (props) => {
   const bookingId = useParams();
@@ -40,8 +48,10 @@ export const SingleBooking = (props) => {
   const navigate = useNavigate();
   const bookingData = useSelector(getSingleBooking);
   const singleBookingStatus = useSelector(getSingleBookingStatus);
+  const roomStatus = useSelector(getSingleRoomStatus);
+  const roomData = useSelector(getSingleRoom);
+  const roomsData = useSelector(getRoomsData);
 
-  const [fieldError, setFieldError] = useState("");
   const [guestName, setGuestName] = useState("");
   const [orderDate, setOrderDate] = useState("");
   const [roomId, setRoomId] = useState("");
@@ -50,6 +60,19 @@ export const SingleBooking = (props) => {
   const [specialRequest, setSpecialRequest] = useState("");
 
   const [edit, setEdit] = useState(false);
+
+  const fieldError = (msg) => {
+    toast.warn(msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
 
   useEffect(() => {
     if (singleBookingStatus === "idle" || bookingData) {
@@ -65,40 +88,72 @@ export const SingleBooking = (props) => {
     setSpecialRequest(bookingData.specialRequest);
   }, [dispatch, singleBookingStatus, bookingId, bookingData]);
 
+  useEffect(() => {
+    if (singleBookingStatus === "fulfilled") {
+      dispatch(getRoom(bookingData.room));
+    }
+  }, [bookingData, singleBookingStatus, dispatch]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if(guestName=== "" || checkIn ==="" || checkOut=== "" || orderDate==="" ||  roomId===""){
-      setFieldError("You have to enter all inputs!")
-      
-  } if(!searchBookingRoom(roomId)){
-    setFieldError("The room you've entered does not exists!")
-  }  else {
-    const booking = {
+    if (
+      guestName === "" ||
+      checkIn === "" ||
+      checkOut === "" ||
+      orderDate === "" ||
+      roomId === ""
+    ) {
+      fieldError("You have to enter all inputs!");
+    } else if (!bookingDatesValidator(checkIn, checkOut)) {
+      fieldError("Invalid Dates!");
+    } else if (!roomsData.find((room) => room.id === roomId)) {
+      fieldError("The room you've entered does not exists!");
+    } else {
+      const booking = {
         id: bookingData.id,
         name: guestName,
-        checkIn: checkIn,
-        checkOut: checkOut,
-        orderDate: orderDate,
+        checkIn: new Date(checkIn).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }),
+        checkOut: new Date(checkOut).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }),
+        orderDate: new Date(orderDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }),
         specialRequest: specialRequest,
         room: roomId,
+      };
+      dispatch(editBooking(booking));
+      dispatch(getBooking(booking.id));
+      dispatch(getRoom(roomId));
+      setEdit(false);
     }
-    dispatch(editBooking(booking));
-    dispatch(getBooking(booking))
-    setEdit(false);
-    setFieldError("");
-} 
   };
 
-
-
-  if (singleBookingStatus === "pending" || singleBookingStatus === "idle") {
+  if (
+    singleBookingStatus === "pending" ||
+    singleBookingStatus === "idle" ||
+    !roomData ||
+    roomStatus === "pending" ||
+    roomStatus === "idle" ||
+    bookingData.room !== roomData.id
+  ) {
     return (
       <Wrapper>
         <HashLoader color="#799283" size={100} />
       </Wrapper>
     );
-  } else if (bookingData) {
+  } else if (
+    singleBookingStatus === "fulfilled" &&
+    roomStatus === "fulfilled"
+  ) {
     if (edit !== true) {
       return (
         <>
@@ -139,15 +194,14 @@ export const SingleBooking = (props) => {
                 <CardItem>
                   <h6>Room info</h6>
                   <h4>
-                    {searchBookingRoom(bookingData.room).roomType}-
-                    {searchBookingRoom(bookingData.room).roomNumber}
+                    {roomData.roomType}-{roomData.roomNumber}
                   </h4>
                 </CardItem>
                 <CardItem>
                   <h6>Price</h6>
                   <h4>
                     {totalPriceCalc(
-                      searchBookingRoom(bookingData.room).price,
+                      roomData.price,
                       bookingData.checkIn,
                       bookingData.checkOut
                     )}{" "}
@@ -161,19 +215,17 @@ export const SingleBooking = (props) => {
                 </CardItem>
               </FeaturesRow>
               <FeaturesRow amenities>
-                {searchBookingRoom(bookingData.room).amenities.map(
-                  (amenitie, i) => {
-                    return (
-                      <CardItem amenitie key={i}>
-                        <CardAmenitie>{amenitie}</CardAmenitie>
-                      </CardItem>
-                    );
-                  }
-                )}
+                {roomData.amenities.map((amenitie, i) => {
+                  return (
+                    <CardItem amenitie key={i}>
+                      <CardAmenitie>{amenitie}</CardAmenitie>
+                    </CardItem>
+                  );
+                })}
               </FeaturesRow>
             </Card>
             <CardImage>
-              <MySlider data={searchBookingRoom(bookingData.room).images}/>
+              <MySlider data={roomData.images} />
 
               <Booked
                 bookStatus={bookedStatusCalc(
@@ -184,8 +236,8 @@ export const SingleBooking = (props) => {
                 {bookedStatusCalc(bookingData.checkIn, bookingData.checkOut)}
               </Booked>
               <CardImageText>
-                <h4>{searchBookingRoom(bookingData.room).roomType}</h4>
-                <p>{searchBookingRoom(bookingData.room).description}</p>
+                <h4>{roomData.roomType}</h4>
+                <p>{roomData.description}</p>
               </CardImageText>
             </CardImage>
           </CardContainer>
@@ -202,11 +254,9 @@ export const SingleBooking = (props) => {
                     navigate("/bookings");
                   }}
                 />
-                <p>{fieldError}</p>
                 <CloseIcon
                   onClick={() => {
                     setEdit(false);
-                    setFieldError("");
                   }}
                 />
               </CardHeader>
@@ -227,11 +277,11 @@ export const SingleBooking = (props) => {
                 <FeaturesRow>
                   <CardItem>
                     <Input>
-                    <h6>Check In</h6>
+                      <h6>Check In</h6>
                       <input
                         type="date"
                         name="checkIn"
-                        defaultValue={checkIn}
+                        defaultValue={dateToCalendar(checkIn)}
                         onInput={(e) => {
                           setCheckIn(e.target.value);
                         }}
@@ -240,11 +290,11 @@ export const SingleBooking = (props) => {
                   </CardItem>
                   <CardItem>
                     <Input>
-                    <h6>Check Out</h6>
+                      <h6>Check Out</h6>
                       <input
                         type="date"
                         name="checkOut"
-                        defaultValue={checkOut}
+                        defaultValue={dateToCalendar(checkOut)}
                         onInput={(e) => {
                           setCheckOut(e.target.value);
                         }}
@@ -259,7 +309,7 @@ export const SingleBooking = (props) => {
                       <input
                         type="date"
                         name="orderDate"
-                        defaultValue={orderDate}
+                        defaultValue={dateToCalendar(orderDate)}
                         onInput={(e) => {
                           setOrderDate(e.target.value);
                         }}
@@ -281,19 +331,17 @@ export const SingleBooking = (props) => {
                   </CardItem>
                 </FeaturesRow>
                 <FeaturesRow>
-                 
-                    <InputBig>
-                      <h6>Special Request</h6>
-                      <input
-                        type="text"
-                        name="specialRequest"
-                        defaultValue={specialRequest}
-                        onInput={(e) => {
-                          setSpecialRequest(e.target.value);
-                        }}
-                      />
-                    </InputBig>
-                  
+                  <InputBig>
+                    <h6>Special Request</h6>
+                    <input
+                      type="text"
+                      name="specialRequest"
+                      defaultValue={specialRequest}
+                      onInput={(e) => {
+                        setSpecialRequest(e.target.value);
+                      }}
+                    />
+                  </InputBig>
                 </FeaturesRow>
                 <CardSeparator />
 

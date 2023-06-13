@@ -1,7 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addBooking, deleteBooking, editBooking, fetchBookings, getBooking } from "./bookingThunks";
+import { toast } from "react-toastify";
 
+const toastSuccess = (msg)=>{
+    toast.success(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });    
+}
 
+const toastError = (msg) =>{
+    toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+}
 
 export const bookingsSlice = createSlice({
     name: "bookings",
@@ -10,15 +35,16 @@ export const bookingsSlice = createSlice({
         status: "idle",
         singleBookingData: {},
         singleBookingStatus: "idle",
-    },
-    
-
+ 
+    },    
+   
     extraReducers(builder){
         builder
-        .addCase(fetchBookings.rejected, (state, action) =>{
+        .addCase(fetchBookings.rejected, (state) =>{
             state.status = "rejected";
+            toastError("Error! Couldn't load bookings.");
         })
-        .addCase(fetchBookings.pending, (state, action) =>{
+        .addCase(fetchBookings.pending, (state) =>{
             state.status = "pending";
         })
         .addCase(fetchBookings.fulfilled, (state, action) =>{
@@ -28,38 +54,49 @@ export const bookingsSlice = createSlice({
         })
 
         .addCase(addBooking.fulfilled, (state, action) =>{
-            const lastId = parseInt(state.bookingListData[state.bookingListData.length  -1].id.slice(2));    
-            action.payload.id = "B-" + (lastId + 1).toString().padStart(4, "0");
+            toastSuccess('The booking has been saved!')
             state.bookingListData.push(action.payload)
             state.status = "fulfilled";
         })
-
-
+        .addCase(addBooking.pending, (state) =>{
+            state.status = "pending";
+        })
+        .addCase(addBooking.rejected, (state) =>{
+            state.status = "rejected";
+            toastError("Error! Couldn't create booking.")
+        })
 
         .addCase(deleteBooking.fulfilled, (state, action) =>{
-            state.bookingListData = state.bookingListData.filter(item => item.id !== action.payload);
+            toastSuccess('The booking has been deleted!')
+            state.bookingListData = state.bookingListData.filter(item => item.id !== action.payload.deletedBooking.id);
             state.status = "fulfilled";
+            
         })
-        .addCase(deleteBooking.pending, (state, action) =>{
+        .addCase(deleteBooking.pending, (state) =>{
             state.status = "pending";
+        })
+        .addCase(deleteBooking.rejected, (state) =>{
+            state.status = "rejected";
+            toastError("Error! Couldn't delete the booking.")
         })
 
 
         .addCase(getBooking.fulfilled, (state, action) =>{
-            if(typeof action.payload === "object"){
-                state.singleBookingData = action.payload
-            } else{
-                state.singleBookingData = state.bookingListData.find(booking => booking.id === action.payload)
-            }
+                state.singleBookingData = action.payload 
             state.singleBookingStatus = "fulfilled";
         })
 
-        .addCase(getBooking.pending, (state, action) =>{
+        .addCase(getBooking.pending, (state) =>{
             state.singleBookingStatus = "pending";
+        })
+        .addCase(getBooking.rejected, (state) =>{
+            state.singleBookingStatus = "rejected";
+            toastError("Error! Couldn't get the booking.")
         })
 
         .addCase(editBooking.fulfilled, (state,action) =>{
-            state.status = "fulfilled"
+            toastSuccess('Changes saved!')
+            state.singleBookingStatus = "fulfilled"
             for(let i = 0; i < state.bookingListData.length; i++) {
                 if (state.bookingListData[i].id === action.payload.id) {
                     state.bookingListData[i] = action.payload;
@@ -70,8 +107,12 @@ export const bookingsSlice = createSlice({
             
         })
 
-        .addCase(editBooking.pending, (state, action) =>{
-            state.status = "pending";
+        .addCase(editBooking.pending, (state) =>{
+            state.singleBookingStatus = "pending";
+        })
+        .addCase(editBooking.rejected, (state) =>{
+            state.singleBookingStatus = "rejected";
+            toastError("Error! Couldn't update the booking.")
         })
     },
 })
@@ -80,5 +121,7 @@ export const getBookingsStatus = (state) => state.bookings.status;
 export const getBookingsData = (state) => state.bookings.bookingListData;
 export const getSingleBooking = (state) => state.bookings.singleBookingData;
 export const getSingleBookingStatus = (state) => state.bookings.singleBookingStatus;
+
+
 
 export default bookingsSlice.reducer;

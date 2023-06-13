@@ -14,16 +14,21 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { Layout } from "./components/Layout";
 import { SingleRoom } from "./pages/Rooms/SingleRoom";
 import { UserContext } from "./components/UserContext";
+import { ToastContainer } from "react-toastify";
 
-const initialState = {
-  auth: false,
-  user: {},
-};
+
+
+
+const initialState = localStorage.getItem("login") ? 
+   {auth: true , user:JSON.parse(localStorage.getItem("login")).id} :
+   {auth: false, user: {}};
+
+
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "LogIn":
-      return { ...state, auth: true, user: action.payload };
+      return  { ...state, auth: true, user: action.payload };
     case "LogOut":
       return { ...state, auth: false, user: {} };
     default:
@@ -31,9 +36,9 @@ const reducer = (state, action) => {
   }
 };
 
+
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   return (
     <>
       <UserContext.Provider value={{ state, dispatch }}>
@@ -61,8 +66,21 @@ function App() {
               <Route path="/users/:id" element={<SingleUser />} />
               <Route path="*" element={<ErrorPage />} />
             </Route>
+            
           </Routes>
         </BrowserRouter>
+        <ToastContainer
+position="top-center"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
       </UserContext.Provider>
     </>
   );

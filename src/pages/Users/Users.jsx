@@ -55,7 +55,7 @@ export const Users = (props) => {
   const options = ["Date", "Name"];
 
   useEffect(() => {
-    if (usersStatus === "idle") {
+    if (usersStatus === "idle" || usersData.length ===0) {
       dispatch(fetchUsers());
     }
     setTableData(usersData);
@@ -122,8 +122,9 @@ export const Users = (props) => {
       setOrderValue("Date")
       setTableData(
         [...tableData].sort((a, b) => {
-          if (a.startDate < b.startDate) return -1;
-          if (a.startDate > b.startDate) return 1;
+          console.log(new Date(a.startDate).getTime())
+          if (new Date(a.startDate).getTime() < new Date(b.startDate).getTime()) return -1;
+          if (new Date(a.startDate).getTime() > new Date(b.startDate).getTime()) return 1;
           return 0;
         })
       );
@@ -224,12 +225,12 @@ export const Users = (props) => {
                   </StyledLink>
                 </TableItem>
                 <TableItem>
-                  <VscTrash
+                {element.email === "admin@admin.com" ? "": <VscTrash
                     onClick={() => {
                       setShowDeleteModal(true);
                       setTargetId(element.id);
                     }}
-                  />
+                />}
                 </TableItem>
               </TableRow>
             ))}
