@@ -1,32 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchRooms, addRoom, deleteRoom, getRoom, editRoom } from "./roomsThunks";
-import { toast } from "react-toastify";
+import { toastError, toastSuccess } from "../toastify";
 
-const toastSuccess =(msg)=>{
-    toast.success(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });    
-}
-
-const toastError = (msg) =>{
-    toast.error(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });
-}
 
 
 export const roomSlice = createSlice({
@@ -45,6 +20,7 @@ export const roomSlice = createSlice({
         .addCase(fetchRooms.rejected, (state, action) =>{
             state.status = "rejected";
             toastError("Error! Couldn't load rooms.")
+            
         })
         .addCase(fetchRooms.pending, (state, action) =>{
             state.status = "pending";
@@ -91,7 +67,7 @@ export const roomSlice = createSlice({
             state.singleRoomStatus = "pending";
         })
         .addCase(getRoom.rejected, (state) =>{
-            state.singleRoomStatus.status = "rejected";
+            state.singleRoomStatus = "rejected";
             toastError("Error! Couldn't get the room.")
         })
 

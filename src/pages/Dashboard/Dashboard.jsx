@@ -7,78 +7,89 @@ import {
 import { CalendarRow, KPI, KpiIcon, KpiRow, KpiText } from "./DashboardStyled";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getContactsData, getContactsStatus } from "../../features/contacts/contactsSlice";
+import {
+  getContactsData,
+  getContactsStatus,
+} from "../../features/contacts/contactsSlice";
 import { fetchContacts } from "../../features/contacts/contactThunks";
-import { Wrapper } from "../../components/LayoutStyled";
+import { Wrapper } from "../../components/Layout/LayoutStyled";
 import { HashLoader } from "react-spinners";
-import { LastReviews } from "../../components/LastReviews";
-import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
+import { LastReviews } from "../../components/LastReviews/LastReviews";
+import {
+  getBookingsData,
+  getBookingsStatus,
+} from "../../features/bookings/bookingsSlice";
 import { fetchBookings } from "../../features/bookings/bookingThunks";
-import { LastBookings } from "../../components/LastBookings";
-import { BookingChart } from "../../components/BookingChart";
-import { Calendar } from "../../components/Calendar";
-
-
+import { LastBookings } from "../../components/LastBookings/LastBookings";
+import { BookingChart } from "../../components/BookingChart/BookingChart";
+import { Calendar } from "../../components/Calendar/Calendar";
+import { ErrorPage } from "../ErrorPage/ErrorPage";
 
 export const Dashboard = (props) => {
   const dispatch = useDispatch("");
   const [recentContacts, setRecentContacts] = useState();
   const contactsStatus = useSelector(getContactsStatus);
   const contactsData = useSelector(getContactsData);
-  const bookingsStatus = useSelector(getBookingsStatus)
+  const bookingsStatus = useSelector(getBookingsStatus);
   const bookingsData = useSelector(getBookingsData);
   const [recentBooking, setRecentBookings] = useState();
 
   useEffect(() => {
-    if(contactsStatus === "idle"){
+    if (contactsStatus === "idle") {
       dispatch(fetchContacts());
     }
-    if(contactsData.length > 0){
-      setRecentContacts([...contactsData].sort((a, b) => {
-        const currentDate = new Date();
-        const startDateA = new Date(a.startDate);
-        const startDateB = new Date(b.startDate);
-    
-       const differenceA = Math.abs(startDateA - currentDate);
-        const differenceB = Math.abs(startDateB - currentDate);
+    if (contactsData.length > 0) {
+      setRecentContacts(
+        [...contactsData]
+          .sort((a, b) => {
+            const currentDate = new Date();
+            const startDateA = new Date(a.startDate);
+            const startDateB = new Date(b.startDate);
 
-    if (differenceA < differenceB) return -1;
-    if (differenceA > differenceB) return 1;
-    return 0;
-      }).slice(0, 6))
+            const differenceA = Math.abs(startDateA - currentDate);
+            const differenceB = Math.abs(startDateB - currentDate);
+
+            if (differenceA < differenceB) return -1;
+            if (differenceA > differenceB) return 1;
+            return 0;
+          })
+          .slice(0, 6)
+      );
     }
-  }, [contactsData, contactsStatus, dispatch])
+  }, [contactsData, contactsStatus, dispatch]);
 
   useEffect(() => {
-    if(bookingsStatus === "idle" && contactsStatus==="fulfilled"){
+    if (bookingsStatus === "idle" && contactsStatus === "fulfilled") {
       dispatch(fetchBookings());
     }
-    if(bookingsData.length > 0){
-      setRecentBookings([...bookingsData].sort((a, b) => {
-        const currentDate = new Date();
-        const startDateA = new Date(a.checkIn);
-        const startDateB = new Date(b.checkIn);
-    
-       const differenceA = Math.abs(startDateA - currentDate);
-        const differenceB = Math.abs(startDateB - currentDate);
+    if (bookingsData.length > 0) {
+      setRecentBookings(
+        [...bookingsData]
+          .sort((a, b) => {
+            const currentDate = new Date();
+            const startDateA = new Date(a.checkIn);
+            const startDateB = new Date(b.checkIn);
 
-    if (differenceA < differenceB) return -1;
-    if (differenceA > differenceB) return 1;
-    return 0;
-      }).slice(0, 5))
+            const differenceA = Math.abs(startDateA - currentDate);
+            const differenceB = Math.abs(startDateB - currentDate);
+
+            if (differenceA < differenceB) return -1;
+            if (differenceA > differenceB) return 1;
+            return 0;
+          })
+          .slice(0, 5)
+      );
     }
-  }, [bookingsData, bookingsStatus, dispatch, contactsStatus])
+  }, [bookingsData, bookingsStatus, dispatch, contactsStatus]);
 
- 
-  if (contactsStatus === "pending" || contactsStatus === "idle" || !recentContacts || !recentBooking || bookingsStatus ==="pending" || bookingsStatus==="idle" || bookingsData.length <= 0) {
+
+  if(bookingsStatus === "rejected" || contactsStatus === "rejected"){
     return (
       <>
-        <Wrapper>
-          <HashLoader color="#799283" size={100} />
-        </Wrapper>
+        <ErrorPage />
       </>
-    )
-  } else {
+    );
+  } else if(bookingsStatus==="fulfilled" && contactsStatus ==="fulfilled" && recentBooking && recentContacts){
     return (
       <>
         <KpiRow data-testid="dashboard__kpi">
@@ -119,15 +130,22 @@ export const Dashboard = (props) => {
             </KpiText>
           </KPI>
         </KpiRow>
-        
-        <LastReviews data={recentContacts}/>
+
+        <LastReviews data={recentContacts} />
         <CalendarRow>
-          <Calendar data={bookingsData}/>
-          <BookingChart/>
+          <Calendar data={bookingsData} />
+          <BookingChart />
         </CalendarRow>
-        <LastBookings data={recentBooking}/>
+        <LastBookings data={recentBooking} />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Wrapper>
+          <HashLoader color="#799283" size={100} />
+        </Wrapper>
       </>
     );
   }
-
 };

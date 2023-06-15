@@ -34,7 +34,6 @@ export const Calendar = (props)=>{
           eventClick={info => {
             navigate(`/bookings/${info.event.title}`);
           }}
-          
         />
         
       </BookingCalendar>

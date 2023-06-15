@@ -12,8 +12,8 @@ import {
   CardHeader,
   CloseIcon,
   CardImageText,
-} from "../../components/CardStyled";
-import { MySlider } from "../../components/Slider";
+} from "../../components/Card/CardStyled";
+import { MySlider } from "../../components/Slider/Slider";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,19 +25,19 @@ import { editRoom, getRoom } from "../../features/rooms/roomsThunks";
 import { HashLoader } from "react-spinners";
 import {
   offerChecker,
-  offerPriceCalc,
-  roomInfoChooser,
+  offerPriceCalc
 } from "../../features/otherFunctions";
-import { Wrapper } from "../../components/LayoutStyled";
+import { Wrapper } from "../../components/Layout/LayoutStyled";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
 import {
   Input,
   InputBig,
   Label,
   RadioInput,
-} from "../../components/FormStyled";
-import { Button } from "../../components/Button";
-import { toast } from "react-toastify";
+} from "../../components/Form/FormStyled";
+import { Button } from "../../components/Button/Button";
+import { toastWarning } from "../../features/toastify";
+
 
 export const SingleRoom = (props) => {
   const roomId = useParams();
@@ -45,17 +45,6 @@ export const SingleRoom = (props) => {
   const navigate = useNavigate();
   const singleRoomData = useSelector(getSingleRoom);
   const singleRoomStatus = useSelector(getSingleRoomStatus);
-
-  const fieldError = (msg) => {toast.warn(msg, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-    })};
 
   const [roomType, setRoomType] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
@@ -67,10 +56,8 @@ export const SingleRoom = (props) => {
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    if (singleRoomStatus === "idle" || singleRoomData) {
-      if (roomId.id !== singleRoomData.id) {
+    if (singleRoomStatus === "idle" || (singleRoomStatus==="fulfilled" && roomId.id !== singleRoomData.id)) {
         dispatch(getRoom(roomId.id));
-      }
     }
     setRoomType(singleRoomData.roomType);
     setRoomNumber(singleRoomData.roomNumber);
@@ -89,11 +76,13 @@ export const SingleRoom = (props) => {
       status === "" ||
       description === ""
     ) {
-      fieldError("Error! You have to enter all inputs.")
-    } else {
+      toastWarning("Error! You have to enter all inputs.")
+    } else 
       if (discount === "") {
         setDiscount(0);
-      }
+      } else if (discount >= 100) {
+        toastWarning("Discount must be smaller than 100!");
+      } else {
       const room = {
         id: singleRoomData.id,
         roomType: roomType,
@@ -101,26 +90,26 @@ export const SingleRoom = (props) => {
         price: price,
         discount: discount,
         status: status,
-        amenities: roomInfoChooser(roomType).amenities,
-        cancellation: roomInfoChooser(roomType).cancelattion,
-        thumbnail: roomInfoChooser(roomType).thumbnail,
-        description: description,
-        images: roomInfoChooser(roomType).images
+        description: description
       };
-      
+      console.log(room)
       dispatch(editRoom(room));
-      dispatch(getRoom(room.id));
       setEdit(false);
+      dispatch(getRoom(room.id));
     }
   };
 
-  if (singleRoomStatus === "pending" || singleRoomStatus === "idle") {
-    return (
-      <Wrapper>
-        <HashLoader color="#799283" size={100} />
-      </Wrapper>
-    );
-  } else if (singleRoomData) {
+
+
+
+if(singleRoomStatus === "rejected"){
+  return (
+    <>
+      <Navigate to="/error"/>
+    </>
+  );
+} else {
+ if (singleRoomStatus==="fulfilled" && singleRoomData.id === roomId.id) {
     if (edit !== true) {
       return (
         <>
@@ -340,11 +329,12 @@ export const SingleRoom = (props) => {
         </>
       );
     }
-  } else {
+} else{
     return (
-      <>
-        <Navigate to="/error" />
-      </>
+      <Wrapper>
+        <HashLoader color="#799283" size={100} />
+      </Wrapper>
     );
-  }
+} 
+}
 };

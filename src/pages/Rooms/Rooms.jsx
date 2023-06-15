@@ -3,14 +3,14 @@ import { getRoomsData, getRoomsStatus } from "../../features/rooms/roomsSlice";
 import { useEffect } from "react";
 import { fetchRooms } from "../../features/rooms/roomsThunks";
 import { HashLoader } from "react-spinners";
-import { Wrapper } from "../../components/LayoutStyled";
-import { AiOutlineInfoCircle} from "react-icons/ai";
+import { Wrapper } from "../../components/Layout/LayoutStyled";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { VscTrash } from "react-icons/vsc";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
-import { Modal } from "../../components/Modal";
+import { Modal } from "../../components/Modal/Modal";
 import { useState } from "react";
 import {
   ImageItem,
@@ -21,14 +21,15 @@ import {
   TableItem,
   TableRow,
   TableTitle,
-} from "../../components/TableStyled";
-import { Button, StatusButton } from "../../components/Button";
+} from "../../components/Table/TableStyled";
+import { Button, StatusButton } from "../../components/Button/Button";
 import { offerPriceCalc } from "../../features/otherFunctions";
 import {
   CustomDropdown,
   RightActions,
   TableActions,
-} from "../../components/TableStyled";
+} from "../../components/Table/TableStyled";
+import { ErrorPage } from "../ErrorPage/ErrorPage";
 
 export const Rooms = (props) => {
   const dispatch = useDispatch();
@@ -53,18 +54,18 @@ export const Rooms = (props) => {
   const options = ["Room Number", "State", "Lowest Price", "Highest Price"];
 
   useEffect(() => {
-    if (roomsStatus === "idle"|| roomsData.length ===0) {
+    if (roomsStatus === "idle") {
       dispatch(fetchRooms());
     }
     setTableData(roomsData);
-  }, [dispatch, roomsStatus, roomsData]);
+  }, [dispatch, roomsStatus, roomsData , tableData.length]);
 
   const onChangeHandler = (e) => {
     if (e.value === "Room Number") {
       setTableData(
         [...tableData].sort((a, b) => {
-          if (a.roomNumber < b.roomNumber) return -1;
-          if (a.roomNumber > b.roomNumber) return 1;
+          if (Number(a.roomNumber) < Number(b.roomNumber)) return -1;
+          if (Number(a.roomNumber) > Number(b.roomNumber)) return 1;
           return 0;
         })
       );
@@ -98,17 +99,15 @@ export const Rooms = (props) => {
         })
       );
     }
-  };
+  }; 
 
-  if (roomsStatus=== "idle" || roomsStatus=== "pending") {
+
+  if(roomsStatus === "rejected"){
     return (
-      <>
-        <Wrapper>
-          <HashLoader color="#799283" size={100} />
-        </Wrapper>
-      </>
+        <ErrorPage/>
     );
-  } else if (roomsStatus=== "fulfilled") {
+  } else {
+   if (roomsStatus === "fulfilled" && tableData) {
     return (
       <>
         <TableActions>
@@ -117,9 +116,10 @@ export const Rooms = (props) => {
             <Button
               onClick={() => {
                 setShowCreateModal(true);
-                console.log(showCreateModal)
               }}
-            >+ New </Button>
+            >
+              + New{" "}
+            </Button>
             <CustomDropdown
               arrowOpen={<MdOutlineKeyboardArrowUp />}
               arrowClosed={<MdOutlineKeyboardArrowDown />}
@@ -143,10 +143,7 @@ export const Rooms = (props) => {
               <TableRow key={element.id}>
                 <TableItem>
                   <ImageItem>
-                    <RoomImageItem
-                      src={element.thumbnail}
-                      alt="room"
-                    />
+                    <RoomImageItem src={element.thumbnail} alt="room" />
                     <div>
                       {element.roomType + "-" + element.roomNumber}
                       <p>{element.id}</p>
@@ -200,5 +197,14 @@ export const Rooms = (props) => {
         />
       </>
     );
+  } else {
+    return (
+      <>
+        <Wrapper>
+          <HashLoader color="#799283" size={100} />
+        </Wrapper>
+      </>
+    );
   }
+}
 };

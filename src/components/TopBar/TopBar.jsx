@@ -2,7 +2,7 @@ import { BsArrowBarLeft, BsArrowBarRight } from "react-icons/bs";
 import { HiOutlineLogout, HiOutlineBell, HiOutlineMail } from "react-icons/hi";
 import { Nav, NavItemContainer } from "./TopBarStyled";
 import { useContext } from "react";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../UserContext";
 
 export const TopBar = (props) => {
   const { dispatch } = useContext(UserContext);

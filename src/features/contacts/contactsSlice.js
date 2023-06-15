@@ -1,33 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchContacts, archiveContacts } from "./contactThunks";
-import { toast } from "react-toastify";
+import { toastError, toastSuccess } from "../toastify";
 
-
-const toastSuccess = (msg)=>{
-    toast.success(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });    
-}
-
-const toastError = (msg) =>{
-    toast.error(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });
-}
 
 export const contactsSlice = createSlice({
     name: "contacts",
@@ -64,7 +38,7 @@ export const contactsSlice = createSlice({
         })
         .addCase(archiveContacts.fulfilled, (state, action) =>{
             toastSuccess('Changes saved!');
-            state.status = "fullfilled";
+            state.status = "fulfilled";
             for(let i = 0; i < state.data.length; i++) {
                 if (state.data[i].id === action.payload.id) {
                     if(state.data[i].archived === true){

@@ -1,13 +1,13 @@
 import { AiOutlineInfoCircle } from "react-icons/ai"
-import { StatusButton } from "./Button"
+import { StatusButton } from "../Button/Button"
 import { LastBookingsTable, ViewMore, ViewMoreButton } from "./LastBookingsStyled"
-import { RoomImageItem, StyledLink, TableItem, TableRow } from "./TableStyled"
-import { bookedStatusCalc } from "../features/otherFunctions"
+import { RoomImageItem, StyledLink, TableItem, TableRow } from "../Table/TableStyled"
+import { bookedStatusCalc } from "../../features/otherFunctions"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getRoomsData, getRoomsStatus } from "../features/rooms/roomsSlice"
-import { fetchRooms } from "../features/rooms/roomsThunks"
+import { getRoomsData, getRoomsStatus } from "../../features/rooms/roomsSlice"
+import { fetchRooms } from "../../features/rooms/roomsThunks"
 
 
 export const LastBookings = (props) => {

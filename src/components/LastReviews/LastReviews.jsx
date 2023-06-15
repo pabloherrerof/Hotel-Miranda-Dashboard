@@ -6,11 +6,11 @@ import {
   ReviewInfo,
   ReviewSlider,
 } from "./LastReviewsStyled";
-import { dateConverter, maxCharString } from "../features/otherFunctions";
-import { ArchiveButton } from "./Button";
-import { archiveContacts } from "../features/contacts/contactThunks";
+import { dateConverter, maxCharString } from "../../features/otherFunctions";
+import { ArchiveButton } from "../Button/Button";
+import { archiveContacts } from "../../features/contacts/contactThunks";
 import { useDispatch } from "react-redux";
-import { Modal } from "./Modal";
+import { Modal } from "../Modal/Modal";
 import { useState } from "react";
 
 export const LastReviews = (props) => {

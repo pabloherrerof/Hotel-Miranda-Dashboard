@@ -1,4 +1,4 @@
-import logo from "../assets/logo-hotel.svg";
+import logo from "../../assets/logo-hotel.svg";
 import {
   TbLayoutDashboard,
   TbKey,
@@ -16,13 +16,31 @@ import {
   User,
   WrapperSideBar,
 } from "./SideBarStyled";
+import { useContext, useEffect } from "react";
+import { UserContext } from "../UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getLoggedUserData, getLoggedUserStatus } from "../../features/users/usersSlice";
+import { getLoggedUser } from "../../features/users/usersThunks";
+
 
 
 export const SideBar = (props) => {
   const navigate = useNavigate();
+  const { state } = useContext(UserContext);
+  const loggedUserStatus = useSelector(getLoggedUserStatus);
+  const loggedUserData = useSelector(getLoggedUserData)
+  const dispatch = useDispatch();
+ 
+
+  useEffect(()=> {
+    if (loggedUserStatus === "idle") {
+        dispatch(getLoggedUser(state.user));
+    }
+  },[loggedUserStatus, dispatch, state.user])
 
   const clickHandler = () => {
-    navigate(`/users/${"U-0001"}`);
+    console.log(state.user)
+    navigate(`/users/${state.user}`);
   };
 
   return (
@@ -63,11 +81,11 @@ export const SideBar = (props) => {
           </li>
         </LinkContainer>
         <User>
-        <SideBarUserImage src={props.user.photo}>
+        <SideBarUserImage src={loggedUserData.photo}>
            
         </SideBarUserImage>
-          <h5>{props.user.name}</h5>
-          <p>{props.user.email}</p>
+          <h5>{loggedUserData.name}</h5>
+          <p>{loggedUserData.email}</p>
           <button onClick={() => clickHandler()}>View User</button>
         </User>
         

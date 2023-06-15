@@ -10,32 +10,28 @@ import "./App.css";
 import { Login } from "./pages/Login/Login";
 import { SingleBooking } from "./pages/Booking/SingleBooking";
 import { ErrorPage } from "./pages/ErrorPage/ErrorPage";
-import { PrivateRoute } from "./components/PrivateRoute";
-import { Layout } from "./components/Layout";
+import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute";
+import { Layout } from "./components/Layout/Layout";
 import { SingleRoom } from "./pages/Rooms/SingleRoom";
 import { UserContext } from "./components/UserContext";
 import { ToastContainer } from "react-toastify";
 
+export const loginLocalValue = localStorage.getItem("login");
 
-
-
-const initialState = localStorage.getItem("login") ? 
-   {auth: true , user:JSON.parse(localStorage.getItem("login")).id} :
-   {auth: false, user: {}};
-
-
+const initialState = loginLocalValue
+  ? { auth: true, user: JSON.parse(loginLocalValue).id }
+  : { auth: false, user: {} };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "LogIn":
-      return  { ...state, auth: true, user: action.payload };
+      return { ...state, auth: true, user: action.payload };
     case "LogOut":
       return { ...state, auth: false, user: {} };
     default:
       return state;
   }
 };
-
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -56,31 +52,30 @@ function App() {
                 </PrivateRoute>
               }
             >
-              <Route  path="/" element={<Dashboard />} />
-              <Route  path="/bookings" element={<Bookings />} />
-              <Route  path="/bookings/:id" element={<SingleBooking />} />
-              <Route  path="/rooms" element={<Rooms />} />
-              <Route  path="/rooms/:id" element={<SingleRoom />} />
-              <Route  path="/contact" element={<Contact />} />
-              <Route  path="/users" element={<Users />} />{" "}
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/bookings" element={<Bookings />} />
+              <Route path="/bookings/:id" element={<SingleBooking />} />
+              <Route path="/rooms" element={<Rooms />} />
+              <Route path="/rooms/:id" element={<SingleRoom />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/users" element={<Users />} />{" "}
               <Route path="/users/:id" element={<SingleUser />} />
-              <Route path="*" element={<ErrorPage />} />
+              <Route path="*" element={<ErrorPage error/>} />
             </Route>
-            
           </Routes>
         </BrowserRouter>
         <ToastContainer
-position="top-center"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-/>
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </UserContext.Provider>
     </>
   );

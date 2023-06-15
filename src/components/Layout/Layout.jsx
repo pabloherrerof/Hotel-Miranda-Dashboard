@@ -1,12 +1,8 @@
 import { Outlet, useLocation, useMatch } from "react-router-dom";
-import { TopBar } from "./TopBar";
-import { useContext, useEffect, useState } from "react";
-import { SideBar } from "./SideBar";
+import { TopBar } from "../TopBar/TopBar";
+import { useState } from "react";
+import { SideBar } from "../SideBar/SideBar";
 import { Container, Content, LeftMenu, RightSection } from "./LayoutStyled";
-import { useDispatch, useSelector } from "react-redux";
-import { getLoggedUserData, getLoggedUserStatus } from "../features/users/usersSlice";
-import { UserContext } from "./UserContext";
-import { getLoggedUser } from "../features/users/usersThunks";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Layout = (props) => {
@@ -14,19 +10,9 @@ export const Layout = (props) => {
   let roomMatch = useMatch("/rooms/:id");
   let bookingMatch = useMatch("/booking/:bookingId");
   let userMatch = useMatch("/user/:id");
-  const dispatch = useDispatch();
-  const getUserData = useSelector(getLoggedUserData);
-  const getUserStatus = useSelector(getLoggedUserStatus);
-  const { state } = useContext(UserContext);
 
   let title = "";
   const [open, setOpen] = useState(false);
-
-  useEffect(()=> {
-    if (getUserStatus === "idle") {
-        dispatch(getLoggedUser(state.user));
-    }
-  },[getUserStatus, dispatch, state.user])
 
   const titleChooser = () => {
     if (location.pathname === "/") {
@@ -50,20 +36,16 @@ export const Layout = (props) => {
     } else if (roomMatch != null && location.pathname === roomMatch.pathname) {
       title = "Room detail";
     }
-
     return title;
   };
 
-  
-  if (getUserData) {
   return (
     <>
       <Container>
         <LeftMenu open={open}>
-          <SideBar user={getUserData}/>
+          <SideBar />
         </LeftMenu>
         <RightSection open={open}>
-       
           <TopBar
             page={titleChooser()}
             setAuth={props.setAuth}
@@ -74,9 +56,7 @@ export const Layout = (props) => {
             <Outlet></Outlet>
           </Content>
         </RightSection>
-      
       </Container>
-      
     </>
   );
-}};
+};

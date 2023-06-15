@@ -1,26 +1,14 @@
 import logo from "../../assets/logo-hotel.svg";
-import { Logo } from "../../components/SideBarStyled";
-import { EditButton } from "../../components/Button";
-import { useContext, useState } from "react";
+import { Logo } from "../../components/SideBar/SideBarStyled";
+import { EditButton } from "../../components/Button/Button";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../components/UserContext";
 import { Inputs, LogContainer, LogForm } from "./LoginStyled";
-import {fetchLoginApi } from "../../features/API";
-import { toast } from "react-toastify";
-
+import { fetchLoginApi } from "../../features/API";
+import {toastWarning} from "../../features/toastify"
 
 export const Login = (props) => {
-  const fieldError = (msg) => {
-    toast.warn(msg, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  };
+ 
   const [email, setEmail] = useState("admin@admin.com");
   const [password, setPassword] = useState("admin");
   const { dispatch } = useContext(UserContext);
@@ -28,14 +16,16 @@ export const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetchLoginApi({email: email, password: password})
-    console.log(await res)
+    const res = await fetchLoginApi({ email: email, password: password });
 
-    if (await res !== undefined) {    
-      localStorage.setItem("login", JSON.stringify({token: res.token, id: res.id}))
-      dispatch({ type: "LogIn", payload: await res.id});
+    if ((await res) !== undefined) {
+      localStorage.setItem(
+        "login",
+        JSON.stringify({ token: res.token, id: res.id })
+      );
+      dispatch({ type: "LogIn", payload: await res.id });
     } else {
-      fieldError("Invalid credentials!");
+      toastWarning("Invalid credentials!");
     }
   };
 
@@ -58,18 +48,22 @@ export const Login = (props) => {
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
-              type="text" data-testid="login__email__input"
+              type="text"
+              data-testid="login__email__input"
             />
             <label htmlFor="password">Pasword:</label>
             <input
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
-              type="password" data-testid="login__password__input"
+              type="password"
+              data-testid="login__password__input"
             />
           </Inputs>
 
-          <EditButton type="submit" data-testid="login__submit__button">Login</EditButton>
+          <EditButton type="submit" data-testid="login__submit__button">
+            Login
+          </EditButton>
         </LogForm>
       </LogContainer>
     </>

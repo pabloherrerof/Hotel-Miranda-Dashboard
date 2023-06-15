@@ -1,32 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addBooking, deleteBooking, editBooking, fetchBookings, getBooking } from "./bookingThunks";
-import { toast } from "react-toastify";
+import { toastError, toastSuccess } from "../toastify";
 
-const toastSuccess = (msg)=>{
-    toast.success(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });    
-}
 
-const toastError = (msg) =>{
-    toast.error(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });
-}
 
 export const bookingsSlice = createSlice({
     name: "bookings",

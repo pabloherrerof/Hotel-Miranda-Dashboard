@@ -1,11 +1,17 @@
 
 import fetch from "cross-fetch";
+import { loginLocalValue } from "../App";
+import { toastError } from "./toastify";
+import { useNavigate } from "react-router-dom";
 
 
 
 
 
-const globalRoute = "http://localhost:3001";
+
+const globalRoute = process.env.REACT_APP_API_URL;
+
+
 
 export const fetchApi = async (route, method, body) => {
   try {
@@ -25,7 +31,7 @@ export const fetchApi = async (route, method, body) => {
     }
     return await res.json();
   } catch (err) {
-    console.error(err);
+    console.log(err)
   }
 };
 
@@ -40,13 +46,15 @@ export const fetchLoginApi = async (body) => {
       },
       body: JSON.stringify(body),
     });
+
     if (res.status >= 400) {
       throw new Error("Bad response from server");
     } else {
-      
+     
       return await res.json();
     }
   } catch (err) {
-    console.error(err);
+    console.log(err)
+      toastError("Server error! Try again later")
   }
 };

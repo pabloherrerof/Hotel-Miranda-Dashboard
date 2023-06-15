@@ -1,32 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addUser, deleteUser, editUser, fetchUsers, getUser, getLoggedUser } from "./usersThunks";
-import { toast } from "react-toastify";
+import { toastError, toastSuccess } from "../toastify";
 
-const toastSuccess = (msg)=>{
-    toast.success(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });    
-}
 
-const toastError = (msg) =>{
-    toast.error(msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });
-}
+
 
 export const usersSlice = createSlice({
     name: "users",
@@ -69,7 +46,7 @@ export const usersSlice = createSlice({
 
         .addCase(deleteUser.fulfilled, (state, action) =>{
             state.usersListData = state.usersListData.filter(item => item.id !== action.payload.deletedUser.id);
-            state.status = "fullfilled";
+            state.status = "fulfilled";
             toastSuccess('The user has been deleted!')
         })
 
@@ -85,7 +62,7 @@ export const usersSlice = createSlice({
 
         .addCase(getUser.fulfilled, (state, action) =>{
             state.singleUser = action.payload    
-            state.singleUserStatus = "fullfilled";
+            state.singleUserStatus = "fulfilled";
 
         })
 
@@ -99,13 +76,16 @@ export const usersSlice = createSlice({
 
         .addCase(getLoggedUser.fulfilled, (state, action) =>{
         state.loggedUser = action.payload
-            state.loggedUserStatus = "fullfilled";
+            state.loggedUserStatus = "fulfilled";
         })
 
         .addCase(getLoggedUser.pending, (state, ) =>{
             state.loggedUserStatus = "pending";
         })
         
+        .addCase(getLoggedUser.rejected, (state, ) =>{
+            state.loggedUserStatus = "rejected";
+        })
 
         .addCase(editUser.fulfilled, (state,action) =>{
             toastSuccess('Changes saved!')

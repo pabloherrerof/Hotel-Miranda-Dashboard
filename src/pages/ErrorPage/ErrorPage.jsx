@@ -1,20 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import { ErrorWrapper } from "./ErrorPageStyled";
 
-export const ErrorPage = () => {
+export const ErrorPage = (props) => {
   const navigate = useNavigate();
 
   const onClickHandler = () => {
-    navigate("/");
+    window.location.reload()
   };
 
-  return (
-    <>
-      <ErrorWrapper>
-        <i className="errorSearchIcon fa-solid fa-x fa-beat fa-2xl"></i>{" "}
-        <h1>The page you’re looking for can’t be found.</h1>
-        <button onClick={onClickHandler}>RETURN TO HOME</button>
-      </ErrorWrapper>
-    </>
-  );
-};
+if(props.error){
+    return (
+      <>
+        <ErrorWrapper>
+          <i className="errorSearchIcon fa-solid fa-x fa-beat fa-2xl"></i>{" "}
+          <h1>The page you’re looking for can’t be found.</h1>
+          <button onClick={()=>{navigate("/")}}>RETURN TO HOME</button>
+        </ErrorWrapper>
+      </>
+    );
+} else {
+    return (
+      <>
+        <ErrorWrapper>
+          <i className="errorSearchIcon fa-solid fa-x fa-beat fa-2xl"></i>{" "}
+          <h1>We encountered a network error.</h1>
+          <button onClick={onClickHandler}>Try again</button>
+        </ErrorWrapper>
+      </>
+    );
+  }
+}
+  
+

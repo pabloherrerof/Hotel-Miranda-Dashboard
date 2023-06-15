@@ -1,41 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
-import { ArchiveButton, Button } from "./Button";
+import { ArchiveButton, Button } from "../Button/Button";
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled";
 import { IoClose } from "react-icons/io5";
-import { addUser, deleteUser } from "../features/users/usersThunks";
-import { addBooking, deleteBooking } from "../features/bookings/bookingThunks";
-import { addRoom, deleteRoom } from "../features/rooms/roomsThunks";
+import { addUser, deleteUser } from "../../features/users/usersThunks";
+import { addBooking, deleteBooking } from "../../features/bookings/bookingThunks";
+import { addRoom, deleteRoom } from "../../features/rooms/roomsThunks";
 import {
   FormContainer,
   Input,
   InputBig,
   Label,
   RadioInput,
-} from "./FormStyled";
+} from "../Form/FormStyled";
 import {
-  bookingDatesValidator,
+  createBookingDatesValidator,
   dateConverter,
   getTodayString,
-} from "../features/otherFunctions";
+} from "../../features/otherFunctions";
 import { useState } from "react";
-import { ReviewComment, ReviewInfo } from "./LastReviewsStyled";
-import { toast } from "react-toastify";
-import { getRoomsData } from "../features/rooms/roomsSlice";
+import { ReviewComment, ReviewInfo } from "../LastReviews/LastReviewsStyled";
+import { getRoomsData } from "../../features/rooms/roomsSlice";
+import { toastWarning } from "../../features/toastify";
 
 export const Modal = (props) => {
   const dispatch = useDispatch();
-  const fieldError = (msg) => {
-    toast.warn(msg, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  };
 
   const roomsData = useSelector(getRoomsData);
   const [userName, setUserName] = useState("");
@@ -93,9 +81,9 @@ export const Modal = (props) => {
         userPhone === "" ||
         userPassword === ""
       ) {
-        fieldError("You have to enter all inputs.");
+        toastWarning("You have to enter all inputs.");
       } else if (/[a-zA-Z]/.test(userPhone)) {
-        fieldError("Error! Phone must be a valid phone number");
+        toastWarning("Error! Phone must be a valid phone number");
       } else {
         const user = {
           photo: userImage,
@@ -127,17 +115,18 @@ export const Modal = (props) => {
       }
     }
     if (props.page === "bookings") {
+
       if (
         guestName === "" ||
         checkIn === "" ||
         checkOut === "" ||
         bookingRoomId === ""
       ) {
-        fieldError("You have to enter all inputs.");
+        toastWarning("You have to enter all inputs.");
       } else if (!roomsData.find((room) => room.id === bookingRoomId)) {
-        fieldError("The room you've entered does not exists!");
-      } else if (!bookingDatesValidator(checkIn, checkOut)) {
-        fieldError("Invalid Dates!");
+        toastWarning("The room you've entered does not exists!");
+      } else if (!createBookingDatesValidator(checkIn, checkOut)) {
+        toastWarning("Invalid Dates!");
       } else {
         const booking = {
           name: guestName,
@@ -155,7 +144,6 @@ export const Modal = (props) => {
           specialRequest: specialRequest,
           room: bookingRoomId,
         };
-        console.log(booking);
         dispatch(addBooking(booking));
         props.setShowCreateModal(false);
         setGuestName("");
@@ -174,13 +162,13 @@ export const Modal = (props) => {
         roomStatus === "" ||
         description === ""
       ) {
-        fieldError("You have to enter all inputs.");
+        toastWarning("You have to enter all inputs.");
       } else {
         if (discount === "") {
           setDiscount(0);
         }
         if (discount > 100) {
-          fieldError("Discount must be smaller than 100!");
+          toastWarning("Discount must be smaller than 100!");
         } else {
           const room = {
             roomType: roomType,

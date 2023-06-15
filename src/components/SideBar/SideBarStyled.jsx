@@ -69,6 +69,7 @@ export const LinkContainer = styled.ul`
     flex-direction: row;
     align-items: center;
     gap: 1rem;
+    width: 100%;
   }
 `;
 

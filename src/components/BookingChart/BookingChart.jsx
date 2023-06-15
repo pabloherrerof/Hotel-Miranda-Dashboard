@@ -3,7 +3,7 @@
   import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { BookingChartContainer } from './BookingChartStyled';
 import { useSelector } from 'react-redux';
-import { getBookingsData} from '../features/bookings/bookingsSlice';
+import { getBookingsData} from '../../features/bookings/bookingsSlice';
   
   export const BookingChart = () => {
     const bookingsData = useSelector(getBookingsData);

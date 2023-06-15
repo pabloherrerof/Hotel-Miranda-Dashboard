@@ -7,8 +7,6 @@ export const fetchRooms = createAsyncThunk("rooms/fetchRooms", async () => {
 });
 
 export const addRoom = createAsyncThunk("rooms/addRoom", async (roomObject) => {
-
-    console.log(roomObject)
     const res=  await fetchApi(`api/rooms/`, "POST",  JSON.stringify(roomObject));
   return await res.data
 });

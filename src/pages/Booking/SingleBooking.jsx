@@ -12,8 +12,8 @@ import {
   CardImageText,
   CardHeader,
   CloseIcon,
-} from "../../components/CardStyled";
-import { MySlider } from "../../components/Slider";
+} from "../../components/Card/CardStyled";
+import { MySlider } from "../../components/Slider/Slider";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -24,23 +24,24 @@ import { useEffect, useState } from "react";
 import { editBooking, getBooking } from "../../features/bookings/bookingThunks";
 import {
   bookedStatusCalc,
-  bookingDatesValidator,
   dateConverter,
   dateToCalendar,
   totalPriceCalc,
+  updateBookingDatesValidator,
 } from "../../features/otherFunctions";
-import { Wrapper } from "../../components/LayoutStyled";
+import { Wrapper } from "../../components/Layout/LayoutStyled";
 import { HashLoader } from "react-spinners";
 import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
-import { Button } from "../../components/Button";
-import { Input, InputBig } from "../../components/FormStyled";
+import { Button } from "../../components/Button/Button";
+import { Input, InputBig } from "../../components/Form/FormStyled";
 import {
   getRoomsData,
+  getRoomsStatus,
   getSingleRoom,
   getSingleRoomStatus,
 } from "../../features/rooms/roomsSlice";
-import { getRoom } from "../../features/rooms/roomsThunks";
-import { toast } from "react-toastify";
+import { fetchRooms, getRoom } from "../../features/rooms/roomsThunks";
+import { toastWarning } from "../../features/toastify";
 
 export const SingleBooking = (props) => {
   const bookingId = useParams();
@@ -48,9 +49,11 @@ export const SingleBooking = (props) => {
   const navigate = useNavigate();
   const bookingData = useSelector(getSingleBooking);
   const singleBookingStatus = useSelector(getSingleBookingStatus);
+  const roomsStatus = useSelector(getRoomsStatus)
   const roomStatus = useSelector(getSingleRoomStatus);
   const roomData = useSelector(getSingleRoom);
   const roomsData = useSelector(getRoomsData);
+
 
   const [guestName, setGuestName] = useState("");
   const [orderDate, setOrderDate] = useState("");
@@ -58,27 +61,14 @@ export const SingleBooking = (props) => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
-
+  
   const [edit, setEdit] = useState(false);
 
-  const fieldError = (msg) => {
-    toast.warn(msg, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  };
 
   useEffect(() => {
-    if (singleBookingStatus === "idle" || bookingData) {
-      if (bookingId.id !== bookingData.id) {
+    if ((singleBookingStatus === "idle")|| (singleBookingStatus ==="fulfilled" && bookingId.id !== bookingData.id)) {
         dispatch(getBooking(bookingId.id));
-      }
+       
     }
     setGuestName(bookingData.name);
     setOrderDate(bookingData.orderDate);
@@ -88,11 +78,21 @@ export const SingleBooking = (props) => {
     setSpecialRequest(bookingData.specialRequest);
   }, [dispatch, singleBookingStatus, bookingId, bookingData]);
 
+ 
+
+  useEffect(() => {
+    if (singleBookingStatus === "fulfilled" && roomsStatus === "idle") {
+      dispatch(fetchRooms());
+    }
+  }, [dispatch, singleBookingStatus, roomsStatus]);
+
   useEffect(() => {
     if (singleBookingStatus === "fulfilled") {
       dispatch(getRoom(bookingData.room));
     }
   }, [bookingData, singleBookingStatus, dispatch]);
+
+  
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -103,11 +103,12 @@ export const SingleBooking = (props) => {
       orderDate === "" ||
       roomId === ""
     ) {
-      fieldError("You have to enter all inputs!");
-    } else if (!bookingDatesValidator(checkIn, checkOut)) {
-      fieldError("Invalid Dates!");
+      console.log(guestName)
+      toastWarning("You have to enter all inputs!");
+    } else if (!updateBookingDatesValidator(checkIn, checkOut)) {
+      toastWarning("Invalid Dates!");
     } else if (!roomsData.find((room) => room.id === roomId)) {
-      fieldError("The room you've entered does not exists!");
+      toastWarning("The room you've entered does not exists!");
     } else {
       const booking = {
         id: bookingData.id,
@@ -137,22 +138,25 @@ export const SingleBooking = (props) => {
     }
   };
 
-  if (
-    singleBookingStatus === "pending" ||
-    singleBookingStatus === "idle" ||
-    !roomData ||
-    roomStatus === "pending" ||
-    roomStatus === "idle" ||
-    bookingData.room !== roomData.id
-  ) {
-    return (
-      <Wrapper>
-        <HashLoader color="#799283" size={100} />
-      </Wrapper>
-    );
-  } else if (
-    singleBookingStatus === "fulfilled" &&
-    roomStatus === "fulfilled"
+ 
+
+
+
+
+
+
+
+
+if(singleBookingStatus === "rejected" || roomStatus === "rejected" || roomsStatus=== "rejected"){
+  return (
+    <>
+      <Navigate to="/error" />
+    </>
+  );
+} else {
+   if (
+    singleBookingStatus === "fulfilled" && roomsStatus === "fulfilled" &&
+    roomStatus === "fulfilled" && roomData &&  bookingData.room === roomData.id
   ) {
     if (edit !== true) {
       return (
@@ -267,7 +271,7 @@ export const SingleBooking = (props) => {
                     <input
                       type="text"
                       name="name"
-                      value={guestName}
+                      defaultValue={bookingData.name}
                       onInput={(e) => {
                         setGuestName(e.target.value);
                       }}
@@ -281,7 +285,7 @@ export const SingleBooking = (props) => {
                       <input
                         type="date"
                         name="checkIn"
-                        defaultValue={dateToCalendar(checkIn)}
+                        defaultValue={dateToCalendar(bookingData.checkIn)}
                         onInput={(e) => {
                           setCheckIn(e.target.value);
                         }}
@@ -294,7 +298,7 @@ export const SingleBooking = (props) => {
                       <input
                         type="date"
                         name="checkOut"
-                        defaultValue={dateToCalendar(checkOut)}
+                        defaultValue={dateToCalendar(bookingData.checkOut)}
                         onInput={(e) => {
                           setCheckOut(e.target.value);
                         }}
@@ -309,7 +313,7 @@ export const SingleBooking = (props) => {
                       <input
                         type="date"
                         name="orderDate"
-                        defaultValue={dateToCalendar(orderDate)}
+                        defaultValue={dateToCalendar(bookingData.orderDate)}
                         onInput={(e) => {
                           setOrderDate(e.target.value);
                         }}
@@ -322,7 +326,7 @@ export const SingleBooking = (props) => {
                       <input
                         type="text"
                         name="room"
-                        defaultValue={roomId}
+                        defaultValue={bookingData.room}
                         onInput={(e) => {
                           setRoomId(e.target.value);
                         }}
@@ -336,7 +340,7 @@ export const SingleBooking = (props) => {
                     <input
                       type="text"
                       name="specialRequest"
-                      defaultValue={specialRequest}
+                      defaultValue={bookingData.specialRequest}
                       onInput={(e) => {
                         setSpecialRequest(e.target.value);
                       }}
@@ -357,8 +361,11 @@ export const SingleBooking = (props) => {
   } else {
     return (
       <>
-        <Navigate to="/error" />
+        <Wrapper>
+          <HashLoader color="#799283" size={100} />
+        </Wrapper>
       </>
     );
   }
+}
 };
