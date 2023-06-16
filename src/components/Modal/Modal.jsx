@@ -130,6 +130,8 @@ export const Modal = (props) => {
         toastWarning("You have to enter all inputs.");
       } else if (!roomsData.find((room) => room.id === bookingRoomId)) {
         toastWarning("The room you've entered does not exists!");
+      } else if(bookingRoomId === "R-0000"){
+        toastWarning("The room you've entered does not exists!")
       } else if (!createBookingDatesValidator(checkIn, checkOut)) {
         toastWarning("Invalid Dates!");
        

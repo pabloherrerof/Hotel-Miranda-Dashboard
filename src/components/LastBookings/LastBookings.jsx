@@ -34,6 +34,7 @@ export const LastBookings = (props) => {
       <LastBookingsTable>
           <tbody>
           {props.data.map((booking) => {
+            const room = getRoomData.find((room) => room.id === booking.room)
               return (<TableRow key={booking.id}>
                 <TableItem>
                 
@@ -44,7 +45,7 @@ export const LastBookings = (props) => {
                          
                 </TableItem>
                 <TableItem>
-                {getRoomData.find((room) => room.id === booking.room).roomType + "-" + getRoomData.find((room) => room.id === booking.room).roomNumber}
+                {room.id === "R-0000" ? "DELETED ROOM" : room.roomType + "-" + room.roomNumber }
                             <p>{booking.name}</p>
                 </TableItem>
                 <TableItem>
