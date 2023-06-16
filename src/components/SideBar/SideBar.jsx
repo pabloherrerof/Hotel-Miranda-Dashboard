@@ -57,7 +57,7 @@ export const SideBar = (props) => {
         <LinkContainer>
           <li>
             
-            <MenuLink to={"/"}><TbLayoutDashboard />Dashboard</MenuLink>
+            <MenuLink  to={"/"}><TbLayoutDashboard />Dashboard</MenuLink>
           </li>
 
           <li>

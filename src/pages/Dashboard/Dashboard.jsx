@@ -24,6 +24,7 @@ import { LastBookings } from "../../components/LastBookings/LastBookings";
 import { BookingChart } from "../../components/BookingChart/BookingChart";
 import { Calendar } from "../../components/Calendar/Calendar";
 import { ErrorPage } from "../ErrorPage/ErrorPage";
+import { filterCheckInBookings, filterCheckOutBookings, filtrarArraySinRepetidos } from "../../features/otherFunctions";
 
 export const Dashboard = (props) => {
   const dispatch = useDispatch("");
@@ -98,7 +99,7 @@ export const Dashboard = (props) => {
               <MdOutlineKingBed />
             </KpiIcon>
             <KpiText>
-              <h2>8,454</h2>
+              <h2>{bookingsData.length}</h2>
               <h6>New Booking</h6>
             </KpiText>
           </KPI>
@@ -107,7 +108,7 @@ export const Dashboard = (props) => {
               <HiOutlineCalendarDays />
             </KpiIcon>
             <KpiText>
-              <h2>963</h2>
+              <h2>{filtrarArraySinRepetidos(bookingsData, "room").length}</h2>
               <h6>Scheduled Room</h6>
             </KpiText>
           </KPI>
@@ -116,7 +117,7 @@ export const Dashboard = (props) => {
               <HiOutlineArrowRightOnRectangle />
             </KpiIcon>
             <KpiText>
-              <h2>753</h2>
+              <h2>{filterCheckInBookings(bookingsData).length}</h2>
               <h6>Check In</h6>
             </KpiText>
           </KPI>
@@ -125,7 +126,8 @@ export const Dashboard = (props) => {
               <HiOutlineArrowLeftOnRectangle />
             </KpiIcon>
             <KpiText>
-              <h2>516</h2>
+              
+              <h2>{filterCheckOutBookings(bookingsData).length}</h2>
               <h6>Check Out</h6>
             </KpiText>
           </KPI>

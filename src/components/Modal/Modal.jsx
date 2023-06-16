@@ -3,7 +3,7 @@ import { ArchiveButton, Button } from "../Button/Button";
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled";
 import { IoClose } from "react-icons/io5";
 import { addUser, deleteUser } from "../../features/users/usersThunks";
-import { addBooking, deleteBooking } from "../../features/bookings/bookingThunks";
+import { addBooking, deleteBooking, fetchBookings } from "../../features/bookings/bookingThunks";
 import { addRoom, deleteRoom } from "../../features/rooms/roomsThunks";
 import {
   FormContainer,
@@ -21,10 +21,13 @@ import { useState } from "react";
 import { ReviewComment, ReviewInfo } from "../LastReviews/LastReviewsStyled";
 import { getRoomsData } from "../../features/rooms/roomsSlice";
 import { toastWarning } from "../../features/toastify";
+import { getBookingsData, resetBookingsState } from "../../features/bookings/bookingsSlice";
+import { roomAvailability } from "../../features/roomOccupancy";
+
 
 export const Modal = (props) => {
   const dispatch = useDispatch();
-
+  const bookingsData = useSelector(getBookingsData);
   const roomsData = useSelector(getRoomsData);
   const [userName, setUserName] = useState("");
   const [userPhone, setUserPhone] = useState("");
@@ -47,8 +50,9 @@ export const Modal = (props) => {
   const [roomNumber, setRoomNumber] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
-  const [roomStatus, setRoomStatus] = useState("");
   const [description, setDescription] = useState("");
+
+
 
   const onClickDeleteHandler = () => {
     if (props.page === "users") {
@@ -64,6 +68,7 @@ export const Modal = (props) => {
 
     if (props.page === "rooms") {
       dispatch(deleteRoom(props.itemId));
+      dispatch(resetBookingsState())
       props.setShowDeleteModal(false);
     }
   };
@@ -127,6 +132,9 @@ export const Modal = (props) => {
         toastWarning("The room you've entered does not exists!");
       } else if (!createBookingDatesValidator(checkIn, checkOut)) {
         toastWarning("Invalid Dates!");
+       
+      } else if(roomAvailability(bookingRoomId, bookingsData, checkIn, checkOut).length > 0){
+        toastWarning("Room occupied on these dates!");
       } else {
         const booking = {
           name: guestName,
@@ -159,7 +167,6 @@ export const Modal = (props) => {
         roomNumber === "" ||
         roomType === "" ||
         price === "" ||
-        roomStatus === "" ||
         description === ""
       ) {
         toastWarning("You have to enter all inputs.");
@@ -175,7 +182,6 @@ export const Modal = (props) => {
             roomNumber: roomNumber,
             price: price,
             discount: discount,
-            status: roomStatus,
             description: description,
           };
           dispatch(addRoom(room));
@@ -185,7 +191,6 @@ export const Modal = (props) => {
           setDiscount("");
           setPrice("");
           setDescription("");
-          setRoomStatus("");
           e.target.reset();
         }
       }
@@ -477,30 +482,6 @@ export const Modal = (props) => {
                   }}
                 />
               </Input>
-              <RadioInput>
-                <Label active htmlFor="state">
-                  <input
-                    type="radio"
-                    name="state"
-                    value="AVAILABLE"
-                    onChange={(e) => {
-                      setRoomStatus(e.target.value);
-                    }}
-                  />
-                  AVAILABLE
-                </Label>
-                <Label inactive htmlFor="state">
-                  <input
-                    type="radio"
-                    name="state"
-                    value="BOOKED"
-                    onChange={(e) => {
-                      setRoomStatus(e.target.value);
-                    }}
-                  />
-                  BOOKED
-                </Label>
-              </RadioInput>
               <InputBig>
                 <label htmlFor="description">Description</label>
                 <input

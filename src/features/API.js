@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const globalRoute = process.env.REACT_APP_API_URL;
+const globalRoute = "http://localhost:3001";
 
 
 

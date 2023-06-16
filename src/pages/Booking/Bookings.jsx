@@ -280,8 +280,8 @@ export const Bookings = (props) => {
               </TableTitle>
             </thead>
             <tbody>
-              {tableData.map((element) => {
-                const room = roomsData.find((room) => room.id === element.room);
+              {tableData.map((element, index) => {
+                const room = roomsData.find((room ) => room.id === element.room);
                 return (
                 <TableRow key={element.id}>
                   <TableItem>
@@ -311,7 +311,7 @@ export const Bookings = (props) => {
                     </NotesButton>
                   </TableItem>
                   <TableItem>
-                    {room.roomType} - {room.roomNumber}
+                    {room.id==="R-0000" ? "ROOM DELETED" : room.roomType +  "-" + room.roomNumber}
                     {}
                   </TableItem>
                   <TableItem>

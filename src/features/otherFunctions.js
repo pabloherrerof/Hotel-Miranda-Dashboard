@@ -94,3 +94,51 @@ export const updateBookingDatesValidator = (checkIn, checkOut)=> {
     return true
   } return false;
 }
+
+export function filtrarArraySinRepetidos(array, propiedad) {
+  const valoresUnicos = new Set();
+  return array.filter((elemento) => {
+    const valorPropiedad = elemento[propiedad];
+    if (!valoresUnicos.has(valorPropiedad)) {
+      valoresUnicos.add(valorPropiedad);
+      return true;
+    }
+    return false;
+  });
+}
+
+              
+export const filterCheckInBookings = (bookingsArray) => {
+  return bookingsArray.filter(booking => bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN")
+}
+
+export const filterCheckOutBookings = (bookingsArray) => {
+  return bookingsArray.filter(booking => bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK OUT")
+}
+
+const  availableRooms =(rooms, startDate, endDate) => {
+  try{
+    let totalRoomsAvailable= [];
+  if (startDate.getTime() >= endDate.getTime()) {
+    throw new Error("La fecha de fin introducida es anterior o igual a la fecha de inicio")
+  } else if (rooms.length === 0) {
+    throw new Error("No se han introducido habitaciones");
+  } else {
+    rooms.forEach((room) => {
+      
+      if (room.occupancyPercentage(startDate, endDate) === 0) {
+        totalRoomsAvailable.push(room);
+      }
+      if(room.occupancyPercentage(startDate, endDate) === -1){
+        throw new Error("La reserva introducida en la habitación no corresponde a esta habitación o no tiene reservas disponibles");
+      }
+    });
+
+    return totalRoomsAvailable;
+  }
+  } catch(e){
+    console.log(e.name + ": " + e.message);
+    return [];
+  }
+  
+}

@@ -13,6 +13,12 @@ export const bookingsSlice = createSlice({
         singleBookingStatus: "idle",
  
     },    
+    reducers: {
+        resetBookingsState(state){
+            state.bookingListData = [];
+            state.status = "idle"
+        }
+    },
    
     extraReducers(builder){
         builder
@@ -98,6 +104,5 @@ export const getBookingsData = (state) => state.bookings.bookingListData;
 export const getSingleBooking = (state) => state.bookings.singleBookingData;
 export const getSingleBookingStatus = (state) => state.bookings.singleBookingStatus;
 
-
-
+export const {resetBookingsState} = bookingsSlice.actions
 export default bookingsSlice.reducer;

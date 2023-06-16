@@ -30,11 +30,16 @@ import {
   TableActions,
 } from "../../components/Table/TableStyled";
 import { ErrorPage } from "../ErrorPage/ErrorPage";
+import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
+import { roomStatusCalc } from "../../features/roomOccupancy";
+import { fetchBookings } from "../../features/bookings/bookingThunks";
 
 export const Rooms = (props) => {
   const dispatch = useDispatch();
   const roomsStatus = useSelector(getRoomsStatus);
   const roomsData = useSelector(getRoomsData);
+  const bookingsData = useSelector(getBookingsData);
+  const bookingsStatus = useSelector(getBookingsStatus);
   const [targetId, setTargetId] = useState("");
   const [tableData, setTableData] = useState(roomsData);
 
@@ -59,6 +64,13 @@ export const Rooms = (props) => {
     }
     setTableData(roomsData);
   }, [dispatch, roomsStatus, roomsData , tableData.length]);
+
+  useEffect(() => {
+    if (bookingsStatus === "idle") {
+      dispatch(fetchBookings());
+    }
+  }, [dispatch, bookingsStatus, bookingsData]);
+  
 
   const onChangeHandler = (e) => {
     if (e.value === "Room Number") {
@@ -102,12 +114,12 @@ export const Rooms = (props) => {
   }; 
 
 
-  if(roomsStatus === "rejected"){
+  if(roomsStatus === "rejected" || bookingsStatus==="rejected"){
     return (
         <ErrorPage/>
     );
   } else {
-   if (roomsStatus === "fulfilled" && tableData) {
+   if (roomsStatus === "fulfilled" &&  bookingsStatus==="fulfilled" && bookingsData && tableData) {
     return (
       <>
         <TableActions>
@@ -139,7 +151,9 @@ export const Rooms = (props) => {
             </TableTitle>
           </thead>
           <tbody>
-            {tableData.map((element) => (
+            {tableData.map((element) => {if(element.id === "R-0000"){
+              return "";
+            }else return(
               <TableRow key={element.id}>
                 <TableItem>
                   <ImageItem>
@@ -151,7 +165,7 @@ export const Rooms = (props) => {
                   </ImageItem>
                 </TableItem>
                 <TableItem>
-                  <p>{element.amenities.join(", ")}</p>
+                  {<p>{element.amenities.join(", ")}</p> }
                 </TableItem>
                 <TableItem price discount={element.discount}>
                   {element.price + "$"} <p>{"/per night"}</p>
@@ -161,8 +175,8 @@ export const Rooms = (props) => {
                   <p>{element.discount > 0 ? "/per night" : ""}</p>
                 </TableItem>
                 <TableItem>
-                  <StatusButton status={element.status}>
-                    {element.status}
+                  <StatusButton status={roomStatusCalc(element.id, bookingsData)}>
+                    {roomStatusCalc(element.id, bookingsData)}
                   </StatusButton>
                 </TableItem>
                 <TableItem>
@@ -179,7 +193,7 @@ export const Rooms = (props) => {
                   />
                 </TableItem>
               </TableRow>
-            ))}
+            )})}
           </tbody>
         </TableContainer>
         <Modal

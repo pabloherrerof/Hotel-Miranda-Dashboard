@@ -17,11 +17,13 @@ import { MySlider } from "../../components/Slider/Slider";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getBookingsData,
+  getBookingsStatus,
   getSingleBooking,
   getSingleBookingStatus,
 } from "../../features/bookings/bookingsSlice";
 import { useEffect, useState } from "react";
-import { editBooking, getBooking } from "../../features/bookings/bookingThunks";
+import { editBooking, fetchBookings, getBooking } from "../../features/bookings/bookingThunks";
 import {
   bookedStatusCalc,
   dateConverter,
@@ -42,6 +44,7 @@ import {
 } from "../../features/rooms/roomsSlice";
 import { fetchRooms, getRoom } from "../../features/rooms/roomsThunks";
 import { toastWarning } from "../../features/toastify";
+import { roomAvailability } from "../../features/roomOccupancy";
 
 export const SingleBooking = (props) => {
   const bookingId = useParams();
@@ -53,6 +56,8 @@ export const SingleBooking = (props) => {
   const roomStatus = useSelector(getSingleRoomStatus);
   const roomData = useSelector(getSingleRoom);
   const roomsData = useSelector(getRoomsData);
+  const bookingsData = useSelector(getBookingsData)
+  const bookingsStatus = useSelector(getBookingsStatus)
 
 
   const [guestName, setGuestName] = useState("");
@@ -77,6 +82,12 @@ export const SingleBooking = (props) => {
     setCheckOut(bookingData.checkOut);
     setSpecialRequest(bookingData.specialRequest);
   }, [dispatch, singleBookingStatus, bookingId, bookingData]);
+
+  useEffect(() => {
+    if (bookingsStatus === "idle" && edit==="true") {
+      dispatch(fetchBookings());
+    }
+  }, [dispatch, bookingsStatus, bookingsData, edit]);
 
  
 
@@ -103,13 +114,14 @@ export const SingleBooking = (props) => {
       orderDate === "" ||
       roomId === ""
     ) {
-      console.log(guestName)
       toastWarning("You have to enter all inputs!");
     } else if (!updateBookingDatesValidator(checkIn, checkOut)) {
       toastWarning("Invalid Dates!");
     } else if (!roomsData.find((room) => room.id === roomId)) {
       toastWarning("The room you've entered does not exists!");
-    } else {
+    } else if(roomAvailability(roomId, bookingsData, checkIn, checkOut).length > 0){
+      toastWarning("Room occupied on these dates!");
+    }  else {
       const booking = {
         id: bookingData.id,
         name: guestName,
@@ -147,7 +159,7 @@ export const SingleBooking = (props) => {
 
 
 
-if(singleBookingStatus === "rejected" || roomStatus === "rejected" || roomsStatus=== "rejected"){
+if(singleBookingStatus === "rejected" || roomStatus === "rejected" || roomsStatus=== "rejected" || bookingsStatus==="rejected"){
   return (
     <>
       <Navigate to="/error" />
@@ -198,7 +210,7 @@ if(singleBookingStatus === "rejected" || roomStatus === "rejected" || roomsStatu
                 <CardItem>
                   <h6>Room info</h6>
                   <h4>
-                    {roomData.roomType}-{roomData.roomNumber}
+                  {roomData.id==="R-0000" ? "ROOM DELETED" : roomData.roomType + "-" + roomData.roomNumber}
                   </h4>
                 </CardItem>
                 <CardItem>
@@ -229,7 +241,7 @@ if(singleBookingStatus === "rejected" || roomStatus === "rejected" || roomsStatu
               </FeaturesRow>
             </Card>
             <CardImage>
-              <MySlider data={roomData.images} />
+              <MySlider data= {roomData.id==="R-0000" ? [roomData.thumbnail] : roomData.images} />
 
               <Booked
                 bookStatus={bookedStatusCalc(

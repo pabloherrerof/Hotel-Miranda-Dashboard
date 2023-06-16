@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchRooms, addRoom, deleteRoom, getRoom, editRoom } from "./roomsThunks";
 import { toastError, toastSuccess } from "../toastify";
+import { fetchBookings } from "../bookings/bookingThunks";
+import { useDispatch } from "react-redux";
 
 
 
@@ -27,7 +29,7 @@ export const roomSlice = createSlice({
         })
         .addCase(fetchRooms.fulfilled, (state, action) =>{
             state.status = "fulfilled";
-            state.roomsListData = action.payload;
+            state.roomsListData = action.payload
             
             
         })

@@ -37,6 +37,9 @@ import {
 } from "../../components/Form/FormStyled";
 import { Button } from "../../components/Button/Button";
 import { toastWarning } from "../../features/toastify";
+import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
+import { fetchBookings } from "../../features/bookings/bookingThunks";
+import { roomStatusCalc } from "../../features/roomOccupancy";
 
 
 export const SingleRoom = (props) => {
@@ -46,13 +49,15 @@ export const SingleRoom = (props) => {
   const singleRoomData = useSelector(getSingleRoom);
   const singleRoomStatus = useSelector(getSingleRoomStatus);
 
+
   const [roomType, setRoomType] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
-
+  const bookingsData = useSelector(getBookingsData);
+  const bookingsStatus = useSelector(getBookingsStatus);
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
@@ -67,13 +72,18 @@ export const SingleRoom = (props) => {
     setDescription(singleRoomData.description);
   }, [dispatch, singleRoomStatus, roomId.id, singleRoomData]);
 
+  useEffect(() => {
+    if (bookingsStatus === "idle") {
+      dispatch(fetchBookings());
+    }
+  }, [dispatch, bookingsStatus, bookingsData]);
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if (
       roomType === "" ||
       roomNumber === "" ||
       price === "" ||
-      status === "" ||
       description === ""
     ) {
       toastWarning("Error! You have to enter all inputs.")
@@ -89,10 +99,8 @@ export const SingleRoom = (props) => {
         roomNumber: roomNumber,
         price: price,
         discount: discount,
-        status: status,
         description: description
       };
-      console.log(room)
       dispatch(editRoom(room));
       setEdit(false);
       dispatch(getRoom(room.id));
@@ -102,14 +110,17 @@ export const SingleRoom = (props) => {
 
 
 
-if(singleRoomStatus === "rejected"){
+if(singleRoomStatus === "rejected" || bookingsStatus === "rejected"){
   return (
     <>
       <Navigate to="/error"/>
     </>
   );
 } else {
- if (singleRoomStatus==="fulfilled" && singleRoomData.id === roomId.id) {
+ if (singleRoomStatus==="fulfilled" && singleRoomData.id === roomId.id && bookingsStatus==="fulfilled" && bookingsData) {
+    if(singleRoomData.id ==="R-0000"){
+     return (<Navigate to="/error"/>)
+    } else
     if (edit !== true) {
       return (
         <>
@@ -163,9 +174,9 @@ if(singleRoomStatus === "rejected"){
                     <span>/per night</span>
                   </h5>
                 </CardItem>
-                <CardItem state={singleRoomData.status}>
+                <CardItem state={roomStatusCalc(singleRoomData.id, bookingsData)}>
                   <h6>Status</h6>
-                  <h5>{singleRoomData.status}</h5>
+                  <h5>{roomStatusCalc(singleRoomData.id, bookingsData)}</h5>
                 </CardItem>
               </FeaturesRow>
               <CardSeparator />
@@ -271,37 +282,6 @@ if(singleRoomStatus === "rejected"){
                         }}
                       />
                     </Input>
-                  </CardItem>
-                </FeaturesRow>
-                <FeaturesRow>
-                  <CardItem>
-                    <RadioInput>
-                      <h6>State</h6>
-                      <Label active htmlFor="state">
-                        <input
-                          type="radio"
-                          name="state"
-                          value="AVAILABLE"
-                          defaultChecked={status === "AVAILABLE" ? true : false}
-                          onChange={(e) => {
-                            setStatus(e.target.value);
-                          }}
-                        />
-                        AVAILABLE
-                      </Label>
-                      <Label inactive htmlFor="state">
-                        <input
-                          type="radio"
-                          name="state"
-                          value="BOOKED"
-                          defaultChecked={status === "BOOKED" ? true : false}
-                          onChange={(e) => {
-                            setStatus(e.target.value);
-                          }}
-                        />
-                        BOOKED
-                      </Label>
-                    </RadioInput>
                   </CardItem>
                 </FeaturesRow>
                 <FeaturesRow>
