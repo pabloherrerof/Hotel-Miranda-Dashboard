@@ -21,7 +21,7 @@ import {
 } from "../../components/Table/TableStyled";
 import { Wrapper } from "../../components/Layout/LayoutStyled";
 import { Modal } from "../../components/Modal/Modal";
-import { dateConverter } from "../../features/otherFunctions";
+import { dateConverter, tableDataSlicer, tableDataUnSlicer } from "../../features/otherFunctions";
 import { AiOutlineInfoCircle, AiOutlineSearch } from "react-icons/ai";
 import { VscTrash } from "react-icons/vsc";
 import {
@@ -29,6 +29,7 @@ import {
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { ErrorPage } from "../ErrorPage/ErrorPage";
+import { Pagination } from "../../components/Pagination/Pagination";
 
 export const Users = (props) => {
   const dispatch = useDispatch();
@@ -40,7 +41,8 @@ export const Users = (props) => {
   const [showInactive, setShowInactive] = useState("false");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [targetId, setTargetId] = useState("");
-  const [tableData, setTableData] = useState(usersData);
+  const [tableData, setTableData] = useState(tableDataSlicer(usersData));
+  const [page, setPage] = useState(1);
   const [orderValue, setOrderValue] = useState("ID");
 
   const tableTitles = [
@@ -59,7 +61,7 @@ export const Users = (props) => {
     if (usersStatus === "idle") {
       dispatch(fetchUsers());
     }
-    setTableData(usersData);
+    setTableData(tableDataSlicer(usersData));
   }, [dispatch, usersStatus, usersData]);
 
   const onClickHandler = (e) => {
@@ -69,37 +71,47 @@ export const Users = (props) => {
       setShowActive("false");
       setShowInactive("false");
       setOrderValue("ID");
-      setTableData(usersData);
+      setTableData(tableDataSlicer(usersData));
+      setPage(1)
     } else if (option === "Active users") {
       setShowActive("true");
       setShowAll("false");
       setShowInactive("false");
       setOrderValue("ID");
-      setTableData(usersData.filter((user) => user.state === "ACTIVE"));
+      const orderedUnsliceData = usersData.filter((user) => user.state === "ACTIVE");
+      setTableData(tableDataSlicer(orderedUnsliceData))
+      setPage(1)
     } else if (option === "Inactive users") {
       setShowActive("false");
       setShowAll("false");
       setShowInactive("true");
       setOrderValue("ID");
-      setTableData(usersData.filter((user) => user.state === "INACTIVE"));
+      const orderedUnsliceData = usersData.filter((user) => user.state === "INACTIVE");
+      setTableData(tableDataSlicer(orderedUnsliceData))
+      setPage(1)
     }
   };
 
   const onSearchInputHandler = (e) => {
-    setTableData(
-      tableData.filter((user) =>
-        user.name.toLowerCase().includes(e.target.value.toLowerCase())
-      )
+     const unslicedData = tableDataUnSlicer(tableData);
+    const orderedUnsliceData = unslicedData.filter((user) =>
+      user.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
+    setTableData(tableDataSlicer(orderedUnsliceData));
+    setPage(1)
     if (e.target.value === "") {
       if (showAll === "true") {
-        setTableData(usersData);
+        setTableData(tableDataSlicer(usersData));
       }
       if (showActive === "true") {
-        setTableData(usersData.filter((user) => user.state === "ACTIVE"));
+
+        const orderedUnsliceData = usersData.filter((user) => user.state === "ACTIVE");
+        setTableData(tableDataSlicer(orderedUnsliceData));
       }
       if (showInactive === "true") {
-        setTableData(usersData.filter((user) => user.state === "INACTIVE"));
+
+        const orderedUnsliceData = usersData.filter((user) => user.state === "INACTIVE");
+        setTableData(tableDataSlicer(orderedUnsliceData));
       }
     }
   };
@@ -107,25 +119,25 @@ export const Users = (props) => {
   const onChangeHandler = (e) => {
     if (e.value === "Name") {
       setOrderValue("Name");
-      setTableData(
-        [...tableData].sort((a, b) => {
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
           if (a.name < b.name) return -1;
           if (a.name > b.name) return 1;
           return 0;
         })
-      );
+        setTableData(tableDataSlicer(orderedUnsliceData));
     }
     if (e.value === "Date") {
       setOrderValue("Date");
-      setTableData(
-        [...tableData].sort((a, b) => {
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
           if (new Date(a.startDate).getTime() < new Date(b.startDate).getTime())
             return -1;
           if (new Date(a.startDate).getTime() > new Date(b.startDate).getTime())
             return 1;
           return 0;
         })
-      );
+        setTableData(tableDataSlicer(orderedUnsliceData));
     }
   };
 
@@ -147,7 +159,7 @@ export const Users = (props) => {
       </>
     );
   } else {
-    if(usersStatus === "fulfilled" && tableData){
+    if(usersStatus === "fulfilled" && tableData ){
       return (
         <>
           <TableActions>
@@ -193,7 +205,7 @@ export const Users = (props) => {
               />
             </RightActions>
           </TableActions>
-  
+          <Pagination page={page} setPage={setPage} data={tableData} />
           <TableContainer>
             <thead>
               <TableTitle>
@@ -203,7 +215,7 @@ export const Users = (props) => {
               </TableTitle>
             </thead>
             <tbody>
-              {tableData.map((element) => (
+              {tableData.length > 0 ? tableData[page - 1].map((element) => (
                 <TableRow key={element.id}>
                   <TableItem>
                     <ImageItem user>
@@ -250,7 +262,7 @@ export const Users = (props) => {
                     )}
                   </TableItem>
                 </TableRow>
-              ))}
+              )): ""}
             </tbody>
           </TableContainer>
           <Modal

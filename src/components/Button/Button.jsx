@@ -129,12 +129,28 @@ export const ArchiveButton = styled.button`
   font-weight: 500;
   border: none;
   background-color: transparent;
-letter-spacing: 0px;
-color: ${props => props.archived ? "#E23428" : "#5AD07A"  } 
-;
+  letter-spacing: 0px;
+  color: ${props => props.archived ? "#E23428" : "#5AD07A"  } ;
 
 &:hover{
   scale: 1.1;
   cursor: pointer;
 }
+`
+
+export const PaginationButton = styled.button`
+    font-family: "Poppins";
+    font-size: 25px;
+    background-color: #b7b7b7;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+
+    border: none;
+    color: white;
+
+    &:hover{
+      scale: 1.1;
+      cursor: pointer;
+    }
 `

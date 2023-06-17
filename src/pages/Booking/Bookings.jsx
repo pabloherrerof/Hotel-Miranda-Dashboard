@@ -22,24 +22,33 @@ import {
   TableRow,
   TableTitle,
 } from "../../components/Table/TableStyled";
-import { Button, NotesButton, StatusButton } from "../../components/Button/Button";
+import {
+  Button,
+  NotesButton,
+  StatusButton,
+} from "../../components/Button/Button";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { Modal } from "../../components/Modal/Modal";
-import { bookedStatusCalc, dateConverter } from "../../features/otherFunctions";
+import {
+  bookedStatusCalc,
+  dateConverter,
+  tableDataSlicer,
+  tableDataUnSlicer,
+} from "../../features/otherFunctions";
 import { getRoomsData, getRoomsStatus } from "../../features/rooms/roomsSlice";
 import { fetchRooms } from "../../features/rooms/roomsThunks";
 import { ErrorPage } from "../ErrorPage/ErrorPage";
-
+import { Pagination } from "../../components/Pagination/Pagination";
 
 export const Bookings = (props) => {
   const dispatch = useDispatch();
   const bookingsStatus = useSelector(getBookingsStatus);
   const bookingsData = useSelector(getBookingsData);
   const roomsStatus = useSelector(getRoomsStatus);
-  const roomsData =useSelector(getRoomsData);
+  const roomsData = useSelector(getRoomsData);
 
   const [showAll, setShowAll] = useState("true");
   const [showCheckIn, setShowCheckIn] = useState("false");
@@ -48,13 +57,13 @@ export const Bookings = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [targetId, setTargetId] = useState("");
-  const [tableData, setTableData] = useState(bookingsData);
+  const [tableData, setTableData] = useState(tableDataSlicer(bookingsData));
+  const [page, setPage] = useState(1);
   const [targetBooking, setTargetBooking] = useState();
   const [showNotesModal, setShowNotesModal] = useState(false);
-  const [orderValue, setOrderValue] = useState("ID")
+  const [orderValue, setOrderValue] = useState("ID");
 
-
-
+  console.log(page);
   const tableTitles = [
     "Guest",
     "Order Date",
@@ -67,20 +76,20 @@ export const Bookings = (props) => {
     "Delete",
   ];
 
-  const options = ["Guest","Date", "Check in", "Check out"];
+  const options = ["Guest", "Date", "Check in", "Check out"];
 
   useEffect(() => {
     if (bookingsStatus === "idle") {
       dispatch(fetchBookings());
     }
-    setTableData(bookingsData);
+    setTableData(tableDataSlicer(bookingsData));
   }, [dispatch, bookingsStatus, bookingsData]);
 
   useEffect(() => {
     if (roomsStatus === "idle" && bookingsStatus === "fulfilled") {
       dispatch(fetchRooms());
     }
-  }, [dispatch, roomsStatus, bookingsStatus ]);
+  }, [dispatch, roomsStatus, bookingsStatus]);
 
   const onClickHandler = (e) => {
     const option = e.target.innerText;
@@ -90,82 +99,82 @@ export const Bookings = (props) => {
       setShowCheckIn("false");
       setShowCheckOut("false");
       setShowInProgress("false");
-      setTableData(bookingsData);
+      setTableData(tableDataSlicer(bookingsData));
+      setPage(1)
     } else if (option === "Checking In") {
       setOrderValue("ID");
       setShowAll("false");
       setShowCheckIn("true");
       setShowCheckOut("false");
       setShowInProgress("false");
-      setTableData(
-        bookingsData.filter(
-          (booking) =>
-            bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"
-        )
+      setPage(1)
+      const unslicedData = tableDataUnSlicer(bookingsData);
+      const orderedUnsliceData = unslicedData.filter(
+        (booking) =>
+          bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"
       );
+      setTableData(tableDataSlicer(orderedUnsliceData));
     } else if (option === "Checking Out") {
       setOrderValue("ID");
       setShowAll("false");
       setShowCheckIn("false");
       setShowCheckOut("true");
       setShowInProgress("false");
-      setTableData(
-        bookingsData.filter(
-          (booking) =>
-            bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK OUT"
-        )
+      setPage(1)
+      const unslicedData = tableDataUnSlicer(bookingsData);
+      const orderedUnsliceData = unslicedData.filter(
+        (booking) =>
+          bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK OUT"
       );
+      setTableData(tableDataSlicer(orderedUnsliceData));
     } else if (option === "In Progress") {
       setOrderValue("ID");
       setShowAll("false");
       setShowCheckIn("false");
       setShowCheckOut("false");
       setShowInProgress("true");
-      setTableData(
-        bookingsData.filter(
-          (booking) =>
-            bookedStatusCalc(booking.checkIn, booking.checkOut) ===
-            "IN PROGRESS"
-        )
+      setPage(1)
+      const unslicedData = tableDataUnSlicer(bookingsData);
+      const orderedUnsliceData = unslicedData.filter(
+        (booking) =>
+          bookedStatusCalc(booking.checkIn, booking.checkOut) === "IN PROGRESS"
       );
+      setTableData(tableDataSlicer(orderedUnsliceData));
     }
   };
 
   const onSearchInputHandler = (e) => {
-    setTableData(
-      tableData.filter((user) =>
-        user.name.toLowerCase().includes(e.target.value.toLowerCase())
-      )
+    const unslicedData = tableDataUnSlicer(tableData);
+    const orderedUnsliceData = unslicedData.filter((user) =>
+      user.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
+    setTableData(tableDataSlicer(orderedUnsliceData));
+    setPage(1)
     if (e.target.value === "") {
       if (showAll === "true") {
-        setTableData(bookingsData);
+        setTableData(tableDataSlicer(bookingsData));
       }
       if (showCheckIn === "true") {
-        setTableData(
-          bookingsData.filter(
-            (booking) =>
-              bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"
-          )
+        const orderedUnsliceData = bookingsData.filter(
+          (booking) =>
+            bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK IN"
         );
+        setTableData(tableDataSlicer(orderedUnsliceData));
       }
       if (showCheckOut === "true") {
-        setTableData(
-          bookingsData.filter(
-            (booking) =>
-              bookedStatusCalc(booking.checkIn, booking.checkOut) ===
-              "CHECK OUT"
-          )
+        const orderedUnsliceData = bookingsData.filter(
+          (booking) =>
+            bookedStatusCalc(booking.checkIn, booking.checkOut) === "CHECK OUT"
         );
+        setTableData(tableDataSlicer(orderedUnsliceData));
       }
       if (showInProgress === "true") {
-        setTableData(
-          bookingsData.filter(
-            (booking) =>
-              bookedStatusCalc(booking.checkIn, booking.checkOut) ===
-              "IN PROGRESS"
-          )
+        const orderedUnsliceData = bookingsData.filter(
+          (booking) =>
+            bookedStatusCalc(booking.checkIn, booking.checkOut) ===
+            "IN PROGRESS"
         );
+        setTableData(tableDataSlicer(orderedUnsliceData));
       }
     }
   };
@@ -173,55 +182,65 @@ export const Bookings = (props) => {
   const onChangeHandler = (e) => {
     if (e.value === "Guest") {
       setOrderValue("Guest");
-      setTableData(
-        [...tableData].sort((a, b) => {
-          if (a.name < b.name) return -1;
-          if (a.name > b.name) return 1;
-          return 0;
-        })
-      );
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      });
+      setTableData(tableDataSlicer(orderedUnsliceData));
     }
     if (e.value === "Date") {
       setOrderValue("Date");
-      setTableData(
-        [...tableData].sort((a, b) => {
-          if (new Date(a.orderDate).getTime() < new Date(b.orderDate).getTime()) return -1;
-          if (new Date(a.orderDate).getTime() > new Date(b.orderDate).getTime()) return 1;
-          return 0;
-        })
-      );
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
+        if (new Date(a.orderDate).getTime() < new Date(b.orderDate).getTime())
+          return -1;
+        if (new Date(a.orderDate).getTime() > new Date(b.orderDate).getTime())
+          return 1;
+        return 0;
+      });
+      setTableData(tableDataSlicer(orderedUnsliceData));
     }
     if (e.value === "Check in") {
       setOrderValue("Check in");
-      setTableData(
-        [...tableData].sort((a, b) => {
-          if (new Date(a.checkIn).getTime() < new Date(b.checkIn).getTime()) return -1;
-          if (new Date(a.checkIn).getTime() > new Date(b.checkIn).getTime()) return 1;
-          return 0;
-        })
-      );
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
+        if (new Date(a.checkIn).getTime() < new Date(b.checkIn).getTime())
+          return -1;
+        if (new Date(a.checkIn).getTime() > new Date(b.checkIn).getTime())
+          return 1;
+        return 0;
+      });
+      setTableData(tableDataSlicer(orderedUnsliceData));
     }
     if (e.value === "Check out") {
       setOrderValue("Check out");
-      setTableData(
-        [...tableData].sort((a, b) => {
-          if (new Date(a.checkOut).getTime() < new Date(b.checkOut).getTime()) return -1;
-          if (new Date(a.checkOut).getTime() > new Date(b.checkOut).getTime()) return 1;
-          return 0;
-        })
-      );
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
+        if (new Date(a.checkOut).getTime() < new Date(b.checkOut).getTime())
+          return -1;
+        if (new Date(a.checkOut).getTime() > new Date(b.checkOut).getTime())
+          return 1;
+        return 0;
+      });
+      setTableData(tableDataSlicer(orderedUnsliceData));
     }
   };
 
-
-  if(bookingsStatus === "rejected" || roomsStatus === "rejected"){
+  if (bookingsStatus === "rejected" || roomsStatus === "rejected") {
     return (
       <>
-        <ErrorPage/>
+        <ErrorPage />
       </>
     );
   } else {
-    if (bookingsStatus === "fulfilled" && roomsStatus === "fulfilled" && bookingsData && roomsData ){
+    if (
+      bookingsStatus === "fulfilled" &&
+      roomsStatus === "fulfilled" &&
+      tableData &&
+      roomsData
+    ) {
       return (
         <>
           <TableActions>
@@ -270,7 +289,7 @@ export const Bookings = (props) => {
               />
             </RightActions>
           </TableActions>
-  
+          <Pagination page={page} setPage={setPage} data={tableData} />
           <TableContainer>
             <thead>
               <TableTitle>
@@ -280,65 +299,79 @@ export const Bookings = (props) => {
               </TableTitle>
             </thead>
             <tbody>
-              {tableData.map((element, index) => {
-                const room = roomsData.find((room ) => room.id === element.room);
-                return (
-                <TableRow key={element.id}>
-                  <TableItem>
-                    {element.name}
-                    <p>{element.id}</p>
-                  </TableItem>
-                  <TableItem>
-                    {dateConverter(element.orderDate).date}
-                    <p>{dateConverter(element.orderDate).hour}</p>
-                  </TableItem>
-                  <TableItem>
-                    {dateConverter(element.checkIn).date}
-                    <p>{dateConverter(element.checkIn).hour}</p>
-                  </TableItem>
-                  <TableItem>
-                    {dateConverter(element.checkOut).date}
-                    <p>{dateConverter(element.checkOut).hour}</p>
-                  </TableItem>
-                  <TableItem>
-                    <NotesButton
-                      onClick={() => {
-                        setTargetBooking(element);
-                        setShowNotesModal(true);
-                      }}
-                    >
-                      View Notes
-                    </NotesButton>
-                  </TableItem>
-                  <TableItem>
-                    {room.id==="R-0000" ? "ROOM DELETED" : room.roomType +  "-" + room.roomNumber}
-                    {}
-                  </TableItem>
-                  <TableItem>
-                    <StatusButton
-                      status={bookedStatusCalc(element.checkIn, element.checkOut)}
-                    >
-                      {bookedStatusCalc(element.checkIn, element.checkOut)}
-                    </StatusButton>
-                  </TableItem>
-                  <TableItem>
-                    <StyledLink to={`/bookings/${element.id}`}>
-                      <AiOutlineInfoCircle />
-                    </StyledLink>
-                  </TableItem>
-                  <TableItem>
-                    <VscTrash
-                      onClick={() => {
-                        setShowDeleteModal(true);
-                        setTargetId(element.id);
-                      }}
-                    />
-                  </TableItem>
-                </TableRow>
-              )})}
+              {tableData.length > 0
+                ? tableData[page - 1].map((element, index) => {
+                    const room = roomsData.find(
+                      (room) => room.id === element.room
+                    );
+                    return (
+                      <TableRow key={element.id}>
+                        <TableItem>
+                          {element.name}
+                          <p>{element.id}</p>
+                        </TableItem>
+                        <TableItem>
+                          {dateConverter(element.orderDate).date}
+                          <p>{dateConverter(element.orderDate).hour}</p>
+                        </TableItem>
+                        <TableItem>
+                          {dateConverter(element.checkIn).date}
+                          <p>{dateConverter(element.checkIn).hour}</p>
+                        </TableItem>
+                        <TableItem>
+                          {dateConverter(element.checkOut).date}
+                          <p>{dateConverter(element.checkOut).hour}</p>
+                        </TableItem>
+                        <TableItem>
+                          <NotesButton
+                            onClick={() => {
+                              setTargetBooking(element);
+                              setShowNotesModal(true);
+                            }}
+                          >
+                            View Notes
+                          </NotesButton>
+                        </TableItem>
+                        <TableItem>
+                          {room.id === "R-0000"
+                            ? "ROOM DELETED"
+                            : room.roomType + "-" + room.roomNumber}
+                          {}
+                        </TableItem>
+                        <TableItem>
+                          <StatusButton
+                            status={bookedStatusCalc(
+                              element.checkIn,
+                              element.checkOut
+                            )}
+                          >
+                            {bookedStatusCalc(
+                              element.checkIn,
+                              element.checkOut
+                            )}
+                          </StatusButton>
+                        </TableItem>
+                        <TableItem>
+                          <StyledLink to={`/bookings/${element.id}`}>
+                            <AiOutlineInfoCircle />
+                          </StyledLink>
+                        </TableItem>
+                        <TableItem>
+                          <VscTrash
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setTargetId(element.id);
+                            }}
+                          />
+                        </TableItem>
+                      </TableRow>
+                    );
+                  })
+                : ""}
             </tbody>
           </TableContainer>
-          
+         
+
           <Modal
             mode="delete"
             page={"bookings"}
@@ -371,6 +404,4 @@ export const Bookings = (props) => {
       );
     }
   }
-
-  
 };

@@ -23,7 +23,7 @@ import {
   TableTitle,
 } from "../../components/Table/TableStyled";
 import { Button, StatusButton } from "../../components/Button/Button";
-import { offerPriceCalc } from "../../features/otherFunctions";
+import { offerPriceCalc, tableDataSlicer, tableDataUnSlicer } from "../../features/otherFunctions";
 import {
   CustomDropdown,
   RightActions,
@@ -33,6 +33,7 @@ import { ErrorPage } from "../ErrorPage/ErrorPage";
 import { getBookingsData, getBookingsStatus } from "../../features/bookings/bookingsSlice";
 import { roomStatusCalc } from "../../features/roomOccupancy";
 import { fetchBookings } from "../../features/bookings/bookingThunks";
+import { Pagination } from "../../components/Pagination/Pagination";
 
 export const Rooms = (props) => {
   const dispatch = useDispatch();
@@ -41,7 +42,8 @@ export const Rooms = (props) => {
   const bookingsData = useSelector(getBookingsData);
   const bookingsStatus = useSelector(getBookingsStatus);
   const [targetId, setTargetId] = useState("");
-  const [tableData, setTableData] = useState(roomsData);
+  const [tableData, setTableData] = useState(tableDataSlicer(roomsData));
+  const [page, setPage] = useState(1);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -62,7 +64,7 @@ export const Rooms = (props) => {
     if (roomsStatus === "idle") {
       dispatch(fetchRooms());
     }
-    setTableData(roomsData);
+    setTableData(tableDataSlicer(roomsData));
   }, [dispatch, roomsStatus, roomsData , tableData.length]);
 
   useEffect(() => {
@@ -74,42 +76,43 @@ export const Rooms = (props) => {
 
   const onChangeHandler = (e) => {
     if (e.value === "Room Number") {
-      setTableData(
-        [...tableData].sort((a, b) => {
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
           if (Number(a.roomNumber) < Number(b.roomNumber)) return -1;
           if (Number(a.roomNumber) > Number(b.roomNumber)) return 1;
           return 0;
         })
-      );
+        setTableData(tableDataSlicer(orderedUnsliceData));
     }
     if (e.value === "State") {
-      setTableData(
-        [...tableData].sort((a, b) => {
-          if (a.status === "AVAILABLE") return -1;
-          if (a.status === "BOOKED") return 1;
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
+          if (roomStatusCalc(a.id, bookingsData) === "AVAILABLE") return -1;
+          if (roomStatusCalc(a.id, bookingsData) === "BOOKED") return 1;
           return 0;
         })
-      );
+        setTableData(tableDataSlicer(orderedUnsliceData));
     }
 
     if (e.value === "Lowest Price") {
-      setTableData(
-        [...tableData].sort((a, b) => {
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
           if (a.price < b.price) return -1;
           if (a.price > b.price) return 1;
           return 0;
         })
-      );
+        setTableData(tableDataSlicer(orderedUnsliceData));
     }
 
     if (e.value === "Highest Price") {
-      setTableData(
-        [...tableData].sort((a, b) => {
+      
+      const unslicedData = tableDataUnSlicer(tableData);
+      const orderedUnsliceData = unslicedData.sort((a, b) => {
           if (a.price > b.price) return -1;
           if (a.price < b.price) return 1;
           return 0;
         })
-      );
+        setTableData(tableDataSlicer(orderedUnsliceData));
     }
   }; 
 
@@ -119,7 +122,7 @@ export const Rooms = (props) => {
         <ErrorPage/>
     );
   } else {
-   if (roomsStatus === "fulfilled" &&  bookingsStatus==="fulfilled" && bookingsData && tableData) {
+   if (roomsStatus === "fulfilled" &&  bookingsStatus==="fulfilled" && bookingsData && tableData.length > 0) {
     return (
       <>
         <TableActions>
@@ -142,6 +145,7 @@ export const Rooms = (props) => {
             />
           </RightActions>
         </TableActions>
+        <Pagination page={page} setPage={setPage} data={tableData} />
         <TableContainer>
           <thead>
             <TableTitle>
@@ -151,7 +155,8 @@ export const Rooms = (props) => {
             </TableTitle>
           </thead>
           <tbody>
-            {tableData.map((element) => {if(element.id === "R-0000"){
+            {console.log(page)}
+            {tableData[page-1].map((element) => {if(element.id === "R-0000"){
               return "";
             }else return(
               <TableRow key={element.id}>
