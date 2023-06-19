@@ -3,7 +3,7 @@ import { ArchiveButton, Button } from "../Button/Button";
 import { ModalButtonRow, ModalCloseRow, ModalContainer } from "./ModalStyled";
 import { IoClose } from "react-icons/io5";
 import { addUser, deleteUser } from "../../features/users/usersThunks";
-import { addBooking, deleteBooking, fetchBookings } from "../../features/bookings/bookingThunks";
+import { addBooking, deleteBooking } from "../../features/bookings/bookingThunks";
 import { addRoom, deleteRoom } from "../../features/rooms/roomsThunks";
 import {
   FormContainer,
@@ -23,6 +23,7 @@ import { getRoomsData } from "../../features/rooms/roomsSlice";
 import { toastWarning } from "../../features/toastify";
 import { getBookingsData, resetBookingsState } from "../../features/bookings/bookingsSlice";
 import { roomAvailability } from "../../features/roomOccupancy";
+import { archiveContacts } from "../../features/contacts/contactThunks";
 
 
 export const Modal = (props) => {
@@ -197,6 +198,10 @@ export const Modal = (props) => {
         }
       }
     }
+  };
+
+  const onClickArchiveHandler = (contact) => {
+    dispatch(archiveContacts(contact));
   };
 
   if (props.mode === "delete") {
@@ -522,13 +527,14 @@ export const Modal = (props) => {
                 <h4>{props.target.customer.name}</h4>
                 <p>{dateConverter(props.target.date).date}</p>
               </div>
+              {console.log(props.target)}
               {props.target.archived !== true ? (
-                <ArchiveButton archived>Archived</ArchiveButton>
+                <ArchiveButton archived onClick={() => onClickArchiveHandler(props.target)}>Archived</ArchiveButton>
               ) : (
                 ""
               )}
               {props.target.archived ? (
-                <ArchiveButton unarchived>Unarchived</ArchiveButton>
+                <ArchiveButton unarchived onClick={() => onClickArchiveHandler(props.target)}>Unarchived</ArchiveButton>
               ) : (
                 ""
               )}

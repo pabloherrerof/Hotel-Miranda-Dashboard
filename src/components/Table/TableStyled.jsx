@@ -56,12 +56,18 @@ export const TableTitle = styled.tr`
   th {
     padding: 0 1%;
   }
+  
 `;
 
 export const TableRow = styled.tr`
   max-height: 70px;
   box-shadow: 0px 3px 10px #00000005;
   position: relative;
+  background-color: #ffffff;
+  &:hover{
+    scale: 1.03;
+    
+  }
 `;
 export const TableItem = styled.td`
   font-family: "Poppins";
