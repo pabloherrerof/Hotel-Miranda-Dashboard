@@ -55,6 +55,10 @@ export const fetchLoginApi = async (body) => {
     }
   } catch (err) {
     console.log(err)
-      toastError("Server error! Try again later")
+    if(err.message === "Network request failed"){
+      toastError("Server error! Try again later");
+    } else{
+      toastWarning("Invalid credentials!");
+    }
   }
 };
