@@ -24,9 +24,7 @@ export const Login = (props) => {
         JSON.stringify({ token: res.token, id: res.id })
       );
       dispatch({ type: "LogIn", payload: await res.id });
-    } else {
-      toastWarning("Invalid credentials!");
-    }
+    } 
   };
 
   return (
