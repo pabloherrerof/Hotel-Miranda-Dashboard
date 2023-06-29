@@ -1,11 +1,11 @@
 import logo from "../../assets/logo-hotel.svg";
 import { Logo } from "../../components/SideBar/SideBarStyled";
 import { EditButton } from "../../components/Button/Button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../components/UserContext";
 import { Inputs, LogContainer, LogForm } from "./LoginStyled";
 import { fetchLoginApi } from "../../features/API";
-import {toastWarning} from "../../features/toastify"
+
 
 export const Login = (props) => {
  
