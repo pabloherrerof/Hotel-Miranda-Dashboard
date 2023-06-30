@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const globalRoute = "http://localhost:3001";
+const globalRoute = "https://k7m7aq0a26.execute-api.eu-west-3.amazonaws.com/dev/";
 
 
 
