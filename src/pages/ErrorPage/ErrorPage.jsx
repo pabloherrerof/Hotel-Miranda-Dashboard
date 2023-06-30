@@ -7,8 +7,16 @@ export const ErrorPage = (props) => {
   const onClickHandler = () => {
     window.location.reload()
   };
-
-if(props.error){
+if(props.mobile){
+  return (
+    <>
+      <ErrorWrapper>
+        <i className="errorSearchIcon fa-solid fa-x fa-beat fa-2xl"></i>{" "}
+        <h1>App only available for desktop users.</h1>
+      </ErrorWrapper>
+    </>
+  );
+} else if(props.error){
     return (
       <>
         <ErrorWrapper>

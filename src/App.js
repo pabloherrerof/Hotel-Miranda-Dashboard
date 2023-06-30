@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Bookings } from "./pages/Booking/Bookings";
@@ -15,6 +15,7 @@ import { Layout } from "./components/Layout/Layout";
 import { SingleRoom } from "./pages/Rooms/SingleRoom";
 import { UserContext } from "./components/UserContext";
 import { ToastContainer } from "react-toastify";
+import { ErrorPageMobile } from "./pages/ErrorPage/ErrorPageMobile";
 
 export const loginLocalValue = localStorage.getItem("login");
 
@@ -35,6 +36,27 @@ const reducer = (state, action) => {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  
+
+  if(windowWidth < 1000){
+    return(
+      <ErrorPageMobile/>
+    )
+  } else
   return (
     <>
       <UserContext.Provider value={{ state, dispatch }}>

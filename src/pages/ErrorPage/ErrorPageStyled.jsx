@@ -4,6 +4,7 @@ export const ErrorWrapper = styled.div`
   display: flex;
   height: 100vh;
   width: 100vw;
+  
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -13,7 +14,7 @@ export const ErrorWrapper = styled.div`
     font-family: "Poppins";
     font-style: normal;
     font-weight: 600;
-    line-height: 29px;
+    line-height: 50px;
     letter-spacing: 0.05em;
     font-size: 2em;
   }
