@@ -32,8 +32,6 @@ import { FiArrowLeftCircle, FiEdit } from "react-icons/fi";
 import {
   Input,
   InputBig,
-  Label,
-  RadioInput,
 } from "../../components/Form/FormStyled";
 import { Button } from "../../components/Button/Button";
 import { toastWarning } from "../../features/toastify";
@@ -54,7 +52,6 @@ export const SingleRoom = (props) => {
   const [roomNumber, setRoomNumber] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
-  const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const bookingsData = useSelector(getBookingsData);
   const bookingsStatus = useSelector(getBookingsStatus);
@@ -68,7 +65,6 @@ export const SingleRoom = (props) => {
     setRoomNumber(singleRoomData.roomNumber);
     setPrice(singleRoomData.price);
     setDiscount(singleRoomData.discount);
-    setStatus(singleRoomData.status);
     setDescription(singleRoomData.description);
   }, [dispatch, singleRoomStatus, roomId.id, singleRoomData]);
 

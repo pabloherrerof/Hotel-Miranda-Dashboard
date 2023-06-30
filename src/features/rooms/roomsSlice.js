@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchRooms, addRoom, deleteRoom, getRoom, editRoom } from "./roomsThunks";
 import { toastError, toastSuccess } from "../toastify";
-import { fetchBookings } from "../bookings/bookingThunks";
-import { useDispatch } from "react-redux";
+
 
 
 

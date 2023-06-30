@@ -1,15 +1,13 @@
-
 import fetch from "cross-fetch";
-import { loginLocalValue } from "../App";
 import { toastError, toastWarning } from "./toastify";
-import { useNavigate } from "react-router-dom";
 
 
 
 
 
 
-const globalRoute = "https://k7m7aq0a26.execute-api.eu-west-3.amazonaws.com/dev/";
+
+const globalRoute = process.env.REACT_APP_API_URL;
 
 
 
