@@ -36,6 +36,7 @@ export const fetchApi = async (route, method, body) => {
 export const fetchLoginApi = async (body) => {
   try {
     const url = `${globalRoute}login`;
+    console.log(url)
     const res = await fetch(url, {
       method: "POST",
       mode: "cors",

@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /Hotel-Miranda-Dashboard/
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /Hotel-Miranda-Dashboard/index.html [L]
