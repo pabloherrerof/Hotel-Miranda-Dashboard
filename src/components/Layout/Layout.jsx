@@ -8,8 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 export const Layout = (props) => {
   let location = useLocation();
   let roomMatch = useMatch("/rooms/:id");
-  let bookingMatch = useMatch("/booking/:bookingId");
-  let userMatch = useMatch("/user/:id");
+  let bookingMatch = useMatch("/bookings/:bookingId");
+  let userMatch = useMatch("/users/:id");
 
   let title = "";
   const [open, setOpen] = useState(false);
