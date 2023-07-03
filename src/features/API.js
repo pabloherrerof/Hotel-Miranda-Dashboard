@@ -14,7 +14,7 @@ const globalRoute = process.env.REACT_APP_API_URL;
 export const fetchApi = async (route, method, body) => {
   try {
       const token = JSON.parse(localStorage.getItem("login")).token 
-    const url = `${globalRoute}/${route}`;
+    const url = `${globalRoute}${route}`;
     const res = await fetch(url, {
       method: method,
       mode: "cors",
@@ -35,7 +35,7 @@ export const fetchApi = async (route, method, body) => {
 
 export const fetchLoginApi = async (body) => {
   try {
-    const url = `${globalRoute}/login`;
+    const url = `${globalRoute}login`;
     const res = await fetch(url, {
       method: "POST",
       mode: "cors",
